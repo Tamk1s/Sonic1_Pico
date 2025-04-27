@@ -12,6 +12,43 @@ Z80_Clock:       equ Master_Clock/15
 FM_Sample_Rate:  equ M68000_Clock/(6*6*4)
 PSG_Sample_Rate: equ Z80_Clock/16
 
+; !@ PICO addresses
+pico_START:			equ $800000
+pico_ver:			equ	$800001	;1 byte
+pico_btn:			equ	$800003	;1 byte
+pico_penX_hi:		equ	$800005	;1 byte
+pico_penX_lo:		equ	$800007	;1 byte
+pico_penY_hi:		equ	$800009	;1 byte
+pico_penY_lo:		equ	$80000B	;1 byte
+pico_BookPage:		equ	$80000D	;1 byte
+pico_copType:		equ	$80000F	;1 byte
+pico_pcm_data:		equ	$800010	;1 word
+pico_pcm_ctrl:		equ	$800012	;1 word
+pico_port_1_data:	equ	$800015	;1 word
+pico_port_1_ctrl:	equ	$800017	;1 word
+pico_security_addr:	equ	$800019	;2 words
+
+copr_ymz263b_a0:	equ	$BFF801	;1 word
+copr_ymz263b_d0:	equ	$BFF803	;1 word
+copr_ymz263b_a1:	equ	$BFF805	;1 word
+copr_ymz263b_d1:	equ	$BFF807	;1 word
+
+copr_ymf262_a0:		equ	$BFF824
+copr_ymf262_d0:		equ	$BFF828
+copr_ymf262_a1:		equ	$BFF834
+
+copr_ym712b_a0:		equ	$BFF840
+
+; Pico constants
+penX_min:			equ	$003C
+penX_max:			equ	$017C
+penY_min:			equ	$01FC
+penY_minPad:		equ	$01FC
+penY_maxPad:		equ $02F7
+penY_minBook:		equ	$02F8
+penY_maxBook:		equ	$03F3
+penY_max:			equ	$03F3
+
 ; VDP addressses
 vdp_data_port:		equ $C00000
 vdp_control_port:	equ $C00004
