@@ -1,161 +1,170 @@
-Mus8A_Title_Screen_Header:
-	smpsHeaderStartSong 1
-	smpsHeaderVoice     Mus8A_Title_Screen_Voices
-	smpsHeaderChan      $06, $03
-	smpsHeaderTempo     $01, $05
+S28Bit_TitleScreen_Header:
+	smpsHeaderStartSong 1, 1
+	smpsHeaderVoiceNull
+	smpsHeaderChan      $00, $04
+	smpsHeaderTempo     $02, $00
 
-	smpsHeaderDAC       Mus8A_Title_Screen_DAC
-	smpsHeaderFM        Mus8A_Title_Screen_FM1,	$F4, $0C
-	smpsHeaderFM        Mus8A_Title_Screen_FM2,	$F4, $09
-	smpsHeaderFM        Mus8A_Title_Screen_FM3,	$F4, $0D
-	smpsHeaderFM        Mus8A_Title_Screen_FM4,	$F4, $0C
-	smpsHeaderFM        Mus8A_Title_Screen_FM5,	$F4, $0E
-	smpsHeaderPSG       Mus8A_Title_Screen_PSG1,	$D0, $03, $00, fTone_05
-	smpsHeaderPSG       Mus8A_Title_Screen_PSG2,	$DC, $06, $00, fTone_05
-	smpsHeaderPSG       Mus8A_Title_Screen_PSG3,	$00, $04, $00, fTone_04
-
-; FM5 Data
-Mus8A_Title_Screen_FM5:
-	smpsAlterNote       $03
-
-; FM1 Data
-Mus8A_Title_Screen_FM1:
-	smpsSetvoice        $00
-	dc.b	nRst, $3C, nCs6, $15, nRst, $03, nCs6, $06, nRst, nD6, $0F, nRst
-	dc.b	$03, nB5, $18, nRst, $06, nCs6, nRst, nCs6, nRst, nCs6, nRst, nA5
-	dc.b	nRst, nG5, $0F, nRst, $03, nB5, $0C, nRst, $12, nA5, $06, nRst
-	dc.b	nCs6, nRst, nA6, nRst, nE6, $0C, nRst, $06, nAb6, $12, nA6, $06
-	dc.b	nRst, $72
-	smpsStop
-
-; FM2 Data
-Mus8A_Title_Screen_FM2:
-	smpsSetvoice        $01
-	smpsNop             $01
-	dc.b	nRst, $30, nA3, $06, nRst, nA3, nRst, nE3, nRst, nE3, nRst, nG3
-	dc.b	$12, nFs3, $0C, nG3, $06, nFs3, $0C, nA3, $06, nRst, nA3, nRst
-	dc.b	nE3, nRst, nE3, nRst, nD4, $12, nCs4, $0C, nD4, $06, nCs4, $0C
-	dc.b	nRst, nA2, nRst, nA2, nRst, $06, nAb3, $12, nA3, $06, nRst, nA2
-	dc.b	$6C
-	smpsNop             $01
-	smpsStop
-
-; FM3 Data
-Mus8A_Title_Screen_FM3:
-	smpsSetvoice        $02
-	dc.b	nRst, $30, nE6, $06, nRst, nE6, nRst, nCs6, nRst, nCs6, nRst, nD6
-	dc.b	$0F, nRst, $03, nD6, $18, nRst, $06, nE6, nRst, nE6, nRst, nCs6
-	dc.b	nRst, nCs6, nRst, nG6, $0F, nRst, $03, nG6, $18, nRst, $06, nE6
-	dc.b	$0C, nRst, nE6, nRst, nRst, $06, nEb6, $12, nE6, $0C
-	smpsAlterVol        $FC
-	smpsSetvoice        $01
-	smpsAlterNote       $03
-	dc.b	nA2, $6C
-	smpsStop
-
-; FM4 Data
-Mus8A_Title_Screen_FM4:
-	smpsSetvoice        $02
-	dc.b	nRst, $30, nCs6, $06, nRst, nCs6, nRst, nA5, nRst, nA5, nRst, nB5
-	dc.b	$0F, nRst, $03, nB5, $18, nRst, $06, nCs6, nRst, nCs6, nRst, nA5
-	dc.b	nRst, nA5, nRst, nD6, $0F, nRst, $03, nD6, $18, nRst, $06, nCs6
-	dc.b	$0C, nRst, nCs6, nRst, nRst, $06, nC6, $12, nCs6, $0C
-	smpsAlterVol        $FD
-	smpsSetvoice        $01
-	smpsModSet          $00, $01, $06, $04
-	dc.b	nA2, $6C
-	smpsStop
-
-; PSG3 Data
-Mus8A_Title_Screen_PSG3:
-	smpsPSGform         $E7
-	dc.b	nRst, $30
-
-Mus8A_Title_Screen_Loop00:
-	smpsNoteFill        $03
-	dc.b	nMaxPSG, $0C
-	smpsNoteFill        $0C
-	dc.b	$0C
-	smpsNoteFill        $03
-	dc.b	$0C
-	smpsNoteFill        $0C
-	dc.b	$0C
-	smpsLoop            $00, $05, Mus8A_Title_Screen_Loop00
-	smpsNoteFill        $03
-	dc.b	$06
-	smpsNoteFill        $0E
-	dc.b	$12
-	smpsNoteFill        $03
-	dc.b	$0C
-	smpsNoteFill        $0F
-	dc.b	$0C
-	smpsStop
-
-; DAC Data
-Mus8A_Title_Screen_DAC:
-	dc.b	nRst, $0C, dSnare, dSnare, dSnare, dKick, dSnare, dKick, dSnare, dKick, dSnare, dKick
-	dc.b	dSnare, dKick, dSnare, dKick, dSnare, dKick, dSnare, dKick, $06, nRst, $02, dSnare
-	dc.b	dSnare, dSnare, $09, dSnare, $03, dKick, $0C, dSnare, dKick, dSnare, dKick, $06
-	dc.b	dSnare, $12, dSnare, $0C, dKick
+	smpsHeaderPSG       S28Bit_TitleScreen_PSG1,	$00, $04, $00, $00
+	smpsHeaderPSG       S28Bit_TitleScreen_PSG2,	$00, $03, $00, $00
+	smpsHeaderPSG       S28Bit_TitleScreen_PSG3,	$00, $03, $00, $00
+	smpsHeaderPSG       S28Bit_TitleScreen_PSG4,	$01, $00, $00, $00
 
 ; PSG1 Data
-Mus8A_Title_Screen_PSG1:
-; PSG2 Data
-Mus8A_Title_Screen_PSG2:
+S28Bit_TitleScreen_PSG1:
+	smpsCall            S28Bit_TitleScreen_Call01
+	smpsLoop            $00, $08, S28Bit_TitleScreen_PSG1
+	smpsPSGAlterVol     $FF
+	smpsPSGvoice        s28BitTone_08
+	smpsModSet          $09, $01, $01, $05
+	dc.b	nFs2, $01, nG2, $0B, nFs2, $01, nG2, $08, nF2, $09, nE2, $06
+	dc.b	nE2, $01, nF2, $05, nE2, $0C, nC2, nG1, $12
+	smpsModSet          $01, $01, $FB, $01
+	dc.b	nG1, $0C
+	smpsModSet          $09, $01, $01, $05
+	dc.b	nG2, nFs2, $01, nG2, $08, nF2, $09, nE2, $06, nE2, $01, nF2
+	dc.b	$05, nE2, $2A
+	smpsModSet          $01, $01, $FB, $01
+	dc.b	nG1, $0C
+	smpsModSet          $09, $01, $01, $05
+	dc.b	nFs2, $01, nG2, $0B, nFs2, $01, nG2, $08, nF2, $09, nE2, $06
+	dc.b	nE2, $01, nF2, $05, nE2, $0C, nC2, nG1, $12
+	smpsModSet          $01, $01, $FB, $01
+	dc.b	nG1, $0C
+	smpsModSet          $09, $01, $01, $05
+	dc.b	nG2, nFs2, $01, nG2, $08, nF2, $09, nE2, $06, nE2, $01, nF2
+	dc.b	$0B
+	smpsPSGvoice        s28BitTone_03
+	dc.b	nF2, $06, nG2, $09, nB2
+
+S28Bit_TitleScreen_Loop04:
+	dc.b	nC3, $06
+	smpsPSGAlterVol     $02
+	smpsLoop            $00, $06, S28Bit_TitleScreen_Loop04
 	smpsStop
 
-Mus8A_Title_Screen_Voices:
-;	Voice $00
-;	$3A
-;	$51, $08, $51, $02, 	$1E, $1E, $1E, $10, 	$1F, $1F, $1F, $0F
-;	$00, $00, $00, $02, 	$0F, $0F, $0F, $1F, 	$18, $24, $22, $81
-	smpsVcAlgorithm     $02
-	smpsVcFeedback      $07
-	smpsVcUnusedBits    $00
-	smpsVcDetune        $00, $05, $00, $05
-	smpsVcCoarseFreq    $02, $01, $08, $01
-	smpsVcRateScale     $00, $00, $00, $00
-	smpsVcAttackRate    $10, $1E, $1E, $1E
-	smpsVcAmpMod        $00, $00, $00, $00
-	smpsVcDecayRate1    $0F, $1F, $1F, $1F
-	smpsVcDecayRate2    $02, $00, $00, $00
-	smpsVcDecayLevel    $01, $00, $00, $00
-	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $01, $22, $24, $18
+S28Bit_TitleScreen_Call01:
+	smpsPSGvoice        s28BitTone_03
+	dc.b	nG2, $03, nD3, nF3, nG3, nC4, nG3, nF3, nD3
+	smpsReturn
 
-;	Voice $01
-;	$20
-;	$36, $35, $30, $31, 	$DF, $DF, $9F, $9F, 	$07, $06, $09, $06
-;	$07, $06, $06, $08, 	$2F, $1F, $1F, $FF, 	$19, $37, $13, $80
-	smpsVcAlgorithm     $00
-	smpsVcFeedback      $04
-	smpsVcUnusedBits    $00
-	smpsVcDetune        $03, $03, $03, $03
-	smpsVcCoarseFreq    $01, $00, $05, $06
-	smpsVcRateScale     $02, $02, $03, $03
-	smpsVcAttackRate    $1F, $1F, $1F, $1F
-	smpsVcAmpMod        $00, $00, $00, $00
-	smpsVcDecayRate1    $06, $09, $06, $07
-	smpsVcDecayRate2    $08, $06, $06, $07
-	smpsVcDecayLevel    $0F, $01, $01, $02
-	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $13, $37, $19
+; PSG3 Data
+S28Bit_TitleScreen_PSG3:
+	smpsPSGvoice        s28BitTone_07
+	dc.b	nG0, $02, nRst, $01, nG0, $02, nRst, $01
+	smpsPSGAlterVol     $02
+	dc.b	nG0, $05, nRst, $01
+	smpsPSGAlterVol     $02
+	dc.b	nG0, $05, nRst, $01
+	smpsPSGAlterVol     $FC
+	dc.b	nG0, $02, nRst, $01, nG0, $02, nRst, $01
+	smpsPSGAlterVol     $02
+	dc.b	nG0, $05, nRst, $01
+	smpsPSGAlterVol     $FE
+	dc.b	nE0, $06, nF0, nFs0
+	smpsLoop            $00, $04, S28Bit_TitleScreen_PSG3
 
-;	Voice $02
-;	$3A
-;	$01, $07, $01, $01, 	$8E, $8E, $8D, $53, 	$0E, $0E, $0E, $03
-;	$00, $00, $00, $00, 	$1F, $FF, $1F, $0F, 	$18, $28, $27, $80
-	smpsVcAlgorithm     $02
-	smpsVcFeedback      $07
-	smpsVcUnusedBits    $00
-	smpsVcDetune        $00, $00, $00, $00
-	smpsVcCoarseFreq    $01, $01, $07, $01
-	smpsVcRateScale     $01, $02, $02, $02
-	smpsVcAttackRate    $13, $0D, $0E, $0E
-	smpsVcAmpMod        $00, $00, $00, $00
-	smpsVcDecayRate1    $03, $0E, $0E, $0E
-	smpsVcDecayRate2    $00, $00, $00, $00
-	smpsVcDecayLevel    $00, $01, $0F, $01
-	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $27, $28, $18
+S28Bit_TitleScreen_Loop02:
+	dc.b	nC0, $06, nG0, nBb0, nC1, $03, nC0, $06, nC0, $03, nG0, $06
+	dc.b	nBb0, nC1
+	smpsLoop            $00, $07, S28Bit_TitleScreen_Loop02
+	dc.b	nG0, $06, nG0, nRst, $03, nG0, $09
 
+S28Bit_TitleScreen_Loop03:
+	dc.b	nC0, $06
+	smpsPSGAlterVol     $02
+	smpsLoop            $00, $06, S28Bit_TitleScreen_Loop03
+	smpsStop
+
+; PSG2 Data
+S28Bit_TitleScreen_PSG2:
+	smpsCall            S28Bit_TitleScreen_Call00
+	smpsChangeTransposition $02
+	smpsCall            S28Bit_TitleScreen_Call00
+	smpsPSGvoice        s28BitTone_03
+	smpsChangeTransposition $FE
+	dc.b	nB1, $03, nB1
+	smpsPSGAlterVol     $02
+	dc.b	nB1, $06
+	smpsPSGAlterVol     $02
+	dc.b	nB1, $06
+	smpsPSGAlterVol     $FC
+	dc.b	nB1, $03, nB1
+	smpsPSGAlterVol     $02
+	dc.b	nB1, $06
+	smpsPSGAlterVol     $02
+	dc.b	nB1, $06
+	smpsPSGAlterVol     $FC
+	smpsPSGvoice        s28BitTone_06
+	smpsModSet          $08, $01, $F8, $01
+	dc.b	nG1, $0C
+
+S28Bit_TitleScreen_Loop00:
+	smpsModSet          $0B, $03, $05, $01
+	dc.b	nG3, $0C
+	smpsModSet          $00, $00, $00, $00
+	smpsPSGAlterVol     $02
+	smpsLoop            $00, $04, S28Bit_TitleScreen_Loop00
+	smpsPSGAlterVol     $F8
+	smpsPSGvoice        s28BitTone_08
+	smpsPSGAlterVol     $01
+	smpsModSet          $09, $01, $01, $05
+	dc.b	nEb2, $01, nE2, $0B, nEb2, $01, nE2, $08, nD2, $09, nC2, $06
+	dc.b	nC2, $01, nD2, $05, nC2, $0C, nG1, nE1, $12
+	smpsModSet          $01, $01, $FB, $01
+	dc.b	nE1, $0C
+	smpsModSet          $09, $01, $01, $05
+	dc.b	nE2, nEb2, $01, nE2, $08, nD2, $09, nC2, $06, nC2, $01, nD2
+	dc.b	$05, nC2, $2A
+	smpsModSet          $01, $01, $FB, $01
+	dc.b	nE1, $0C
+	smpsModSet          $09, $01, $01, $05
+	dc.b	nEb2, $01, nE2, $0B, nEb2, $01, nE2, $08, nD2, $09, nC2, $06
+	dc.b	nC2, $01, nD2, $05, nC2, $0C, nG1, nE1, $12
+	smpsModSet          $01, $01, $FB, $01
+	dc.b	nE1, $0C
+	smpsModSet          $09, $01, $01, $05
+	dc.b	nE2, nEb2, $01, nE2, $08, nD2, $09, nC2, $06, nC2, $01, nD2
+	dc.b	$0B
+	smpsPSGvoice        s28BitTone_03
+	dc.b	nB1, $06, nD2, $09, nG2
+
+S28Bit_TitleScreen_Loop01:
+	dc.b	nE3, $06
+	smpsPSGAlterVol     $02
+	smpsLoop            $00, $06, S28Bit_TitleScreen_Loop01
+	smpsStop
+
+S28Bit_TitleScreen_Call00:
+	smpsPSGvoice        s28BitTone_03
+	dc.b	nG1, $03, nG1
+	smpsPSGAlterVol     $02
+	dc.b	nG1, $06
+	smpsPSGAlterVol     $02
+	dc.b	nG1, $06
+	smpsPSGAlterVol     $FC
+	dc.b	nG1, $03, nG1
+	smpsPSGAlterVol     $02
+	dc.b	nG1, $06
+	smpsPSGAlterVol     $02
+	dc.b	nG1, $06
+	smpsPSGAlterVol     $FC
+	dc.b	nG1, $03, nG1
+	smpsPSGAlterVol     $02
+	dc.b	nG1, $06
+	smpsPSGAlterVol     $FE
+	smpsReturn
+
+; PSG4 Data
+S28Bit_TitleScreen_PSG4:
+	dc.b	dNoise4, $03, dNoise4, dNoise1, dNoise1, dNoise1, dNoise1, dNoise4, dNoise4, dNoise1, dNoise1, dNoise4
+	dc.b	dNoise1, dNoise4, dNoise1, dNoise4, dNoise1
+	smpsLoop            $00, $03, S28Bit_TitleScreen_PSG4
+	dc.b	dNoise4, $03, dNoise1, dNoise1, dNoise1, dNoise4, dNoise1, dNoise1, dNoise1, dNoise4, dNoise1, dNoise4
+	dc.b	dNoise1, dNoise4, dNoise4, dNoise4, dNoise4
+
+S28Bit_TitleScreen_Loop05:
+	dc.b	dNoise1, dNoise1, dNoise4, dNoise1, dNoise1, dNoise1, dNoise4, dNoise1, dNoise1, dNoise1, dNoise4, dNoise1
+	dc.b	dNoise1, dNoise1, dNoise4, dNoise1
+	smpsLoop            $00, $07, S28Bit_TitleScreen_Loop05
+	dc.b	dNoise4, dNoise1, dNoise4, dNoise1, dNoise1, dNoise4, dNoise1, dNoise1, dNoise4, $18, nRst, $30
+	smpsStop

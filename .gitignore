@@ -230,3 +230,6 @@ Assets/Releases/*
 Assets/Misc/PicoM2_SegaG3_VA2_HW_Mod/*
 *.dll
 *.vgm
+s1built.debug.bin
+s1built.prev.bin
+sonic.debug.lst

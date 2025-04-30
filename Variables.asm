@@ -236,7 +236,14 @@ v_opl_screen:		ds.w	1		; ObjPosLoad - screen variable
 v_opl_data:		ds.b	$10		; ObjPosLoad - data buffer
 v_ssangle:		ds.w	1		; Special Stage angle
 v_ssrotate:		ds.w	1		; Special Stage rotation speed
-			ds.b	$C		; unused
+
+;!@ New pico variables
+			;ds.b	$C		; unused
+v_pico_penX:		ds.w	1
+v_pico_penY:		ds.w	1
+v_pico_BookPage:	ds.b	1
+			ds.b	$07
+			
 v_btnpushtime1:		ds.w	1		; button push duration - in level
 v_btnpushtime2:		ds.w	1		; button push duration - in demo
 v_palchgspeed:		ds.w	1		; palette fade/transition speed (0 is fastest)
