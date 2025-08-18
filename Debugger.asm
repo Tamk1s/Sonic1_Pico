@@ -22,7 +22,7 @@
 DEBUGGER__EXTENSIONS__ENABLE:			equ		1		; 0 = OFF, 1 = ON (default)
 
 ; Whether to show SR and USP registers in exception handler
-DEBUGGER__SHOW_SR_USP:					equ		0		; 0 = OFF (default), 1 = ON
+DEBUGGER__SHOW_SR_USP:					equ		1		; 0 = OFF (default), 1 = ON
 
 ; Debuggers mapped to pressing A/B/C on the exception screen
 ; Use 0 to disable button, use debugger's entry point otherwise.

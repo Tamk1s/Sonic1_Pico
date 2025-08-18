@@ -3,7 +3,13 @@
 ; ---------------------------------------------------------------------------
 ; SoundDriverLoad: JmpTo_SoundDriverLoad  SMPS_LoadDACDriver:
 SMPS_Setup:
+	if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)	
 	lea	(Clone_Driver_RAM).l,a5
+	else
+	nop
+	nop
+	rts
+	endif
 	binclude "c++/initialise.bin"
 	even
 ; End of function SMPS_LoadDACDriver
@@ -21,6 +27,7 @@ SMPS_DoRingFilter:
 
     if SMPS_IdlingSegaSound
 SMPS_DoSegaFilter:
+	if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 	cmpi.w	#SndID_SegaSound,d0
 	bne.s	.not_sega
 	; Waste cycles until the Sega sound finishes playing
@@ -38,7 +45,24 @@ SMPS_DoSegaFilter:
 
 	movem.l	(sp)+,d0/d1
 .not_sega:
-
+	else
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop     
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	endif
 	rts
     endif
 

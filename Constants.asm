@@ -15,7 +15,7 @@ PSG_Sample_Rate: equ Z80_Clock/16
 
 ; !@ PICO addresses
 pico_START:			equ $800000
-pico_ver:			equ	$800001	;1 byte
+pico_version:		equ	$800001	;1 byte
 pico_btn:			equ	$800003	;1 byte
 pico_penX_hi:		equ	$800005	;1 byte
 pico_penX_lo:		equ	$800007	;1 byte

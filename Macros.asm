@@ -105,7 +105,13 @@ copyTilemap:	macro source,destination,width,height
 ; ---------------------------------------------------------------------------
 
 stopZ80:	macro
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.w	#$100,(z80_bus_request).l
+		else
+		nop
+		nop
+		nop
+		endif
 		endm
 
 ; ---------------------------------------------------------------------------
@@ -113,8 +119,14 @@ stopZ80:	macro
 ; ---------------------------------------------------------------------------
 
 waitZ80:	macro
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 .wait:	btst	#0,(z80_bus_request).l
 		bne.s	.wait
+		else
+		nop
+		nop
+		nop
+		endif
 		endm
 
 ; ---------------------------------------------------------------------------
@@ -122,11 +134,23 @@ waitZ80:	macro
 ; ---------------------------------------------------------------------------
 
 deassertZ80Reset:	macro
-		move.w	#$100,(z80_reset).l
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
+		move.w	#$100,(z80_reset).l		
+		else
+		nop
+		nop
+		nop
+		endif
 		endm
 
 assertZ80Reset:	macro
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.w	#0,(z80_reset).l
+		else
+		nop
+		nop
+		nop
+		endif
 		endm
 
 ; ---------------------------------------------------------------------------
@@ -134,7 +158,13 @@ assertZ80Reset:	macro
 ; ---------------------------------------------------------------------------
 
 startZ80:	macro
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.w	#0,(z80_bus_request).l
+		else
+		nop
+		nop
+		nop
+		endif
 		endm
 
 ; ---------------------------------------------------------------------------
@@ -263,11 +293,25 @@ out_of_range:	macro exit,pos
 ; ---------------------------------------------------------------------------
 
 gotoSRAM:	macro
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.b	#1,(sram_port).l
+		else
+		;RaiseError "Pico SRAM access!"
+		nop
+		nop
+		nop
+		endif
 		endm
 
 gotoROM:	macro
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.b	#0,(sram_port).l
+		else
+		;RaiseError "Pico SRAM access!"
+		nop
+		nop
+		nop
+		endif
 		endm
 
 ; ---------------------------------------------------------------------------

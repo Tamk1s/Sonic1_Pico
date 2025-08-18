@@ -9,20 +9,26 @@
 
 	cpu 68000
 
-EnableSRAM	  = 0	; change to 1 to enable SRAM
-BackupSRAM	  = 1
-AddressSRAM	  = 3	; 0 = odd+even; 2 = even only; 3 = odd only
+sys_isEmu		= 1		;!@ Is this running in emulator?
+sys_isPico		= 1 	;!@ Is this a Sega Pico console? 1 = true, 0=false (Genesis)
+sys_PicoCopera	= 0		;!@ Is this Sega Pico a Copera variant? 1=true, 0=false (Regular Pico)
+sys_PicoMods	= 1		;!@ Does this Sega Pico/Copera have Genesis mods installed? 1=true, 0=false. Mods are 3x Genesis controller ports (P1, P2, Ext), Reset button, RGB Video + Stereo Genesis FM/DAC Audio re-enabled
+sys_PicoRev		= 1		;!@ What revision is this Sega Pico? (1= Gen3 VA2 with Sega 315-6123 GOAC for Sega Mega Pico mode, 0=Gen3 VA1 (Sega 315-5860 GOAC)
+
+EnableSRAM			= 0	; change to 1 to enable SRAM
+BackupSRAM			= 1
+AddressSRAM			= 3	; 0 = odd+even; 2 = even only; 3 = odd only
 
 ; Change to 0 to build the original version of the game, dubbed REV00
 ; Change to 1 to build the later vesion, dubbed REV01, which includes various bugfixes and enhancements
 ; Change to 2 to build the version from Sonic Mega Collection, dubbed REVXB, which fixes the infamous "spike bug"
-Revision	  = 1
+Revision	  = 2
 
 ZoneCount	  = 6	; discrete zones are: GHZ, MZ, SYZ, LZ, SLZ, and SBZ
 
-FixBugs		  = 0	; change to 1 to enable bugfixes
+FixBugs		  = 1	; change to 1 to enable bugfixes
 
-zeroOffsetOptimization = 0	; if 1, makes a handful of zero-offset instructions smaller
+zeroOffsetOptimization = 1	; if 1, makes a handful of zero-offset instructions smaller
 	;!@ Clone Driver v2 SMS
 	include "sound/Sonic-2-Clone-Driver-v2/Definitions.asm"
 	
@@ -37,8 +43,11 @@ zeroOffsetOptimization = 0	; if 1, makes a handful of zero-offset instructions s
 ; ===========================================================================
 
 StartOfRom:
-Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
+Vectors:
+		dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l EntryPoint			; Start of program
+		
+		; Error traps
 		dc.l BusError			; Bus error
 		dc.l AddressError		; Address error (4)
 		dc.l IllegalInstr		; Illegal instruction
@@ -62,6 +71,9 @@ Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l ErrorExcept		; Unused (reserved)
 		dc.l ErrorExcept		; Unused (reserved) (24)
 		dc.l ErrorExcept		; Spurious exception
+		
+		;Interrupt traps
+		if sys_isPico=0 | sys_isEmu=1
 		dc.l ErrorTrap			; IRQ level 1
 		dc.l ErrorTrap			; IRQ level 2
 		dc.l ErrorTrap			; IRQ level 3 (28)
@@ -69,6 +81,23 @@ Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l ErrorTrap			; IRQ level 5
 		dc.l VBlank				; IRQ level 6 (vertical retrace interrupt)
 		dc.l ErrorTrap			; IRQ level 7 (32)
+		else
+		;Shift all interrupts up by 1 slot if Pico mode (https://gendev.spritesmind.net/forum/viewtopic.php?t=3375)
+		; Add new Pico/Copera-specific interrupts
+		dc.l ErrorTrap			; IRQ level 1
+		dc.l ErrorTrap			; IRQ level 2		
+			;If copera, add Copera YMZ263B interrupt; else errorTrap
+			 if sys_PicoCopera=1
+			 dc.l cop_ymz263B_int	; IRQ Level 3 (28) (YMZ263B interrupt (Copera only))
+			 else
+			 dc.l ErrorTrap			; IRQ level 3 (28)
+			 endif
+		dc.l pico_adpcm_int		; IRQ Level 4 (Pico ADPCM interrupt)
+		dc.l XBlank				; IRQ level 5 (VDP external interrupt (pico, speculative))
+		dc.l HBlank				; IRQ level 6 (horizontal retrace interrupt)
+		dc.l VBlank				; IRQ level 7 (32) (vertical retrace interrupt)
+		endif
+		
 		dc.l ErrorTrap			; TRAP #00 exception
 		dc.l ErrorTrap			; TRAP #01 exception
 		dc.l ErrorTrap			; TRAP #02 exception
@@ -85,6 +114,8 @@ Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l ErrorTrap			; TRAP #13 exception
 		dc.l ErrorTrap			; TRAP #14 exception
 		dc.l ErrorTrap			; TRAP #15 exception (48)
+		
+		;Unused/hacky workarounds
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
@@ -116,16 +147,28 @@ loc_E0:
 		dc.l ErrorTrap
 		dc.l ErrorTrap
 	endif
-		;!@ 
-		;dc.b "SEGA MEGA DRIVE " ; Hardware system ID (Console name)
-		dc.b "SEGA PICO       "
+
+		;!@ 		
+		if sys_isPico=0
+			dc.b "SEGA MEGA DRIVE " ; Hardware system ID (Console name)
+		else
+			if sys_PicoCopera=1
+				dc.b "SEGA PICO       "
+			else
+				if (sys_PicoMods && sys_PicoRev)
+					dc.b "SEGA MEGA PICO  "
+				else
+					dc.b "SEGA PICO       "
+				endif
+			endif
+		endif
 		dc.b "(C)SEGA 2025.APR" ; Copyright holder and release date (generally year)
 		dc.b "SONIC THE HEDGEHOG: PICO EDITION                " ; Domestic name
 		dc.b "SONIC THE HEDGEHOG: PICO EDITION                " ; International name
 		if Revision=0
 		dc.b "GM 00001009-00"   ; Serial/version number (Rev 0)
 		else
-			dc.b "GM 00004049-01" ; Serial/version number (Rev non-0)
+		dc.b "GM 00004049-01" ; Serial/version number (Rev non-0)
 		endif
 Checksum:
 		if Revision=0
@@ -134,7 +177,11 @@ Checksum:
 		dc.w $AFC7
 		endif
 		;!@ dc.b "J               " ; I/O support
+		if sys_isPico=0
 		dc.b "JTM             " ; I/O support
+		else
+		dc.b "                " ; I/O support
+		endif
 		dc.l StartOfRom		; Start address of ROM
 RomEndLoc:	dc.l EndOfRom-1		; End address of ROM
 		dc.l $FF0000		; Start address of RAM
@@ -160,27 +207,36 @@ ErrorTrap:
 ; ===========================================================================
 
 EntryPoint:
+		;!@
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		tst.l	(z80_port_1_control).l ; test port A & B control registers
 		bne.s	PortA_Ok
 		tst.w	(z80_expansion_control).l ; test port C control register
+		endif
 
 PortA_Ok:
 		;!@ bne.s	SkipSetup ; Skip the VDP and Z80 setup code if port A, B or C is ok...?
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		bne.w	SkipSetup ; Skip the VDP and Z80 setup code if port A, B or C is ok...?
+		endif
 		lea	SetupValues(pc),a5	; Load setup values array address.
 		movem.w	(a5)+,d5-d7
 		movem.l	(a5)+,a0-a4
+		
+		;!@
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.b	-$10FF(a1),d0	; get hardware version (from $A10001)
 		andi.b	#$F,d0
-		
-		;!@ beq.s	SkipSecurity	; If the console has no TMSS, skip the security stuff.
-		;!@ move.l	#'SEGA',$2F00(a1) ; move "SEGA" to TMSS register ($A14000)
+		beq.s	SkipSecurity	; If the console has no TMSS, skip the security stuff.
+		move.l	#'SEGA',$2F00(a1) ; move "SEGA" to TMSS register ($A14000)
+		else
 		lea		(pico_START).l,	a1
 		move.b	#'S',$19(a1)
 		move.b	#'E',$1A(a1)
 		move.b	#'G',$1C(a1)
 		move.b	#'A',$1E(a1)
-		movea.l	#$A11100,a1
+		;movea.l	#$A11100,a1
+		endif
 
 SkipSecurity:
 		move.w	(a4),d0	; clear write-pending flag in VDP to prevent issues if the 68k has been reset in the middle of writing a command long word to the VDP.
@@ -197,21 +253,31 @@ VDPInitLoop:
 		
 		move.l	(a5)+,(a4)
 		move.w	d0,(a3)		; clear	the VRAM
+		;!@
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.w	d7,(a1)		; stop the Z80
-		move.w	d7,(a2)		; reset	the Z80
+		move.w	d7,(a2)		; reset	the Z80		
 
 WaitForZ80:
 		btst	d0,(a1)		; has the Z80 stopped?
 		bne.s	WaitForZ80	; if not, branch
+		endif
 
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		moveq	#$25,d2
 Z80InitLoop:
 		move.b	(a5)+,(a0)+
 		dbf	d2,Z80InitLoop
+		else
+		adda.l	#$26,a5
+		endif
 		
+		;!@
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.w	d0,(a2)
-		move.w	d0,(a1)		; start	the Z80
+		move.w	d0,(a1)		; start	the Z80		
 		move.w	d7,(a2)		; reset	the Z80
+		endif
 
 ClrRAMLoop:
 		move.l	d0,-(a6)	; clear 4 bytes of RAM
@@ -242,13 +308,20 @@ SkipSetup:
 		bra.s	GameProgram	; begin game
 
 ; ===========================================================================
-SetupValues:	dc.w $8000		; VDP register start number
+SetupValues:
+		dc.w $8000		; VDP register start number
 		dc.w $3FFF		; size of RAM/4
 		dc.w $100		; VDP register diff
 
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		dc.l z80_ram		; start	of Z80 RAM
 		dc.l z80_bus_request	; Z80 bus request
 		dc.l z80_reset		; Z80 reset
+		else
+		dc.l StartOfRom
+		dc.l StartOfRom
+		dc.l StartOfRom
+		endif
 		dc.l vdp_data_port	; VDP data
 		dc.l vdp_control_port	; VDP control
 
@@ -324,11 +397,13 @@ zStartupCodeEndLoc:
 ; ===========================================================================
 
 GameProgram:
-		tst.w	(vdp_control_port).l
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
+		tst.w	(vdp_control_port).l		
 		btst	#6,(z80_expansion_control+1).l
-		beq.s	CheckSumCheck
+		beq.s	CheckSumCheck		
 		cmpi.l	#'init',(v_init).w ; has checksum routine already run?
 		beq.w	GameInit	; if yes, branch
+		endif
 
 CheckSumCheck:
 		movea.l	#EndOfHeader,a0	; start	checking bytes after the header	($200)
@@ -352,7 +427,12 @@ CheckSumOk:
 		move.l	d7,(a6)+
 		dbf	d6,.clearRAM	; clear RAM ($FE00-$FFFF)
 
+		;!@
+		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		move.b	(z80_version).l,d0
+		else
+		move.b	(pico_version).l,d0
+		endif
 		andi.b	#$C0,d0
 		move.b	d0,(v_megadrive).w ; get region setting
 		move.l	#'init',(v_init).w ; set flag so checksum won't run again
@@ -366,8 +446,9 @@ GameInit:
 		dbf	d6,.clearRAM	; clear RAM ($0000-$FDFF)
 
 		bsr.w	VDPSetupGame
-		bsr.w	DACDriverLoad
+		bsr.w	DACDriverLoad			;!@ UPDATE ME (Sega Pico)
 		bsr.w	JoypadInit
+		;!@
 		move.b	#id_Sega,(v_gamemode).w ; set Game Mode to Sega Screen
 
 MainGameLoop:
@@ -945,6 +1026,40 @@ loc_119E:
 		rte	
 ; End of function HBlank
 
+	if sys_isPico=1
+; ---------------------------------------------------------------------------
+; External VDP interrupt (Pico)
+; ---------------------------------------------------------------------------
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+XBlank:
+	nop
+	RaiseError "External VDP interrupt triggered!"
+	rte
+; End of function XBlank
+
+; ---------------------------------------------------------------------------
+; Pico ADPCM interrupt
+; ---------------------------------------------------------------------------
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+pico_adpcm_int:
+	nop
+	RaiseError "Pico ADPCM Interrupt triggered!"
+	rte
+; End of function XBlank
+
+; ---------------------------------------------------------------------------
+; YMZ263B Interrupt (Copera only)
+; ---------------------------------------------------------------------------
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+		if sys_PicoCopera=1
+cop_ymz263B_int:
+		RaiseError "Copera YMZ263B Interrupt triggered!"
+		nop
+		rte
+		endif
+	endif
+; End of function cop_ymz263B_int
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to	initialise joypads
 ; ---------------------------------------------------------------------------
@@ -956,9 +1071,19 @@ JoypadInit:
 		stopZ80
 		waitZ80
 		moveq	#$40,d0
+		
+		;!@
+		if sys_isPico=1
+		move.b	d0,(pico_port_1_ctrl).l	; Pico_Ext
+		endif
+		
+		;!@
+		if sys_isPico=0 || sys_PicoMods
 		move.b	d0,(z80_port_1_control+1).l	; init port 1 (joypad 1)
 		move.b	d0,(z80_port_2_control+1).l	; init port 2 (joypad 2)
 		move.b	d0,(z80_expansion_control+1).l	; init port 3 (expansion/extra)
+		endif
+		
 		startZ80
 		rts	
 ; End of function JoypadInit
@@ -968,18 +1093,65 @@ JoypadInit:
 ; ---------------------------------------------------------------------------
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-;!@ Uses a0,a1,d0,d1
+;!@ Uses a0-a2,d0,d1
 ReadJoypads:
 		;!@
 		;jsr	(ReadPage).l
-		jsr		(ReadPico).l
 		
-		lea	(v_jpadhold1).w,a0 ; address where joypad states are written
-		;!@ lea	(z80_port_1_data+1).l,a1	; first	joypad port
-		lea	(pico_btn).l,a1	; first	joypad port
-		bsr.s	.read		; do the first joypad
-		;!@ addq.w	#2,a1	; do the second	joypad
-		addi.l	#$12,a1		; do the Pico ext port (older models)
+		;if on a pico platform, then handle extra Pico hw (pen, book)
+		if sys_isPico=1
+		jsr		(ReadPico).l
+		else
+		nop
+		nop
+		nop
+		endif
+		
+		lea	(v_jpadhold1).w,a0 	; address where combined joypad states are written (ctrl_1-ctrl_5). This increments as necessary
+		movea.l	a0,a2			; Copy that address into a2 (ctrl_1 addr)
+		
+		;!@
+		;lea	(z80_port_1_data+1).l,a1	; first	joypad port
+		;bsr.s	.read		; do the first joypad
+		;addq.w	#2,a1	; do the second	joypad
+
+		if sys_isPico=1		
+			;If a Pico platform, than handle Pico and Pico_Ext controllers
+			
+			;If Gens emulator, override with Genesis p1 & p2 instead
+			if sys_isEmu=1
+			lea	(z80_port_1_data+1).l,a1	; P1
+			bsr.s	.read
+			move.w	(a2),(v_jpadholdP).l
+			
+			addq.w	#2,a1	;P2
+			bsr.s	.read			
+			
+			else
+			
+			lea	(pico_btn).l,a1				; built-in Pico joypad
+			bsr.s	.read
+			move.w	(a2),(v_jpadholdP).l	;Move ctrl_1 port into special Pico jpadholdP variable. Only handle Pico button
+			
+			addi.l	#$12,a1					; Pico_Ext port
+			bsr.s	.read
+			endif
+		endif
+		
+		if sys_isPico=0 || sys_PicoMods
+		; If on Genesis or Pico platform with mods, then handle Genesis P1, P2, and Ext. ports
+		lea	(z80_port_1_data+1).l,a1	; P1
+		bsr.s	.read
+		addq.w	#2,a1	;P2
+		bsr.s	.read
+		addq.w	#2,a1	;Ext
+		bsr.s	.read
+		endif
+
+		;!@ Combine the joypads (v_jpadhold1, v_jpadholdG)
+		bsr.w	ReadJoypads_Cmbo
+		rts
+		
 .read:
 		move.b	#0,(a1)
 		nop	
@@ -1000,6 +1172,7 @@ ReadJoypads:
 		and.b	d0,d1
 		move.b	d1,(a0)+
 		rts	
+		
 ; End of function ReadJoypads
 
 ; !@ ---------------------------------------------------------------------------
@@ -1025,6 +1198,43 @@ ReadPico:
 		lea	(pico_BookPage).l,a1
 		move.b	(a1),d0
 		move.b	d0,(v_pico_BookPage).w
+		rts
+		
+; !@ ---------------------------------------------------------------------------
+; New subroutine to logical OR combine the joypads appropriately
+; ---------------------------------------------------------------------------
+
+ReadJoypads_Cmbo:
+		moveq	#0,d1				;d1 is OR accumlator var for ALL joypads (v_jpadhold1, ctrl_1 to ctrl_5)
+		moveq	#0,d2				;d2 is OR accumlator var for all Genesis joypads (v_jpadholdG, ctrl_2 to ctrl_5. ctrl_1 is reserved for internal pico joypad)
+		lea	(v_jpadhold1).w,a1		;Load v_jpadhold1 addr (ALL joypads) into a1
+		lea	(v_jpadholdG).w,a2		;Load v_jpadholdG addr (all Genesis joypads) into a2
+		movea.l	a1,a0				;Copy v_jpadhold1 into a0. This address will increment
+		
+		;(Internal Pico jpad if Pico platform)
+		move.w	(a0)+,d0			;ctrl_1. Get the v_jpadhold port value, move into d0 and increment to next jpad port
+		or.w	d0,d1				;Logical OR value with d1 accumlator (ALL joypads)
+		;If Genesis platform		Logical OR value with d2 accumulator (Genesis joypads). DO NOT if pico platform
+		if sys_isPico=0
+		or.w	d0,d2
+		endif
+		
+		move.w	(a0)+,d0			;ctrl_2
+		or.w	d0,d1
+		or.w	d0,d2
+		move.w	(a0)+,d0			;ctrl_3
+		or.w	d0,d1
+		or.w	d0,d2
+		move.w	(a0)+,d0			;ctrl_4
+		or.w	d0,d1
+		or.w	d0,d2
+		move.w	(a0)+,d0			;ctrl_5
+		or.w	d0,d1
+		or.w	d0,d2
+		
+		;Update
+		move.w	d1,(a1)				;Move combined ALL joypads into v_jpadhold1
+		move.w	d2,(a2)				;Move combined Genesis joypads into v_jpadholdG
 		rts
 
 ; !@ ---------------------------------------------------------------------------
@@ -2204,12 +2414,16 @@ Sega_WaitEnd:
 		bsr.w	WaitForVBla
 		tst.w	(v_demolength).w
 		beq.s	Sega_GotoTitle
-		;!@ andi.b	#btnStart,(v_jpadpress1).w ; is Start button pressed?
-		andi.b	#btnABC+btnStart,(v_jpadpress1).w ; is Start button pressed?
-		beq.s	Sega_WaitEnd	; if not, branch
+		;!@ andi.b	#btnStart,(v_jpadpress1).w 		; is Start button pressed?		
+		andi.b	#btnStart,(v_jpadpressG).w 			; is Start button pressed on Genesis controllers?
+		bne.s	Sega_GotoTitle						; if so, branch
+		andi.b	#btnABC+btnStart,(v_jpadpressP).w 	; is a button pressed on Pico_pad?
+		bne.s	Sega_GotoTitle						; if so, branch
+		;!@
+		bra.s	Sega_WaitEnd						;Loop		
 
 Sega_GotoTitle:
-		move.b	#id_Title,(v_gamemode).w ; go to title screen
+		move.b	#id_Title,(v_gamemode).w 			; go to title screen
 		rts	
 ; ===========================================================================
 
@@ -2223,7 +2437,7 @@ GM_Title:
 		bsr.w	ClearPLC
 		bsr.w	PaletteFadeOut
 		disable_ints
-		bsr.w	DACDriverLoad
+		bsr.w	DACDriverLoad				;!@ Update me (Sega Pico)
 		lea	(vdp_control_port).l,a6
 		move.w	#$8004,(a6)	; 8-colour mode
 		move.w	#$8200+(vram_fg>>10),(a6) ; set foreground nametable address
@@ -2425,16 +2639,22 @@ Tit_CountC:
 loc_3230:
 		tst.w	(v_demolength).w
 		beq.w	GotoDemo
-		;!@ andi.b	#btnStart,(v_jpadpress1).w ; check if Start is pressed
-		andi.b	#btnABC+btnStart,(v_jpadpress1).w ; check if any face button is pressed
-		beq.w	Tit_MainLoop	; if not, branch
+		
+		andi.b	#btnStart,(v_jpadpress1).w 	; check if Start is pressed
+		beq.w	Tit_MainLoop				; if not, branch
 
 Tit_ChkLevSel:
-		tst.b	(f_levselcheat).w ; check if level select code is on
-		beq.w	PlayLevel	; if not, play level
+		tst.b	(f_levselcheat).w 			; check if level select code is on
+		beq.w	PlayLevel					; if not, play level
 		;!@ btst	#bitA,(v_jpadhold1).w ; check if A is pressed
 		;beq.w	PlayLevel	; if not, play level
-
+		btst	#bitA,(v_jpadhold1).w		;check if A is pressed on anything
+		bne.s	.lvlsel						;if so, branch
+		btst	#bitB,(v_jpadholdP).w		;check if B is pressed on pico_pad
+		bne.s	.lvlsel						;if so, branch
+		bra.w	PlayLevel					;If no presses, play level
+		
+.lvlsel:
 		moveq	#palid_LevelSel,d0
 		bsr.w	PalLoad	; load level select palette
 
@@ -4331,8 +4551,11 @@ TryAg_MainLoop:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		;!@ andi.b	#btnStart,(v_jpadpress1).w ; is Start button pressed?
-		andi.b	#btnABC+btnStart,(v_jpadpress1).w ; is Start button pressed?
+		andi.b	#btnStart,(v_jpadpressG).w ; is Start button pressed on Genesis pads?
 		bne.s	TryAg_Exit	; if yes, branch
+		andi.b	#btnABC+btnStart,(v_jpadpressG).w ; is any face button pressed on Pico_pad?
+		bne.s	TryAg_Exit	; if yes, branch		
+		
 		tst.w	(v_demolength).w ; has 30 seconds elapsed?
 		beq.s	TryAg_Exit	; if yes, branch
 		cmpi.b	#id_Credits,(v_gamemode).w
