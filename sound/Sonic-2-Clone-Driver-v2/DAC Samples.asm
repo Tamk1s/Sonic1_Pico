@@ -10,7 +10,8 @@ DACMetadata macro pSampleRate,pStart
 
 DACMetadataTable:
 ; The numbers you see are sample rates. If you don't know what those are... get help.
-ptr_dacE0:	DACMetadata	16270, SegaPCM		; $E0	- Sega!
+;!@ ptr_dacE0:	DACMetadata	16270, SegaPCM		; $E0	- Sega!
+ptr_dacE0:	DACMetadata	16000, SegaPCM		; $E0	- Sega!
 
 	if SMPS_S1DACSamples||SMPS_S2DACSamples
 		; Sonic 1 & 2

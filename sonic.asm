@@ -453,7 +453,8 @@ GameInit:
 
 MainGameLoop:
 		move.b	(v_gamemode).w,d0 ; load Game Mode
-		andi.w	#$1C,d0	; limit Game Mode value to $1C max (change to a maximum of 7C to add more game modes)
+		;!@andi.w	#$1C,d0	; limit Game Mode value to $1C max (change to a maximum of 7C to add more game modes)
+		andi.w	#id_MAX,d0	; limit Game Mode value to $1C max (change to a maximum of 7C to add more game modes)
 		jsr	GameModeArray(pc,d0.w) ; jump to apt location in ROM
 		bra.s	MainGameLoop	; loop indefinitely
 ; ===========================================================================
@@ -478,7 +479,8 @@ ptr_GM_Cont:	bra.w	GM_Continue	; Continue Screen ($14)
 ptr_GM_Ending:	bra.w	GM_Ending	; End of game sequence ($18)
 
 ptr_GM_Credits:	bra.w	GM_Credits	; Credits ($1C)
-
+;!@
+ptr_GM_SSRGScreen:	bra.w	GM_SSRGScreen	; CreditsSSRG Screen ($20)
 		rts	
 ; ===========================================================================
 
@@ -764,7 +766,8 @@ VBla_14:
 
 VBla_04:
 		bsr.w	sub_106E
-		bsr.w	LoadTilesAsYouMove_BGOnly
+		;!@ bsr.w	LoadTilesAsYouMove_BGOnly
+		jsr		(LoadTilesAsYouMove_BGOnly).l
 		bsr.w	sub_1642
 		tst.w	(v_demolength).w
 		beq.w	.end
@@ -830,7 +833,8 @@ VBla_08:
 
 
 Demo_Time:
-		bsr.w	LoadTilesAsYouMove
+		;!@ bsr.w	LoadTilesAsYouMove
+		jsr	(LoadTilesAsYouMove).l
 		jsr	(AnimateLevelGfx).l
 		jsr	(HUD_Update).l
 		bsr.w	ProcessDPLC2
@@ -2407,13 +2411,18 @@ Sega_WaitPal:
 		bsr.w	PlaySound_Special	; play "SEGA" sound
 		move.b	#$14,(v_vbla_routine).w
 		bsr.w	WaitForVBla
-		move.w	#$1E,(v_demolength).w
+		
+		;!@ Yield about 7 seconds for the new GD Sega sound to stop playing
+		;!@ move.w	#$1E,(v_demolength).w
+		move.w	#($3C * $07),(v_demolength).w
 
 Sega_WaitEnd:
 		move.b	#2,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		tst.w	(v_demolength).w
 		beq.s	Sega_GotoTitle
+		
+		;!@ If start button any Genesis controller OR if any action button pressed on pico_jpad, then skip Sega logo
 		;!@ andi.b	#btnStart,(v_jpadpress1).w 		; is Start button pressed?		
 		andi.b	#btnStart,(v_jpadpressG).w 			; is Start button pressed on Genesis controllers?
 		bne.s	Sega_GotoTitle						; if so, branch
@@ -2423,8 +2432,13 @@ Sega_WaitEnd:
 		bra.s	Sega_WaitEnd						;Loop		
 
 Sega_GotoTitle:
-		move.b	#id_Title,(v_gamemode).w 			; go to title screen
-		rts	
+		;SSRG - Goto screen
+		;!@move.b	#id_Title,(v_gamemode).w 			; go to title screen
+		move.b	#id_SSRG,(v_gamemode).w 			; go to SSRG Screen
+		rts
+		
+;!@ SSRG Screen
+		include	"SSRG/SSRG.asm"
 ; ===========================================================================
 
 ; ---------------------------------------------------------------------------
@@ -2940,6 +2954,11 @@ LevSel_Down:
 LevSel_Refresh:
 		move.w	d0,(v_levselitem).w ; set new selection
 		bsr.w	LevSelTextLoad	; refresh text
+		
+		;!@ Play Ring SFX on item move
+		move.w	#sfx_Ring,d0	; play ring sound
+		jsr		(PlaySound_Special).l
+		
 		rts	
 ; ===========================================================================
 

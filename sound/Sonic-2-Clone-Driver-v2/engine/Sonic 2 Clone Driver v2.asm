@@ -2,7 +2,9 @@
 ; Sonic 2 Clone Driver v2
 ; ===========================================================================
 
-	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.9)"
+	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.9_SMP)"
+	;!@
+	dc.b	"With Sega Pico ADPCM support, added by GenesisDoes"
 	even
 
 ; ---------------------------------------------------------------------------

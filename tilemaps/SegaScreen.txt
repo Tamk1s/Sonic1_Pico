@@ -1,0 +1,10 @@
+; provided by Selbi, to be placed in some subfolder
+Palette File: ../palette/sega2.bin
+Mapping File: ../tilemaps/Sega Logo.eni
+Art File: ../artnem/Sega Logo.nem
+Mapping Compression: Enigma
+Art Compression: Nemesis
+Palette Length: 0x20
+Palette Offset: 0x16
+x-Size: 40
+y-Size: 28
