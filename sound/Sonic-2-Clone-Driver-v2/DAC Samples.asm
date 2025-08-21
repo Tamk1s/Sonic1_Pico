@@ -12,6 +12,7 @@ DACMetadataTable:
 ; The numbers you see are sample rates. If you don't know what those are... get help.
 ;!@ ptr_dacE0:	DACMetadata	16270, SegaPCM		; $E0	- Sega!
 ptr_dacE0:	DACMetadata	16000, SegaPCM		; $E0	- Sega!
+ptr_dacE1:	DACMetadata	16000, DontPCM		; $E1	- What NintenDont
 
 	if SMPS_S1DACSamples||SMPS_S2DACSamples
 		; Sonic 1 & 2
@@ -148,6 +149,7 @@ __LABEL__ label *
 	endm
 
 SegaPCM		IncludeDAC "sound/Sonic-2-Clone-Driver-v2/DAC/SegaPCM.pcm"
+DontPCM		IncludeDAC "sound/Sonic-2-Clone-Driver-v2/DAC/Dont.pcm"
 
     if SMPS_S1DACSamples||SMPS_S2DACSamples
 Kick		IncludeDAC "sound/Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Kick.pcm"

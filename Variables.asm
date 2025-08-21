@@ -449,7 +449,8 @@ v_unused2:		ds.w	1		; unused
 v_unused3:		ds.b	1		; unused
 v_unused4:		ds.b	1		; unused
 v_unused5:		ds.b	1		; unused
-v_unused6:		ds.b	1		; unused
+;!@v_unused6:		ds.b	1		; unused
+v_consoleType:		ds.b	1		; !@ Sega Mega Pico. Console type. See CT_ Bitfield
 f_demo:			ds.w	1		; demo mode flag (0 = no; 1 = yes; $8001 = ending)
 v_demonum:		ds.w	1		; demo level number (not the same as the level number)
 v_creditsnum:		ds.w	1		; credits index number

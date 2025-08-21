@@ -35,7 +35,8 @@ loc_135F0:
 
 loc_13602:
 		bsr.w	Sonic_HitFloor
-		move.b	d1,(v_unused6).w
+		;!@move.b	d1,(v_unused6).w
+		move.b	d1,(v_unused3).w
 		tst.w	d1
 		bpl.s	locret_1367E
 		move.b	obVelY(a0),d2

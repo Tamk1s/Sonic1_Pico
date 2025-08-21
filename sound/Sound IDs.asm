@@ -117,6 +117,7 @@ SMPS_idstart := $70
 
 dac__First = SMPS_idstart
 sfx_Sega =		SMPS_id(ptr_dacE0)
+sfx_Dont =		SMPS_id(ptr_dacE1)
 dac__Last =		SMPS_id(ptr_dacend)-1
 
 

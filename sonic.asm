@@ -207,7 +207,10 @@ ErrorTrap:
 ; ===========================================================================
 
 EntryPoint:
-		;!@
+		;!@ Sega Mega Pico
+		jsr		(GetConsoleType).l
+
+		;!@		
 		if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
 		tst.l	(z80_port_1_control).l ; test port A & B control registers
 		bne.s	PortA_Ok
@@ -900,7 +903,8 @@ VBla_0C:
 		movem.l	d0-d7,(v_screenposx_dup).w
 		movem.l	(v_fg_scroll_flags).w,d0-d1
 		movem.l	d0-d1,(v_fg_scroll_flags_dup).w
-		bsr.w	LoadTilesAsYouMove
+		;!@ bsr.w	LoadTilesAsYouMove
+		jsr		(LoadTilesAsYouMove).l
 		jsr	(AnimateLevelGfx).l
 		jsr	(HUD_Update).l
 		bsr.w	sub_1642
@@ -1064,6 +1068,77 @@ cop_ymz263B_int:
 	endif
 ; End of function cop_ymz263B_int
 
+; ---------------------------------------------------------------------------
+; Subroutine to	determine console hardware configuration
+; ---------------------------------------------------------------------------
+GetConsoleType:
+		moveq	#$00,d0
+		lea		(v_consoleType),a0
+		
+		move.b	pico_btn,d0
+		cmpi.b	#btnInvalid,d0
+		bne.s	.not_genesis
+		bclr	#tipConsole,0(a0)
+		bclr	#tipCopera,0(a0)
+		bra.s	.check_revision_genesis
+		
+.not_genesis:
+		bset	#tipConsole,0(a0)
+		
+.check_copera:
+		move.b	pico_copType,d0
+		cmpi.b	#$01,d0
+		bne.s	.not_copera
+		bset	#tipCopera,0(a0)
+		bra.s	.check_revision_pico
+		
+.not_copera:
+		bclr	#tipCopera,0(a0)
+
+.check_revision_pico:
+		move.b	pico_version,d0
+		andi.b	#$07,d0
+		cmpi.b	#$00,d0
+		bne.s	.not_rev1p
+		bclr	#tipRevision,0(a0)
+		bra.s	.check_mods
+		
+.not_rev1p:
+		bset	#tipRevision,0(a0)
+		bra.s	.check_mods
+
+
+.check_revision_genesis:
+		move.b	z80_version,d0
+		andi.b	#$07,d0
+		bne.s	.not_rev1g
+		bclr	#tipRevision,0(a0)
+		bra.s	.set_modsG
+		
+.not_rev1g:
+		bset	#tipRevision,0(a0)		
+		
+.set_modsG:
+		bset	#tipMods,0(a0)
+		bra.s	.locret
+		
+
+.check_mods:
+		;!@ Not sure about this. Can a Model 1 Sega Pico peek z80 ctrl ports, or will it peek+burn?
+		btst	#tipRevision,0(a0)
+		beq.s	.no_mods
+		
+		move.b	z80_port_1_data,d0
+		cmpi.b	#btnInvalid,d0
+		beq.s	.no_mods
+		bset	#tipMods,0(a0)
+		bra.s	.locret
+
+.no_mods:
+		bclr	#tipMods,0(a0)
+.locret:
+		rts		
+		
 ; ---------------------------------------------------------------------------
 ; Subroutine to	initialise joypads
 ; ---------------------------------------------------------------------------
@@ -2452,6 +2527,7 @@ GM_Title:
 		bsr.w	PaletteFadeOut
 		disable_ints
 		bsr.w	DACDriverLoad				;!@ Update me (Sega Pico)
+		
 		lea	(vdp_control_port).l,a6
 		move.w	#$8004,(a6)	; 8-colour mode
 		move.w	#$8200+(vram_fg>>10),(a6) ; set foreground nametable address
@@ -2461,7 +2537,7 @@ GM_Title:
 		move.w	#$8B03,(a6)
 		move.w	#$8720,(a6)	; set background colour (palette line 2, entry 0)
 		clr.b	(f_wtr_state).w
-		bsr.w	ClearScreen
+		bsr.w	ClearScreen		
 
 		clearRAM v_objspace
 
@@ -2478,7 +2554,7 @@ GM_Title:
 
 		copyTilemap	v_256x256&$FFFFFF,vram_fg,40,28
 
-		clearRAM v_palette_fading
+		clearRAM v_palette_fading		
 
 		moveq	#palid_Sonic,d0	; load Sonic's palette
 		bsr.w	PalLoad_Fade
@@ -2486,7 +2562,32 @@ GM_Title:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	PaletteFadeIn
-		disable_ints
+		
+		;!@ Dont SFX
+		move.b	#sfx_Dont,d0
+		bsr.w	PlaySound_Special	; play "DONT" sound		
+		;!@ Yield about 1.20 seconds for the new Dont Sega sound to stop playing
+		;!@ move.w	#$1E,(v_demolength).w
+		move.w	#(($3C * $01)+$14),(v_demolength).w
+
+Dont_WaitEnd:
+		move.b	#2,(v_vbla_routine).w
+		bsr.w	WaitForVBla
+		tst.w	(v_demolength).w
+		beq.s	GotoTitle
+		
+;!@ If start button any Genesis controller OR if any action button pressed on pico_jpad, then skip Sega logo
+		;!@ andi.b	#btnStart,(v_jpadpress1).w 		; is Start button pressed?		
+		jsr		(ReadJoypads).l
+		andi.b	#btnStart,(v_jpadpressG).w 			; is Start button pressed on Genesis controllers?
+		bne.s	GotoTitle						; if so, branch
+		andi.b	#btnABC+btnStart,(v_jpadpressP).w 	; is a button pressed on Pico_pad?
+		bne.s	GotoTitle						; if so, branch
+		;!@
+		bra.s	Dont_WaitEnd						;Loop		
+
+GotoTitle:
+		disable_ints				
 		locVRAM	ArtTile_Title_Foreground*tile_size
 		lea	(Nem_TitleFg).l,a0 ; load title	screen patterns
 		bsr.w	NemDec

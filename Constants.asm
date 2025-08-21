@@ -118,17 +118,42 @@ cYellow:	equ cGreen+cRed		; colour yellow
 cAqua:		equ cGreen+cBlue	; colour aqua
 cMagenta:	equ cBlue+cRed		; colour magenta
 
+; !@ Console Type mask bitfields and bits
+;%0000 mrpc
+;m = Mods installed (Mega Pico) (0=no, 1=yes)
+;r = Revision type (0=VA1, 1=VA2)
+;p = Copera Type (0=Regular Pico, 1= Yamaha Mixt Book Copera)
+;c = Console Type family (0=Sega Genesis, 1=Sega Pico)
+
+;Masks
+typConsole	equ	%00000001
+typCopera	equ	%00000010
+typRevision	equ	%00000100
+typMods		equ	%00001000
+typMask		equ	%00001111
+;Bits
+tipConsole	equ	$00
+tipCopera	equ	$01
+tipRevision	equ	$02
+tipMods		equ	$03
+
+
 ; Joypad input
-btnStart:	equ %10000000 ; Start button	($80)
-btnA:		equ %01000000 ; A		($40)
-btnC:		equ %00100000 ; C		($20)
-btnB:		equ %00010000 ; B		($10)
-btnR:		equ %00001000 ; Right		($08)
-btnL:		equ %00000100 ; Left		($04)
-btnDn:		equ %00000010 ; Down		($02)
-btnUp:		equ %00000001 ; Up		($01)
-btnDir:		equ %00001111 ; Any direction	($0F)
-btnABC:		equ %01110000 ; A, B or C	($70)
+btnInvalid:	equ	%11111111 ; !@	Invalid 		(open bus/FF)
+btnStart:	equ %10000000 ; 	Start button	($80)
+btnAC:		equ	%01100000 ; !@	A or C 			($60)
+btnABC:		equ %01110000 ; 	A, B or C		($70)
+btnA:		equ %01000000 ; 	A				($40)
+btnC:		equ %00100000 ; 	C				($20)
+btnB:		equ %00010000 ; 	B				($10)
+btnDir:		equ %00001111 ; 	Any direction	($0F)
+btnLR:		equ %00001100 ; !@ 	Left+Right		($0C)
+btnR:		equ %00001000 ; 	Right			($08)
+btnL:		equ %00000100 ; 	Left			($04)
+btnDnUp:	equ %00000011 ; !@	Up+Down			($03)
+btnDn:		equ %00000010 ; 	Down			($02)
+btnUp:		equ %00000001 ; 	Up				($01)
+
 bitStart:	equ 7
 bitA:		equ 6
 bitC:		equ 5
