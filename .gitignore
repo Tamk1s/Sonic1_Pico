@@ -233,3 +233,7 @@ Assets/Misc/PicoM2_SegaG3_VA2_HW_Mod/*
 s1built.debug.bin
 s1built.prev.bin
 sonic.debug.lst
+sound/Sonic-2-Clone-Driver-v2/engine/c++/output/
+sound/Sonic-2-Clone-Driver-v2/engine/c++/dac/DAC-Driver.bin
+sound/Sonic-2-Clone-Driver-v2/engine/c++/dac/DAC-Driver.h
+sound/Sonic-2-Clone-Driver-v2/engine/c++/dac/DAC-Driver.lst

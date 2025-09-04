@@ -606,7 +606,7 @@ ArtTile_Title_S2Font:		equ	$28	;!@
 ArtTile_Title_Foreground:	equ $200
 ArtTile_Title_Sonic:		equ $300+ArtTile_Title_S2Font
 ArtTile_Title_Trademark:	equ $510+ArtTile_Title_S2Font
-ArtTile_Level_Select_Font:	equ $680+ArtTile_Title_S2Font
+ArtTile_Level_Select_Font:	equ $680
 
 ; Continue Screen
 ArtTile_Continue_Sonic:		equ $500
