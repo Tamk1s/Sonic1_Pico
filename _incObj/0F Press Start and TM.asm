@@ -16,7 +16,17 @@ PSB_Index:	dc.w PSB_Main-PSB_Index
 
 PSB_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
+		
+		;!@
+		cmpi.b	#2,obFrame(a0)	; is object "PRESS START"?
+		blo.s	.PSB_PrsStart_Init	; if yes, branch
 		move.w	#$D0,obX(a0)
+		bra.s	.init
+		
+	.PSB_PrsStart_Init:
+		move.w	#$D0+$24,obX(a0)
+		
+	.init:
 		move.w	#$130,obScreenY(a0)
 		move.l	#Map_PSB,obMap(a0)
 		move.w	#make_art_tile(ArtTile_Title_Foreground,0,0),obGfx(a0)

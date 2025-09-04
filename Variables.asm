@@ -118,9 +118,9 @@ v_jpadpress1:		ds.b	1		; joypad input - pressed. ALL controllers
 v_vdp_buffer1:		ds.w	1		; VDP instruction buffer
 ;!@
 v_jpadholdP:		ds.b	1		 ; joypad input - pressed. Pico_jpad
-v_jpadpressP:		ds.b	1		;			   - held
+v_jpadpressP:		ds.b	1		;			   - held. Pico_Jpad
 v_jpadholdG:		ds.b	1		;			   - held. All Genesis jpads
-v_jpadpressG:		ds.b	1		;			   - pressed
+v_jpadpressG:		ds.b	1		;			   - pressed. All Genesis jpads
 					;!@ds.b	6		; unused
 v_demolength:		ds.w	1		; the length of a demo in frames
 v_scrposy_vdp:		ds.w	1		; screen position y (VDP)
