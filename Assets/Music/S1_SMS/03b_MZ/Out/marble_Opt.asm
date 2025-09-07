@@ -6155,7 +6155,6 @@ Mus_00b_MZ_PSG3_Loop25:
 	
 	;!@
 	smpsSetVol			$0A<<3
-	dc.b	nRst, $0C
 	smpsJump			Mus_00b_MZ_PSG3_Loop00
 	
 Mus_00b_MZ_PSG4:

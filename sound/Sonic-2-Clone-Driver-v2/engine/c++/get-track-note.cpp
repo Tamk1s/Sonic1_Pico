@@ -25,6 +25,11 @@ STARTING_FUNCTION unsigned int SMPS::GetTrackNote(const unsigned int track_id, c
 	#ifdef SMPS_EnablePSGNoiseDrums
 		MUSIC_PSG_NOISE,
 	#endif
+	
+	//!@
+	#ifdef SMPS_EnablePicoADPCM
+		MUSIC_PICO,
+	#endif
 
 		SFX_FM3,
 		SFX_FM4,
@@ -75,6 +80,12 @@ STARTING_FUNCTION unsigned int SMPS::GetTrackNote(const unsigned int track_id, c
 				return 0;
 
 			return track.saved_dac;
+		}		
+		//!@
+		else if (track_map[track_id] == MUSIC_PICO)
+		{
+			//!@ TODO
+			return 0;
 		}
 		else
 		{
