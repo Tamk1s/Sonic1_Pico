@@ -2,6 +2,7 @@
 ; Music metadata (pointers, speed shoes tempos, flags)
 ; ---------------------------------------------------------------------------
 ; byte_71A94: SpeedUpIndex:
+
 MusicIndex:
 ptr_mus81:	SMPS_MUSIC_METADATA	Music81, s1TempotoS3($07), 0	; GHZ
 ptr_mus82:	SMPS_MUSIC_METADATA	Music82, s1TempotoS3($72), 0	; LZ
@@ -22,7 +23,16 @@ ptr_mus90:	SMPS_MUSIC_METADATA	Music90, s1TempotoS3($07), SMPS_MUSIC_METADATA_FO
 ptr_mus91:	SMPS_MUSIC_METADATA	Music91, s1TempotoS3($33), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Credits
 ptr_mus92:	SMPS_MUSIC_METADATA	Music92, s1TempotoS3($02), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Drowning
 ptr_mus93:	SMPS_MUSIC_METADATA	Music93, s1TempotoS3($06), 0	; Emerald
+;!@ New base music slots
+ptr_mus94:	SMPS_MUSIC_METADATA	Music94, s1TempotoS3($07), $00	; Level Select
+ptr_mus95:	SMPS_MUSIC_METADATA	Music95, s1TempotoS3($07), $00	; Zone Start
+ptr_mus96:	SMPS_MUSIC_METADATA	Music96, s1TempotoS3($07), $00	; Options
+ptr_mus97:	SMPS_MUSIC_METADATA	Music97, s1TempotoS3($07), $00	; Bridge Zone
+ptr_mus98:	SMPS_MUSIC_METADATA	Music98, s1TempotoS3($07), $00	; Jungle Zone
+ptr_musend2	;!@
+;!@ Dups for other playlists
 ptr_musend
+		even
 
 ; ---------------------------------------------------------------------------
 ; Music data
@@ -65,3 +75,15 @@ Music92:	include		"sound/music/Mus92 - Drowning.asm"
 		even
 Music93:	include		"sound/music/Mus93 - Get Emerald.asm"
 		even
+;!@ New base music slots
+Music94:	include		"sound/music/Mus94 - Level Select.asm"
+		even
+Music95:	include		"sound/music/Mus95 - Zone Start.asm"
+		even
+Music96:	include		"sound/music/Mus96 - Options.asm"
+		even
+Music97:	include		"sound/music/Mus97 - BZ.asm"
+		even
+Music98:	include		"sound/music/Mus98 - JZ.asm"
+		even
+

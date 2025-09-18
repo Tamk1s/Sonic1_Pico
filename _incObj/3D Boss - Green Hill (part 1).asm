@@ -96,7 +96,7 @@ loc_177E6:
 		tst.b	objoff_3E(a0)
 		bne.s	BGHZ_ShipFlash
 		move.b	#$20,objoff_3E(a0)	; set number of	times for ship to flash
-		move.w	#sfx_HitBoss,d0
+		move.w	#_sfx_HitBoss,d0
 		jsr	(PlaySound_Special).l	; play boss damage sound
 
 BGHZ_ShipFlash:

@@ -16,12 +16,16 @@ SMPS_Setup:
 
     if SMPS_RingSFXBehaviour
 SMPS_DoRingFilter:
-	cmpi.w	#SndID_Ring,d0
+	;!@ cmpi.w	#SndID_Ring,d0
+	cmpi.w	#SndID_Ring,d1
 	bne.s	+
 	bchg	#SMPS_FLAGS_RING_TOGGLE,(Clone_Driver_RAM+SMPS_RAM.flags).l
 	bne.s	+
-	move.w	#SndID_RingLeft,d0
+	;!@ move.w	#SndID_RingLeft,d0
+	move.w	#SndID_RingLeft,d1
 +
+	move.w	d1,d0				;!@
+	bsr.w	PlaySound_List
 	rts
     endif
 
@@ -79,8 +83,12 @@ SMPS_QueueSound1:
 SMPS_QueueSound2:
 SMPS_QueueSound3:
 	move.w	d0,-(sp)
-	andi.w	#$FF,d0
+	move.w	d1,-(sp)		;!@
+	andi.w	#$00FF,d0
+	move.w	d0,d1			;!@
+	bsr.w	PlaySound_List
 	bsr.s	SMPS_QueueSound1_Extended
+	move.w	(sp)+,d1
 	move.w	(sp)+,d0
 .return:
 	rts
@@ -130,7 +138,7 @@ SMPS_QueueSound3_Extended:
 .slot2:
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).l
     if SMPS_IdlingSegaSound
-	bra.s	SMPS_DoSegaFilter
+	bra.w	SMPS_DoSegaFilter
     else
 	rts
     endif
@@ -164,6 +172,7 @@ SMPS_PlayDACSample:
 	addi.w	#DACID__First-$81,d0
 +
 	; Send it.
+	bsr.w	PlaySound_List
 	bsr.s	SMPS_QueueSound1_Extended
 	movem.w	(sp)+,d0/d1
 	rts
@@ -202,3 +211,162 @@ SMPS_ChangeMusicTempo:
 	rts
 ; End of function SMPS_ChangeMusicTempo
 
+; ---------------------------------------------------------------------------
+; !@ Subroutine to convert base sfx ID to playlist ID
+; Input: d0 (base)
+; Output: d0 (adjusted)
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+PlaySound_List:		
+		movem.l	a0,-(sp)			;Push a0 onto stack
+		movem.l	d1,-(sp)			;Push d1 onto stack
+		
+		move.b	(v_playlist),d1
+		add.b	d1,d1
+		add.b	d1,d1
+		lea		(Playlist_lists).l,a0
+		adda.w	d1,a0
+		movea.l	(a0),a0
+		add.w	d0,d0
+		adda.w	d0,a0
+		move.w	(a0),d0
+		
+		movem.l	(sp)+,d1			;Pop d1 from stack
+		movem.l	(sp)+,a0			;Pop a0 from stack
+		rts
+		even
+		
+Playlist_lists:		
+		dc.l	play_Sonic1FM
+		dc.l	play_Sonic1Mega
+		dc.l	play_Sonic1SMS
+		dc.l	play_SonicGSMS
+		dc.l	play_Copera
+		even
+		
+play_Sonic1FM:
+		;Flags
+		dc.w	$00,bgm_Stop,sfx_Fade,specsfx_Fade,dacsfx_Fade,bgm_Fade,bgm_Speedup,bgm_Slowdown
+		
+		;Music
+		dc.w	bgm_GHZ,bgm_LZ,bgm_MZ,bgm_SLZ,bgm_SYZ,bgm_SBZ
+		dc.w	bgm_Invincible,bgm_ExtraLife,bgm_SS,bgm_Title,bgm_Ending,bgm_Boss,bgm_FZ
+		dc.w	bgm_GotThrough,bgm_GameOver,bgm_Continue,bgm_Credits,bgm_Drowning,bgm_Emerald
+		dc.w	bgm_LvlSel,bgm_ZoneStart,bgm_Options,bgm_BZ,bgm_JZ
+		
+		;SFX
+		dc.w	sfx_Jump,sfx_Lamppost,sfx_A2,sfx_Death,sfx_Skid,sfx_A5,sfx_HitSpikes,sfx_Push
+		dc.w	sfx_SSGoal,sfx_SSItem,sfx_Splash,sfx_AB,sfx_HitBoss,sfx_Bubble,sfx_Fireball,sfx_Shield
+		dc.w	sfx_Saw,sfx_Electric,sfx_Drown,sfx_Flamethrower,sfx_Bumper,sfx_Ring,sfx_SpikesMove,sfx_Rumbling
+		dc.w	sfx_B8,sfx_Collapse,sfx_SSGlass,sfx_Door,sfx_Teleport,sfx_ChainStomp,sfx_Roll,sfx_Continue
+		dc.w	sfx_Basaran,sfx_BreakItem,sfx_Warning,sfx_GiantRing,sfx_Bomb,sfx_Cash,sfx_RingLoss,sfx_ChainRise
+		dc.w	sfx_Burning,sfx_Bonus,sfx_EnterSS,sfx_WallSmash,sfx_Spring,sfx_Switch,sfx_RingLeft,sfx_Signpost
+		
+		;Special SFX
+		dc.w	sfx_Waterfall
+		
+		;DAC SFX
+		dc.w	sfx_Sega,sfx_Dont
+		even
+		
+play_Sonic1Mega:
+		;Flags
+		dc.w	$00,bgm_Stop,sfx_Fade,specsfx_Fade,dacsfx_Fade,bgm_Fade,bgm_Speedup,bgm_Slowdown
+		
+		;Music
+		dc.w	bgm_GHZ,bgm_LZ,bgm_MZ,bgm_SLZ,bgm_SYZ,bgm_SBZ
+		dc.w	bgm_Invincible,bgm_ExtraLife,bgm_SS,bgm_Title,bgm_Ending,bgm_Boss,bgm_FZ
+		dc.w	bgm_GotThrough,bgm_GameOver,bgm_Continue,bgm_Credits,bgm_Drowning,bgm_Emerald
+		dc.w	bgm_LvlSel,bgm_ZoneStart,bgm_Options,bgm_BZ,bgm_JZ
+		
+		;SFX
+		dc.w	sfx_Jump,sfx_Lamppost,sfx_A2,sfx_Death,sfx_Skid,sfx_A5,sfx_HitSpikes,sfx_Push
+		dc.w	sfx_SSGoal,sfx_SSItem,sfx_Splash,sfx_AB,sfx_HitBoss,sfx_Bubble,sfx_Fireball,sfx_Shield
+		dc.w	sfx_Saw,sfx_Electric,sfx_Drown,sfx_Flamethrower,sfx_Bumper,sfx_Ring,sfx_SpikesMove,sfx_Rumbling
+		dc.w	sfx_B8,sfx_Collapse,sfx_SSGlass,sfx_Door,sfx_Teleport,sfx_ChainStomp,sfx_Roll,sfx_Continue
+		dc.w	sfx_Basaran,sfx_BreakItem,sfx_Warning,sfx_GiantRing,sfx_Bomb,sfx_Cash,sfx_RingLoss,sfx_ChainRise
+		dc.w	sfx_Burning,sfx_Bonus,sfx_EnterSS,sfx_WallSmash,sfx_Spring,sfx_Switch,sfx_RingLeft,sfx_Signpost
+		
+		;Special SFX
+		dc.w	sfx_Waterfall
+		
+		;DAC SFX
+		dc.w	sfx_Sega,sfx_Dont
+		even
+
+play_Sonic1SMS:
+		;Flags
+		dc.w	$00,bgm_Stop,sfx_Fade,specsfx_Fade,dacsfx_Fade,bgm_Fade,bgm_Speedup,bgm_Slowdown
+		
+		;Music
+		dc.w	bgm_GHZ,bgm_LZ,bgm_MZ,bgm_SLZ,bgm_SYZ,bgm_SBZ
+		dc.w	bgm_Invincible,bgm_ExtraLife,bgm_SS,bgm_Title,bgm_Ending,bgm_Boss,bgm_FZ
+		dc.w	bgm_GotThrough,bgm_GameOver,bgm_Continue,bgm_Credits,bgm_Drowning,bgm_Emerald
+		dc.w	bgm_LvlSel,bgm_ZoneStart,bgm_Options,bgm_BZ,bgm_JZ
+		
+		;SFX
+		dc.w	sfx_Jump,sfx_Lamppost,sfx_A2,sfx_Death,sfx_Skid,sfx_A5,sfx_HitSpikes,sfx_Push
+		dc.w	sfx_SSGoal,sfx_SSItem,sfx_Splash,sfx_AB,sfx_HitBoss,sfx_Bubble,sfx_Fireball,sfx_Shield
+		dc.w	sfx_Saw,sfx_Electric,sfx_Drown,sfx_Flamethrower,sfx_Bumper,sfx_Ring,sfx_SpikesMove,sfx_Rumbling
+		dc.w	sfx_B8,sfx_Collapse,sfx_SSGlass,sfx_Door,sfx_Teleport,sfx_ChainStomp,sfx_Roll,sfx_Continue
+		dc.w	sfx_Basaran,sfx_BreakItem,sfx_Warning,sfx_GiantRing,sfx_Bomb,sfx_Cash,sfx_RingLoss,sfx_ChainRise
+		dc.w	sfx_Burning,sfx_Bonus,sfx_EnterSS,sfx_WallSmash,sfx_Spring,sfx_Switch,sfx_RingLeft,sfx_Signpost
+		
+		;Special SFX
+		dc.w	sfx_Waterfall
+		
+		;DAC SFX
+		dc.w	sfx_Sega,sfx_Dont
+		even
+		
+play_SonicGSMS:
+		;Flags
+		dc.w	$00,bgm_Stop,sfx_Fade,specsfx_Fade,dacsfx_Fade,bgm_Fade,bgm_Speedup,bgm_Slowdown
+		
+		;Music
+		dc.w	bgm_GHZ,bgm_LZ,bgm_MZ,bgm_SLZ,bgm_SYZ,bgm_SBZ
+		dc.w	bgm_Invincible,bgm_ExtraLife,bgm_SS,bgm_Title,bgm_Ending,bgm_Boss,bgm_FZ
+		dc.w	bgm_GotThrough,bgm_GameOver,bgm_Continue,bgm_Credits,bgm_Drowning,bgm_Emerald
+		dc.w	bgm_LvlSel,bgm_ZoneStart,bgm_Options,bgm_BZ,bgm_JZ
+		
+		;SFX
+		dc.w	sfx_Jump,sfx_Lamppost,sfx_A2,sfx_Death,sfx_Skid,sfx_A5,sfx_HitSpikes,sfx_Push
+		dc.w	sfx_SSGoal,sfx_SSItem,sfx_Splash,sfx_AB,sfx_HitBoss,sfx_Bubble,sfx_Fireball,sfx_Shield
+		dc.w	sfx_Saw,sfx_Electric,sfx_Drown,sfx_Flamethrower,sfx_Bumper,sfx_Ring,sfx_SpikesMove,sfx_Rumbling
+		dc.w	sfx_B8,sfx_Collapse,sfx_SSGlass,sfx_Door,sfx_Teleport,sfx_ChainStomp,sfx_Roll,sfx_Continue
+		dc.w	sfx_Basaran,sfx_BreakItem,sfx_Warning,sfx_GiantRing,sfx_Bomb,sfx_Cash,sfx_RingLoss,sfx_ChainRise
+		dc.w	sfx_Burning,sfx_Bonus,sfx_EnterSS,sfx_WallSmash,sfx_Spring,sfx_Switch,sfx_RingLeft,sfx_Signpost
+		
+		;Special SFX
+		dc.w	sfx_Waterfall
+		
+		;DAC SFX
+		dc.w	sfx_Sega,sfx_Dont
+		even
+		
+play_Copera:
+		;Flags
+		dc.w	$00,bgm_Stop,sfx_Fade,specsfx_Fade,dacsfx_Fade,bgm_Fade,bgm_Speedup,bgm_Slowdown
+		
+		;Music
+		dc.w	bgm_GHZ,bgm_LZ,bgm_MZ,bgm_SLZ,bgm_SYZ,bgm_SBZ
+		dc.w	bgm_Invincible,bgm_ExtraLife,bgm_SS,bgm_Title,bgm_Ending,bgm_Boss,bgm_FZ
+		dc.w	bgm_GotThrough,bgm_GameOver,bgm_Continue,bgm_Credits,bgm_Drowning,bgm_Emerald
+		dc.w	bgm_LvlSel,bgm_ZoneStart,bgm_Options,bgm_BZ,bgm_JZ
+		
+		;SFX
+		dc.w	sfx_Jump,sfx_Lamppost,sfx_A2,sfx_Death,sfx_Skid,sfx_A5,sfx_HitSpikes,sfx_Push
+		dc.w	sfx_SSGoal,sfx_SSItem,sfx_Splash,sfx_AB,sfx_HitBoss,sfx_Bubble,sfx_Fireball,sfx_Shield
+		dc.w	sfx_Saw,sfx_Electric,sfx_Drown,sfx_Flamethrower,sfx_Bumper,sfx_Ring,sfx_SpikesMove,sfx_Rumbling
+		dc.w	sfx_B8,sfx_Collapse,sfx_SSGlass,sfx_Door,sfx_Teleport,sfx_ChainStomp,sfx_Roll,sfx_Continue
+		dc.w	sfx_Basaran,sfx_BreakItem,sfx_Warning,sfx_GiantRing,sfx_Bomb,sfx_Cash,sfx_RingLoss,sfx_ChainRise
+		dc.w	sfx_Burning,sfx_Bonus,sfx_EnterSS,sfx_WallSmash,sfx_Spring,sfx_Switch,sfx_RingLeft,sfx_Signpost
+		
+		;Special SFX
+		dc.w	sfx_Waterfall
+		
+		;DAC SFX
+		dc.w	sfx_Sega,sfx_Dont
+		even
+; ---------------------------------------------------------------------------

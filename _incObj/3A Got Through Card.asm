@@ -116,7 +116,7 @@ Got_RingBonus:
 Got_ChkBonus:
 		tst.w	d0		; is there any bonus?
 		bne.s	Got_AddBonus	; if yes, branch
-		move.w	#sfx_Cash,d0
+		move.w	#_sfx_Cash,d0
 		jsr	(PlaySound_Special).l	; play "ker-ching" sound
 		addq.b	#2,obRoutine(a0)
 		cmpi.w	#(id_SBZ<<8)+1,(v_zone).w
@@ -135,7 +135,7 @@ Got_AddBonus:
 		move.b	(v_vbla_byte).w,d0
 		andi.b	#3,d0
 		bne.s	locret_C692
-		move.w	#sfx_Switch,d0
+		move.w	#_sfx_Switch,d0
 		jmp	(PlaySound_Special).l	; play "blip" sound
 ; ===========================================================================
 
@@ -238,7 +238,7 @@ Got_SBZ2:
 		bne.w	DeleteObject
 		addq.b	#2,obRoutine(a0)
 		clr.b	(f_lockctrl).w	; unlock controls
-		move.w	#bgm_FZ,d0
+		move.w	#_bgm_FZ,d0
 		jmp	(PlaySound).l	; play FZ music
 ; ===========================================================================
 

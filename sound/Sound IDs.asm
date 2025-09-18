@@ -18,35 +18,43 @@ flg__Last =		bgm_Slowdown
 ; Background music
 SMPS_offset :=	MusicIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	$10
+;!@ SMPS_idstart :=	$10
+SMPS_idstart :=	flg__Last+1
 
 bgm__First = SMPS_idstart
-bgm_GHZ =		SMPS_id(ptr_mus81)
-bgm_LZ =		SMPS_id(ptr_mus82)
-bgm_MZ =		SMPS_id(ptr_mus83)
-bgm_SLZ =		SMPS_id(ptr_mus84)
-bgm_SYZ =		SMPS_id(ptr_mus85)
-bgm_SBZ =		SMPS_id(ptr_mus86)
+;!@ Sonic 1 FM music
+bgm_GHZ =			SMPS_id(ptr_mus81)
+bgm_LZ =			SMPS_id(ptr_mus82)
+bgm_MZ =			SMPS_id(ptr_mus83)
+bgm_SLZ =			SMPS_id(ptr_mus84)
+bgm_SYZ =			SMPS_id(ptr_mus85)
+bgm_SBZ =			SMPS_id(ptr_mus86)
 bgm_Invincible =	SMPS_id(ptr_mus87)
 bgm_ExtraLife =		SMPS_id(ptr_mus88)
-bgm_SS =		SMPS_id(ptr_mus89)
-bgm_Title =		SMPS_id(ptr_mus8A)
+bgm_SS =			SMPS_id(ptr_mus89)
+bgm_Title =			SMPS_id(ptr_mus8A)
 bgm_Ending =		SMPS_id(ptr_mus8B)
-bgm_Boss =		SMPS_id(ptr_mus8C)
-bgm_FZ =		SMPS_id(ptr_mus8D)
+bgm_Boss =			SMPS_id(ptr_mus8C)
+bgm_FZ =			SMPS_id(ptr_mus8D)
 bgm_GotThrough =	SMPS_id(ptr_mus8E)
 bgm_GameOver =		SMPS_id(ptr_mus8F)
 bgm_Continue =		SMPS_id(ptr_mus90)
 bgm_Credits =		SMPS_id(ptr_mus91)
 bgm_Drowning =		SMPS_id(ptr_mus92)
 bgm_Emerald =		SMPS_id(ptr_mus93)
+;New base slots
+bgm_LvlSel =		SMPS_id(ptr_mus94)
+bgm_ZoneStart =		SMPS_id(ptr_mus95)
+bgm_Options =		SMPS_id(ptr_mus96)
+bgm_BZ =			SMPS_id(ptr_mus97)
+bgm_JZ =			SMPS_id(ptr_mus98)
 bgm__Last =		SMPS_id(ptr_musend)-1
 
 
 ; Sound effects
 SMPS_offset :=	SoundIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	$30
+SMPS_idstart :=	bgm__Last+1
 
 sfx__First = SMPS_idstart
 sfx_Jump =		SMPS_id(ptr_sndA0)
@@ -103,17 +111,18 @@ sfx__Last =		SMPS_id(ptr_sndend)-1
 ; Special sound effects
 SMPS_offset :=	SpecSoundIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	$60
+SMPS_idstart :=	sfx__Last+1
 
 spec__First = SMPS_idstart
 sfx_Waterfall =		SMPS_id(ptr_sndD0)
 spec__Last =		SMPS_id(ptr_specend)-1
 
 
+
 ; DAC sound effects
 SMPS_offset :=  DACMetadataTable
 SMPS_ptrsize := 5
-SMPS_idstart := $70
+SMPS_idstart := spec__Last+1
 
 dac__First = SMPS_idstart
 sfx_Sega =		SMPS_id(ptr_dacE0)

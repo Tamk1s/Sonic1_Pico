@@ -103,6 +103,14 @@ songStart set *
 	endif
 
 	endm
+	
+;!@ GenesisDoes; EOF
+smpsFooterEndSong macro Path
+songEnd set *
+	if MOMPASS==1
+	message "Song \"\{Path}\" is $\{songEnd-songStart} bytes"
+	endif
+	endm
 
 smpsHeaderVoiceNull macro
 	if songStart<>*
@@ -608,7 +616,7 @@ vcRR2 set op2
 vcRR3 set op3
 vcRR4 set op4
 	endm
-
++
 ; Voices - Total Level
 ; The original SMPS2ASM decides TL high bits automatically,
 ; but later versions leave it up to the user.

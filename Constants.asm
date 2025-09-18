@@ -326,6 +326,13 @@ af2ndRoutine:	equ $FA	; increment 2nd routine counter
 ; bgm_Stop:	equ ((ptr_flgE4-Sound_ExIndex)/4)+flg__First
 ; flg__Last:	equ ((ptr_flgend-Sound_ExIndex-4)/4)+flg__First
 
+;!@ playlists IDs
+bply_Sonic1FM:		equ	0	;Regular Sonic 1 music (FM)
+bply_Sonic1Mega:	equ	1	;Alt Sonic 1 Music (Music+Pico ADPCM)
+bply_Sonic1SMS:		equ	2	;Sonic 1 SMS (PSG)
+bply_SonicGSMS:		equ	3	;Sonic Genesis for SMS (PSG)
+bply_Copera:		equ	4	;Copera (Soundblaster)
+
 ; Sonic frame IDs
 fr_Null:	equ 0
 fr_Stand:	equ 1

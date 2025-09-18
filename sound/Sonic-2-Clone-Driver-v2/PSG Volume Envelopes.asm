@@ -92,10 +92,6 @@ ptr_kcpsg0C:	dc.l KC_PSG0C
 ptr_kcpsg0D:	dc.l KC_PSG0D
 ptr_kcpsg0E:	dc.l KC_PSG0E
 	endif
-	
-;!@ S1SMS
-	if SMPS_S18BitPSGEnvelopes
-	endif
 
 	if SMPS_S28BitPSGEnvelopes
 ptr_s28bitpsg01:	dc.l S28Bit_PSG01
@@ -216,11 +212,6 @@ KC_PSG0C:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Knuckles' Chaotix/PSG C.bi
 KC_PSG0D:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Knuckles' Chaotix/PSG D.bin"
 KC_PSG0E:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Knuckles' Chaotix/PSG E.bin"
 	endif
-	
-	;!@ Insert custom envelopes here
-	;!@ S1SMS
-	if SMPS_S18BitPSGEnvelopes
-	 endif
 
 	if SMPS_S28BitPSGEnvelopes
 S28Bit_PSG01:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 1.bin"

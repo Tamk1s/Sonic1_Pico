@@ -62,7 +62,7 @@ loc_BDBE:
 loc_BDC8:
 		tst.b	(a3)
 		bne.s	loc_BDD6
-		move.w	#sfx_Switch,d0
+		move.w	#_sfx_Switch,d0
 		jsr	(PlaySound_Special).l	; play switch sound
 
 loc_BDD6:

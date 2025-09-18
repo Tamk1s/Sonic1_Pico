@@ -454,7 +454,9 @@ v_consoleType:		ds.b	1		; !@ Sega Mega Pico. Console type. See CT_ Bitfield
 f_demo:			ds.w	1		; demo mode flag (0 = no; 1 = yes; $8001 = ending)
 v_demonum:		ds.w	1		; demo level number (not the same as the level number)
 v_creditsnum:		ds.w	1		; credits index number
-			ds.b	2		; unused
+v_playlist:		ds.b	1		;!@ Current playlist type. See constants for playlist types
+				ds.b	1
+			;!@ ds.b	2		; unused
 v_megadrive:		ds.b	1		; Megadrive machine type
 			ds.b	1		; unused
 f_debugmode:		ds.w	1		; debug mode flag

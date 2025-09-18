@@ -98,7 +98,7 @@ Bas_Action:	; Routine 2
 		move.b	(v_vbla_byte).w,d0
 		andi.b	#$F,d0
 		bne.s	.nosound
-		move.w	#sfx_Basaran,d0
+		move.w	#_sfx_Basaran,d0
 		jsr	(PlaySound_Special).l	; play flapping sound every 16th frame
 
 .nosound:

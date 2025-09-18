@@ -202,7 +202,7 @@ loc_B872:
 		bne.s	loc_B892
 		tst.b	obRender(a0)
 		bpl.s	loc_B892
-		move.w	#sfx_ChainRise,d0
+		move.w	#_sfx_ChainRise,d0
 		jsr	(PlaySound_Special).l	; play rising chain sound
 
 loc_B892:
@@ -228,7 +228,7 @@ loc_B8A8:
 		move.w	#0,obVelY(a0)	; stop object falling
 		tst.b	obRender(a0)
 		bpl.s	CStom_Restart
-		move.w	#sfx_ChainStomp,d0
+		move.w	#_sfx_ChainStomp,d0
 		jsr	(PlaySound_Special).l	; play stomping sound
 
 CStom_Restart:
@@ -254,7 +254,7 @@ loc_B902:
 		bne.s	loc_B91C
 		tst.b	obRender(a0)
 		bpl.s	loc_B91C
-		move.w	#sfx_ChainRise,d0
+		move.w	#_sfx_ChainRise,d0
 		jsr	(PlaySound_Special).l	; play rising chain sound
 
 loc_B91C:
@@ -281,7 +281,7 @@ loc_B938:
 		move.w	#$3C,objoff_38(a0)
 		tst.b	obRender(a0)
 		bpl.s	loc_B97C
-		move.w	#sfx_ChainStomp,d0
+		move.w	#_sfx_ChainStomp,d0
 		jsr	(PlaySound_Special).l	; play stomping sound
 
 loc_B97C:

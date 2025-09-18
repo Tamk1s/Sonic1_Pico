@@ -30,7 +30,7 @@ Sonic_Water:
 		asr	obVelY(a0)	; slow Sonic
 		beq.s	.exit		; branch if Sonic stops moving
 		move.b	#id_Splash,(v_splash).w ; load splash object
-		move.w	#sfx_Splash,d0
+		move.w	#_sfx_Splash,d0
 		jmp	(PlaySound_Special).l	 ; play splash sound
 ; ===========================================================================
 
@@ -49,6 +49,6 @@ Sonic_Water:
 		move.w	#-$1000,obVelY(a0) ; set maximum speed on leaving water
 
 .belowmaxspeed:
-		move.w	#sfx_Splash,d0
+		move.w	#_sfx_Splash,d0
 		jmp	(PlaySound_Special).l	 ; play splash sound
 ; End of function Sonic_Water

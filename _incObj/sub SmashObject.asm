@@ -49,7 +49,7 @@ SmashObject:
 		dbf	d1,.loop
 
 .playsnd:
-		move.w	#sfx_WallSmash,d0
+		move.w	#_sfx_WallSmash,d0
 		jmp	(PlaySound_Special).l ; play smashing sound
 
 ; End of function SmashObject

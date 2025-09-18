@@ -109,10 +109,6 @@ KCVolEnv_0C =		SMPS_id(ptr_kcpsg0C)
 KCVolEnv_0D =		SMPS_id(ptr_kcpsg0D)
 KCVolEnv_0E =		SMPS_id(ptr_kcpsg0E)
 	endif
-	
-;!@ S1SMS
-	if SMPS_S18BitPSGEnvelopes
-	endif
 
 	if SMPS_S28BitPSGEnvelopes
 s28BitTone_01 =		SMPS_id(ptr_s28bitpsg01)

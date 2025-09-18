@@ -60,7 +60,10 @@ ptr_sndCC:	SMPS_SFX_METADATA	SoundCC, $70, 0
 ptr_sndCD:	SMPS_SFX_METADATA	SoundCD, $70, 0
 ptr_sndCE:	SMPS_SFX_METADATA	SoundCE, $70, 0
 ptr_sndCF:	SMPS_SFX_METADATA	SoundCF, $70, 0
+ptr_sndend2
+;!@ Duplicates for other playlists
 ptr_sndend
+		even
 
 ; ---------------------------------------------------------------------------
 ; SFX data

@@ -236,7 +236,7 @@ loc_130BA:
 		blt.s	locret_130E8
 		move.b	#id_Stop,obAnim(a0) ; use "stopping" animation
 		bclr	#0,obStatus(a0)
-		move.w	#sfx_Skid,d0
+		move.w	#_sfx_Skid,d0
 		jsr	(PlaySound_Special).l	; play stopping sound
 
 locret_130E8:
@@ -282,7 +282,7 @@ loc_13120:
 		bgt.s	locret_1314E
 		move.b	#id_Stop,obAnim(a0) ; use "stopping" animation
 		bset	#0,obStatus(a0)
-		move.w	#sfx_Skid,d0
+		move.w	#_sfx_Skid,d0
 		jsr	(PlaySound_Special).l	; play stopping sound
 
 locret_1314E:

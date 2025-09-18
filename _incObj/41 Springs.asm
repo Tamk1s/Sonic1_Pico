@@ -84,7 +84,7 @@ Spring_BounceUp:
 		move.b	#2,obRoutine(a1)
 		bclr	#3,obStatus(a0)
 		clr.b	obSolid(a0)
-		move.w	#sfx_Spring,d0
+		move.w	#_sfx_Spring,d0
 		jsr	(PlaySound_Special).l	; play spring sound
 
 Spring_AniUp:	; Routine 4
@@ -134,7 +134,7 @@ Spring_Flipped:
 loc_DC56:
 		bclr	#5,obStatus(a0)
 		bclr	#5,obStatus(a1)
-		move.w	#sfx_Spring,d0
+		move.w	#_sfx_Spring,d0
 		jsr	(PlaySound_Special).l	; play spring sound
 
 Spring_AniLR:	; Routine $A
@@ -178,7 +178,7 @@ Spring_BounceDwn:
 		move.b	#2,obRoutine(a1)
 		bclr	#3,obStatus(a0)
 		clr.b	obSolid(a0)
-		move.w	#sfx_Spring,d0
+		move.w	#_sfx_Spring,d0
 		jsr	(PlaySound_Special).l	; play spring sound
 
 Spring_AniDwn:	; Routine $10

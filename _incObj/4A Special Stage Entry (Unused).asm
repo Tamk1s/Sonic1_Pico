@@ -40,7 +40,7 @@ Van_RmvSonic:	; Routine 2
 		tst.b	(v_player).w
 		beq.s	.display
 		move.b	#0,(v_player).w	; remove Sonic
-		move.w	#sfx_SSGoal,d0
+		move.w	#_sfx_SSGoal,d0
 		jsr	(PlaySound_Special).l	; play Special Stage "GOAL" sound
 
 .display:

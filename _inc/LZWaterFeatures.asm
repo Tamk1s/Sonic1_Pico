@@ -171,7 +171,7 @@ DynWater_LZ3:
 		move.w	#$4C8,d1	; set new water height
 		move.b	#$4B,(v_lvllayout+$80*2+6).w ; update level layout
 		move.b	#1,(v_wtr_routine).w ; use second routine next
-		move.w	#sfx_Rumbling,d0
+		move.w	#_sfx_Rumbling,d0
 		bsr.w	PlaySound_Special ; play sound $B7 (rumbling)
 
 .setwaterlz3:
@@ -315,7 +315,7 @@ LZWindTunnels:
 		move.b	(v_vbla_byte).w,d0
 		andi.b	#$3F,d0		; does VInt counter fall on 0, $40, $80 or $C0?
 		bne.s	.skipsound	; if not, branch
-		move.w	#sfx_Waterfall,d0
+		move.w	#_sfx_Waterfall,d0
 		jsr	(PlaySound_Special).l	; play rushing water sound (only every $40 frames)
 
 .skipsound:
@@ -438,7 +438,7 @@ loc_3F9A:
 		move.b	(v_vbla_byte).w,d0
 		andi.b	#$1F,d0
 		bne.s	locret_3FBE
-		move.w	#sfx_Waterfall,d0
+		move.w	#_sfx_Waterfall,d0
 		jsr	(PlaySound_Special).l	; play water sound
 
 locret_3FBE:

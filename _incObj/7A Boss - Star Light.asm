@@ -134,7 +134,7 @@ loc_189FE:
 		tst.b	objoff_3E(a0)
 		bne.s	loc_18A28
 		move.b	#$20,objoff_3E(a0)
-		move.w	#sfx_HitBoss,d0
+		move.w	#_sfx_HitBoss,d0
 		jsr	(PlaySound_Special).l	; play boss damage sound
 
 loc_18A28:
@@ -316,7 +316,7 @@ loc_18BAE:
 
 loc_18BB4:
 		clr.w	obVelY(a0)
-		move.w	#bgm_SLZ,d0
+		move.w	#_bgm_SLZ,d0
 		jsr	(PlaySound).l		; play SLZ music
 
 loc_18BC2:

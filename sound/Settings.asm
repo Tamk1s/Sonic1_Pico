@@ -29,7 +29,6 @@ SMPS_S3PSGEnvelopes	= 0
 SMPS_SKPSGEnvelopes	= 0
 SMPS_S3DPSGEnvelopes	= 0
 SMPS_KCPSGEnvelopes	= 0
-SMPS_S18BitPSGEnvelopes	= 0	;!@S1SMS
 SMPS_S28BitPSGEnvelopes	= 1
 
 ; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
@@ -48,10 +47,10 @@ FixMusicAndSFXDataBugs	= 1 ; Needs to be set to fix compatibility issues with so
 
 ; ---SOUND ID BOUNDARIES---
 MusID__First		= bgm__First
-;	| ID of your first song
-;
+;	| ID of your first song;
 MusID__End		= bgm__Last+1
 ;	| ID of your last song+1
+
 ;
 SndID__First		= sfx__First
 ;	| ID of your first SFX
@@ -79,15 +78,15 @@ FlgID__End		= flg__Last+1
 ;
 
 ; ---SFX CONSTANTS---
-SndID_Ring		= sfx_Ring
+SndID_Ring		= _sfx_Ring
 ;	| ID of your ring SFX
 ;
-SndID_RingLeft		= sfx_RingLeft
+SndID_RingLeft		= _sfx_RingLeft
 ;	| ID of your alternate ring SFX
 ;
-MusID_StopDACSFX	= dacsfx_Fade
+MusID_StopDACSFX	= _dacsfx_Fade
 ;	| ID of the command to stop DAC SFX
 ;
-SndID_SegaSound		= sfx_Sega
+SndID_SegaSound		= _sfx_Sega
 ;	| ID of your 'Sega' chant DAC SFX
 ;

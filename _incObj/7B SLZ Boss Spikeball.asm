@@ -301,7 +301,7 @@ loc_18FDC:
 		jsr	(Sonic_ChkRoll).l
 		movea.l	(sp)+,a0
 		move.b	#2,obRoutine(a2)
-		move.w	#sfx_Spring,d0
+		move.w	#_sfx_Spring,d0
 		jsr	(PlaySound_Special).l	; play "spring" sound
 
 loc_19008:
