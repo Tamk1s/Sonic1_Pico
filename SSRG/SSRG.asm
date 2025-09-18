@@ -12,7 +12,7 @@ neonOST = 	v_objspace+$140
 GM_SSRGScreen:
 		;!@ moveq	#$FFFFFFE4,d0				; set music ID to "stop music"
 		;!@ moveq	#bgm_Stop,d0				; set music ID to "stop music"
-		moveq		#bgm_Stop,d0
+		move.w		#_bgm_Stop,d0
 		jsr	PlaySound_Special
 		
 ;!@ Stop music, then play Act Clear music
@@ -23,7 +23,7 @@ SSRG_Wait:
 		tst.w	(v_demolength).w
 		bne.s	SSRG_Wait
 		
-		moveq		#bgm_GotThrough,d0
+		move.w		#_bgm_GotThrough,d0
 		jsr	PlaySound_Special			; play ID
 		jsr	ClearPLC				; clear pattern load cues list
 		;!@ jsr	Pal_FadeFrom				; fade palettes out
@@ -313,7 +313,7 @@ OSN_MoveIn:
 		move.w	#$00DE,$08(a0)				; set him directly at the square
 		clr.w	$10(a0)					; stop sonic moving (no X speed)
 		;!@ moveq	#$FFFFFFBE,d0				; set to play spinning SFX
-		moveq	#sfx_Roll,d0		
+		move.w	#_sfx_Roll,d0		
 		jsr	PlaySound_Special			; play SFX
 		addq.b	#$02,$24(a0)				; increase routine counter
 
@@ -419,7 +419,7 @@ OS_Startup:
 OS_PlaySound:
 		addq.b	#$02,$24(a0)				; increase routine counter
 		;!@moveq	#$FFFFFFBC,d0				; set to play spin release SFX
-		moveq	#sfx_Teleport,d0				; set to play spin release SFX
+		move.w	#_sfx_Teleport,d0				; set to play spin release SFX
 		jsr	PlaySound_Special			; play SFX
 
 ; ===========================================================================
@@ -434,7 +434,7 @@ OS_SpinIn:
 		blt	OS_Display					; if not, branch
 		addq.b	#$02,$24(a0)			; increase routine counter
 		;!@ moveq	#$FFFFFFBD,d0		; set to play spiked chandelier SFX
-		moveq	#sfx_ChainStomp,d0		; set to play spiked chandelier SFX
+		move.w	#_sfx_ChainStomp,d0		; set to play spiked chandelier SFX
 		
 		jsr	PlaySound_Special			; play SFX
 		move.l	#$FF00FC00,$10(a0)			; set X and Y bounce off speeds
