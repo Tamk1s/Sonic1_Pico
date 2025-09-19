@@ -38,6 +38,7 @@ DACDriverLoad		= SMPS_Setup
 PlaySound		= SMPS_QueueSound1
 PlaySound_Special	= SMPS_QueueSound2
 PlaySound_Unused	= SMPS_QueueSound3
+PlaySound_Absolute	= SMPS_QueueSound4	;!@ New function
 
 Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
 

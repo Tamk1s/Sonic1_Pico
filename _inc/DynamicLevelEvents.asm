@@ -201,7 +201,8 @@ DLE_LZ3:
 		beq.s	loc_6F28
 		move.b	#7,(a1)		; modify level layout
 		move.w	#_sfx_Rumbling,d0
-		bsr.w	PlaySound_Special ; play rumbling sound
+		;!@ bsr.w	PlaySound_Special ; play rumbling sound
+		jsr		(PlaySound_Special).l ; play rumbling sound
 
 loc_6F28:
 		tst.b	(v_dle_routine).w

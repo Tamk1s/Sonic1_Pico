@@ -24,7 +24,7 @@ AddressSRAM			= 3	; 0 = odd+even; 2 = even only; 3 = odd only
 ; Change to 2 to build the version from Sonic Mega Collection, dubbed REVXB, which fixes the infamous "spike bug"
 Revision	  = 2
 
-ZoneCount	  = 6	; discrete zones are: GHZ, MZ, SYZ, LZ, SLZ, and SBZ
+ZoneCount	  = 6	; discrete zones are: GHZ, MZ, SYZ, LZ, SLZ, SBZ, BZ, and JZ
 
 FixBugs		  = 1	; change to 1 to enable bugfixes
 
@@ -2799,21 +2799,29 @@ LevelSelect:
 		andi.b	#btnABC+btnStart,(v_jpadpress1).w ; is A, B, C, or Start pressed?
 		beq.s	LevelSelect	; if not, branch
 		move.w	(v_levselitem).w,d0
-		cmpi.w	#$14,d0		; have you selected item $14 (sound test)?
+		;!@cmpi.w	#$14,d0		; have you selected item $14 (sound test)?
+		cmpi.w	#$14+6,d0		; have you selected item $14+6 (sound test)?
 		bne.s	LevSel_Level_SS	; if not, go to	Level/SS subroutine
+		
 		move.w	(v_levselsound).w,d0
 		;!@ Clone Driver
 		;addi.w	#$80,d0
-		tst.b	(f_creditscheat).w ; is Japanese Credits cheat on?
-		beq.s	LevSel_NoCheat	; if not, branch
+		
+		;Disabled jap credits cheat check; just now check if Start pressed on ending/credits BGMs
+		;!@ tst.b	(f_creditscheat).w ; is Japanese Credits cheat on?
+		;!@ beq.s	LevSel_NoCheat	; if not, branch
 		;!@ Clone Driver
 		; cmpi.w	#$9F,d0		; is sound $9F being played?
 		; beq.s	LevSel_Ending	; if yes, branch
 		; cmpi.w	#$9E,d0		; is sound $9E being played?
 		; beq.s	LevSel_Credits	; if yes, branch
-		cmpi.w	#$1F,d0		; is sound $9F being played?
+		
+		;!@ Check if start button prssed
+		andi.b	#btnStart,(v_jpadpress1).w ; is Start pressed?
+		beq.s	LevSel_PlaySnd	; if not, branch		
+		cmpi.w	#_bgm_Ending,d0	; !@ is song Ending highlighted?
 		beq.s	LevSel_Ending	; if yes, branch
-		cmpi.w	#$1E,d0		; is sound $9E being played?
+		cmpi.w	#bgm_Credits,d0	; !@ is sound Credits highlighted?
 		beq.s	LevSel_Credits	; if yes, branch
 		
 
@@ -2827,7 +2835,17 @@ LevSel_NoCheat:
 		; blo.s	LevelSelect	; if yes, branch
 
 LevSel_PlaySnd:
-		bsr.w	PlaySound_Special
+		;!@ New code to check playlist type.
+		;If invalid, then play sound ID absolute; else with playlist translation
+		move.b	v_playlist,d1		;Move playlist ID into d1
+		;Is the I>=MAX?
+		cmpi.b	#bply_MAX,d1
+		bgt.s	.abs				;if so, branch		
+		bsr.w	PlaySound_Special	;Play sound normally (with playlist ID translation)
+		bra.s	.end
+.abs:
+		bsr.w	PlaySound_Absolute	;Play sound absolute
+.end:		
 		bra.s	LevelSelect
 ; ===========================================================================
 
@@ -2844,14 +2862,13 @@ LevSel_Credits:
 		move.w	#0,(v_creditsnum).w
 		rts	
 ; ===========================================================================
-
 LevSel_Level_SS:
 		add.w	d0,d0
 		move.w	LevSel_Ptrs(pc,d0.w),d0 ; load level number
 		bmi.w	LevelSelect
 		cmpi.w	#id_SS*$100,d0	; check	if level is 0700 (Special Stage)
 		bne.s	LevSel_Level	; if not, branch
-;!@
+
 LevSel_SS_Goto:
 		move.b	#id_Special,(v_gamemode).w ; set screen mode to $10 (Special Stage)
 		clr.w	(v_zone).w	; clear	level
@@ -2892,6 +2909,24 @@ PlayLevel:
 ; ---------------------------------------------------------------------------
 ; Level	select - level pointers
 ; ---------------------------------------------------------------------------
+; !@ S1 SMS level order:
+; Green Hill Zone
+; Bridge Zone
+; Jungle Zone
+; Labyrinth Zone
+; Scrap Brain Zone
+; Sky Base Zone
+
+; New level order:
+; GHZ
+; *BZ
+; *JZ
+; MZ
+; SYZ
+; LZ
+; SLZ
+; SBZ
+
 LevSel_Ptrs:	if Revision=0
 		; old level order
 		dc.b id_GHZ, 0
@@ -2912,12 +2947,23 @@ LevSel_Ptrs:	if Revision=0
 		dc.b id_SBZ, 0
 		dc.b id_SBZ, 1
 		dc.b id_LZ, 3		; Scrap Brain Zone 3
-		dc.b id_SBZ, 2		; Final Zone
+		dc.b id_BZ, 0		;!@
+		dc.b id_BZ, 1
+		dc.b id_BZ, 2
+		dc.b id_JZ, 0		;!@
+		dc.b id_JZ, 1
+		dc.b id_JZ, 2
 		else
 		; correct level order
 		dc.b id_GHZ, 0
 		dc.b id_GHZ, 1
 		dc.b id_GHZ, 2
+		dc.b id_BZ, 0		;!@
+		dc.b id_BZ, 1		;!@
+		dc.b id_BZ, 2		;!@
+		dc.b id_JZ, 0		;!@
+		dc.b id_JZ, 1		;!@
+		dc.b id_JZ, 2		;!@
 		dc.b id_MZ, 0
 		dc.b id_MZ, 1
 		dc.b id_MZ, 2
@@ -2933,10 +2979,11 @@ LevSel_Ptrs:	if Revision=0
 		dc.b id_SBZ, 0
 		dc.b id_SBZ, 1
 		dc.b id_LZ, 3
-		dc.b id_SBZ, 2
 		endif
+		dc.b id_SBZ, 2
 		dc.b id_SS, 0		; Special Stage
-		dc.w $8000		; Sound Test
+		dc.w $8000			; Sound Test
+		dc.w $8000			; !@ Playlist
 		even
 ; ---------------------------------------------------------------------------
 ; Level	select codes
@@ -3041,15 +3088,17 @@ LevSel_UpDown:
 		beq.s	LevSel_Down	; if not, branch
 		subq.w	#1,d0		; move up 1 selection
 		bhs.s	LevSel_Down
-		moveq	#$14,d0		; if selection moves below 0, jump to selection	$14
+		;!@moveq	#$14,d0		; if selection moves below 0, jump to selection	$14
+		moveq	#$14+7,d0		; if selection moves below 0, jump to selection	$14+7
 
 LevSel_Down:
 		btst	#bitDn,d1	; is down pressed?
 		beq.s	LevSel_Refresh	; if not, branch
 		addq.w	#1,d0		; move down 1 selection
-		cmpi.w	#$15,d0
+		;!@cmpi.w	#$15,d0
+		cmpi.w	#$15+7,d0
 		blo.s	LevSel_Refresh
-		moveq	#0,d0		; if selection moves above $14,	jump to	selection 0
+		moveq	#0,d0		; if selection moves above $15+7,	jump to	selection 0
 
 LevSel_Refresh:
 		move.w	d0,(v_levselitem).w ; set new selection
@@ -3057,13 +3106,13 @@ LevSel_Refresh:
 		
 		;!@ Play Ring SFX on item move
 		move.w	#_sfx_Ring,d0	; play ring sound
-		jsr		(PlaySound_Special).l
-		
+		jsr		(PlaySound_Special).l		
 		rts	
 ; ===========================================================================
 
 LevSel_SndTest:
-		cmpi.w	#$14,(v_levselitem).w ; is item $14 selected?
+		;!@ cmpi.w	#$14,(v_levselitem).w ; is item $14 selected?
+		cmpi.w	#$14+6,(v_levselitem).w ; is item $14+6 selected? (Sound test)
 		bne.s	LevSel_NoMove	; if not, branch
 		move.b	(v_jpadpress1).w,d1
 		andi.b	#btnR+btnL,d1	; is left/right	pressed?
@@ -3090,7 +3139,27 @@ LevSel_Refresh2:
 		bsr.w	LevSelTextLoad	; refresh text
 
 LevSel_NoMove:
-		rts	
+		;!@ New code, to handle playlist
+		cmpi.w	#$14+7,(v_levselitem).w ; is item $14+7 selected? (Playlist)
+		bne.s	LevSel_NoMove2	; if not, branch
+		move.b	(v_jpadpress1).w,d1
+		andi.b	#btnR+btnL,d1	; is left/right	pressed?
+		beq.s	LevSel_NoMove2	; if not, branch
+		move.b	(v_playlist).w,d0	;Move playlist Into d0
+		btst	#bitL,d1	; is left pressed?
+		beq.s	LevSel_Right2	; if not, branch
+		subq.w	#1,d0		; subtract 1 from playlist
+
+LevSel_Right2:
+		btst	#bitR,d1	; is right pressed?
+		beq.s	LevSel_Refresh3	; if not, branch
+		addq.w	#1,d0		; add 1	to playlist
+
+LevSel_Refresh3:
+		move.b	d0,v_playlist ; set playlist number
+		bsr.w	LevSelTextLoad	; refresh text
+LevSel_NoMove2:
+		rts
 ; End of function LevSelControls
 
 ; ---------------------------------------------------------------------------
@@ -3102,14 +3171,16 @@ LevSel_NoMove:
 
 LevSelTextLoad:
 
-textpos:	= ($40000000+(($E210&$3FFF)<<16)+(($E210&$C000)>>14))
+;!@textpos:	= ($40000000+(($E210&$3FFF)<<16)+(($E210&$C000)>>14))
+textpos:	= ($40000000+(($E010&$3FFF)<<16)+(($E010&$C000)>>14))
 					; $E210 is a VRAM address
 
 		lea	(LevelMenuText).l,a1
 		lea	(vdp_data_port).l,a6
 		move.l	#textpos,d4	; text position on screen
 		move.w	#$E680,d3	; VRAM setting (4th palette, $680th tile)
-		moveq	#$14,d1		; number of lines of text
+		;!@ moveq	#$14,d1		; number of lines of text
+		moveq	#$14+7,d1		; number of lines of text
 
 LevSel_DrawAll:
 		move.l	d4,4(a6)
@@ -3134,15 +3205,33 @@ LevSel_DrawAll:
 		move.l	d4,4(a6)
 		bsr.w	LevSel_ChgLine	; recolour selected line
 		move.w	#$E680,d3
-		cmpi.w	#$14,(v_levselitem).w
+		; Sound test item
+		;!@ cmpi.w	#$14,(v_levselitem).w
+		cmpi.w	#$14+6,(v_levselitem).w
 		bne.s	LevSel_DrawSnd
 		move.w	#$C680,d3
 
 LevSel_DrawSnd:
-		locVRAM	vram_bg+$C30		; sound test position on screen
+		;!@ locVRAM	vram_bg+$C30		; sound test position on screen
+		locVRAM	vram_bg+$D32		; sound test position on screen
 		move.w	(v_levselsound).w,d0
 		;!@ Clone Driver
 		;addi.w	#$80,d0
+		move.b	d0,d2
+		lsr.b	#4,d0
+		bsr.w	LevSel_ChgSnd	; draw 1st digit
+		move.b	d2,d0
+		bsr.w	LevSel_ChgSnd	; draw 2nd digit
+		
+		;!@ New code
+		; Handle drawing playlist
+		move.w	#$E680,d3
+		cmpi.w	#$14+7,(v_levselitem).w
+		bne.s	LevSel_DrawPlay
+		move.w	#$C680,d3
+LevSel_DrawPlay:
+		locVRAM	vram_bg+$DB2		; playlist position on screen
+		move.b	v_playlist,d0
 		move.b	d0,d2
 		lsr.b	#4,d0
 		bsr.w	LevSel_ChgSnd	; draw 1st digit

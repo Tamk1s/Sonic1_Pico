@@ -107,6 +107,8 @@ id_SYZ:		equ 4
 id_SBZ:		equ 5
 id_EndZ:	equ 6
 id_SS:		equ 7
+id_BZ:		equ 8	;!@
+id_JZ:		equ 9	;!@
 
 ; Colours
 cBlack:		equ $000		; colour black
@@ -332,6 +334,7 @@ bply_Sonic1Mega:	equ	1	;Alt Sonic 1 Music (Music+Pico ADPCM)
 bply_Sonic1SMS:		equ	2	;Sonic 1 SMS (PSG)
 bply_SonicGSMS:		equ	3	;Sonic Genesis for SMS (PSG)
 bply_Copera:		equ	4	;Copera (Soundblaster)
+bply_MAX:			equ bply_Copera
 
 ; Sonic frame IDs
 fr_Null:	equ 0

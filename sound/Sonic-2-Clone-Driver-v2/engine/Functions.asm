@@ -83,11 +83,23 @@ SMPS_QueueSound1:
 SMPS_QueueSound2:
 SMPS_QueueSound3:
 	move.w	d0,-(sp)
-	move.w	d1,-(sp)		;!@
+	move.w	d1,-(sp)		;!@		
 	andi.w	#$00FF,d0
 	move.w	d0,d1			;!@
 	bsr.w	PlaySound_List
 	bsr.s	SMPS_QueueSound1_Extended
+	move.w	(sp)+,d1
+	move.w	(sp)+,d0
+.return:
+	rts
+	
+;!@ New function to play sound ID directly; no playlist translation.
+;Used by sound test with an invalid playlist ID, for testing
+SMPS_QueueSound4:
+	move.w	d0,-(sp)
+	move.w	d1,-(sp)		;!@		
+	andi.w	#$00FF,d0
+	bsr.s	SMPS_QueueSound4_Extended
 	move.w	(sp)+,d1
 	move.w	(sp)+,d0
 .return:
@@ -124,14 +136,16 @@ SMPS_QueueSound3_Extended:
 .slot0:
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).l
     if SMPS_IdlingSegaSound
-	bra.s	SMPS_DoSegaFilter
+	;!@bra.s	SMPS_DoSegaFilter
+	bra.w	SMPS_DoSegaFilter
     else
 	rts
     endif
 .slot1:
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).l
     if SMPS_IdlingSegaSound
-	bra.s	SMPS_DoSegaFilter
+	;!@bra.s	SMPS_DoSegaFilter
+	bra.w	SMPS_DoSegaFilter
     else
 	rts
     endif
@@ -151,6 +165,36 @@ SMPS_QueueSound3_Extended:
 	rts
     endif
 ; End of function SMPS_QueueSound1_Extended
+
+SMPS_QueueSound4_Extended:
+	; Reset tempo if a new song is playing.
+	cmpi.w	#MusID__First,d0
+	blo.s	.not_music
+	cmpi.w	#MusID__End,d0
+	bhs.s	.not_music
+	clr.b	(Clone_Driver_RAM+SMPS_TEMPO_OFFSET).l
+.not_music:
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).l
+	beq.s	.slot0b
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).l
+	beq.s	.slot1b
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).l
+	beq.s	.slot2b
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).l
+	beq.s	.slot3b
+	rts
+.slot0b:
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).l
+	rts
+.slot1b:
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).l
+	rts
+.slot2b:
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).l
+	rts
+.slot3b:
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).l
+	rts
 
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample
@@ -173,7 +217,8 @@ SMPS_PlayDACSample:
 +
 	; Send it.
 	bsr.w	PlaySound_List
-	bsr.s	SMPS_QueueSound1_Extended
+	;!@ bsr.s	SMPS_QueueSound1_Extended
+	bsr.w	SMPS_QueueSound1_Extended
 	movem.w	(sp)+,d0/d1
 	rts
 ; End of function SMPS_PlayDACSample
