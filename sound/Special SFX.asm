@@ -10,5 +10,5 @@ ptr_specend
 ; ---------------------------------------------------------------------------
 ; Special SFX data
 ; ---------------------------------------------------------------------------
-SoundWaterfall:	include	"sound/sfx/SndD0 - Waterfall.asm"
+SoundWaterfall:	include	"sound/sfx/S1/SndD0 - Waterfall.asm"
 		even

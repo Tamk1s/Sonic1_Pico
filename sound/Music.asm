@@ -4,86 +4,164 @@
 ; byte_71A94: SpeedUpIndex:
 
 MusicIndex:
-ptr_mus81:	SMPS_MUSIC_METADATA	Music81, s1TempotoS3($07), 0	; GHZ
-ptr_mus82:	SMPS_MUSIC_METADATA	Music82, s1TempotoS3($72), 0	; LZ
-ptr_mus83:	SMPS_MUSIC_METADATA	Music83, s1TempotoS3($73), 0	; MZ
-ptr_mus84:	SMPS_MUSIC_METADATA	Music84, s1TempotoS3($26), 0	; SLZ
-ptr_mus85:	SMPS_MUSIC_METADATA	Music85, s1TempotoS3($15), 0	; SYZ
-ptr_mus86:	SMPS_MUSIC_METADATA	Music86, s1TempotoS3($08), 0	; SBZ
-ptr_mus87:	SMPS_MUSIC_METADATA	Music87, s1TempotoS3($FF), 0	; Invincible
-ptr_mus88:	SMPS_MUSIC_METADATA	Music88, s1TempotoS3($05), SMPS_MUSIC_METADATA_EXTRA_LIFE_JINGLE	; Extra Life
-ptr_mus89:	SMPS_MUSIC_METADATA	Music89, s1TempotoS3($08), 0	; Special Stage
-ptr_mus8A:	SMPS_MUSIC_METADATA	Music8A, s1TempotoS3($05), 0	; Title Screen
-ptr_mus8B:	SMPS_MUSIC_METADATA	Music8B, s1TempotoS3($05), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Ending
-ptr_mus8C:	SMPS_MUSIC_METADATA	Music8C, s1TempotoS3($04)-$20, 0	; Boss
-ptr_mus8D:	SMPS_MUSIC_METADATA	Music8D, s1TempotoS3($06)-$20, 0	; Final Zone
-ptr_mus8E:	SMPS_MUSIC_METADATA	Music8E, s1TempotoS3($03), 0	; End of Act
-ptr_mus8F:	SMPS_MUSIC_METADATA	Music8F, s1TempotoS3($13), 0	; Game Over
-ptr_mus90:	SMPS_MUSIC_METADATA	Music90, s1TempotoS3($07), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Continue
-ptr_mus91:	SMPS_MUSIC_METADATA	Music91, s1TempotoS3($33), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Credits
-ptr_mus92:	SMPS_MUSIC_METADATA	Music92, s1TempotoS3($02), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Drowning
-ptr_mus93:	SMPS_MUSIC_METADATA	Music93, s1TempotoS3($06), 0	; Emerald
+ptr_mus08:	SMPS_MUSIC_METADATA	Music08, s1TempotoS3($07), 0	; GHZ
+ptr_mus09:	SMPS_MUSIC_METADATA	Music09, s1TempotoS3($72), 0	; LZ
+ptr_mus0A:	SMPS_MUSIC_METADATA	Music0A, s1TempotoS3($73), 0	; MZ
+ptr_mus0B:	SMPS_MUSIC_METADATA	Music0B, s1TempotoS3($26), 0	; SLZ
+ptr_mus0C:	SMPS_MUSIC_METADATA	Music0C, s1TempotoS3($15), 0	; SYZ
+ptr_mus0D:	SMPS_MUSIC_METADATA	Music0D, s1TempotoS3($08), 0	; SBZ
+ptr_mus0E:	SMPS_MUSIC_METADATA	Music0E, s1TempotoS3($FF), 0	; Invincible
+ptr_mus0F:	SMPS_MUSIC_METADATA	Music0F, s1TempotoS3($05), SMPS_MUSIC_METADATA_EXTRA_LIFE_JINGLE	; Extra Life
+ptr_mus10:	SMPS_MUSIC_METADATA	Music10, s1TempotoS3($08), 0	; Special Stage
+ptr_mus11:	SMPS_MUSIC_METADATA	Music11, s1TempotoS3($05), 0	; Title Screen
+ptr_mus12:	SMPS_MUSIC_METADATA	Music12, s1TempotoS3($05), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Ending
+ptr_mus13:	SMPS_MUSIC_METADATA	Music13, s1TempotoS3($04)-$20, 0	; Boss
+ptr_mus14:	SMPS_MUSIC_METADATA	Music14, s1TempotoS3($06)-$20, 0	; Final Zone
+ptr_mus15:	SMPS_MUSIC_METADATA	Music15, s1TempotoS3($03), 0	; End of Act
+ptr_mus16:	SMPS_MUSIC_METADATA	Music16, s1TempotoS3($13), 0	; Game Over
+ptr_mus17:	SMPS_MUSIC_METADATA	Music17, s1TempotoS3($07), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Continue
+ptr_mus18:	SMPS_MUSIC_METADATA	Music18, s1TempotoS3($33), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Credits
+ptr_mus19:	SMPS_MUSIC_METADATA	Music19, s1TempotoS3($02), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Drowning
+ptr_mus1A:	SMPS_MUSIC_METADATA	Music1A, s1TempotoS3($06), 0	; Emerald
 ;!@ New base music slots
-ptr_mus94:	SMPS_MUSIC_METADATA	Music94, s1TempotoS3($07), $00	; Level Select
-ptr_mus95:	SMPS_MUSIC_METADATA	Music95, s1TempotoS3($07), $00	; Zone Start
-ptr_mus96:	SMPS_MUSIC_METADATA	Music96, s1TempotoS3($07), $00	; Options
-ptr_mus97:	SMPS_MUSIC_METADATA	Music97, s1TempotoS3($07), $00	; Bridge Zone
-ptr_mus98:	SMPS_MUSIC_METADATA	Music98, s1TempotoS3($07), $00	; Jungle Zone
+ptr_mus1B:	SMPS_MUSIC_METADATA	Music1B, s1TempotoS3($07), $00	; Level Select
+ptr_mus1C:	SMPS_MUSIC_METADATA	Music1C, s1TempotoS3($07), $00	; Zone Start
+ptr_mus1D:	SMPS_MUSIC_METADATA	Music1D, s1TempotoS3($07), $00	; Options
+ptr_mus1E:	SMPS_MUSIC_METADATA	Music1E, s1TempotoS3($07), $00	; Bridge Zone
+ptr_mus1F:	SMPS_MUSIC_METADATA	Music1F, s1TempotoS3($07), $00	; Jungle Zone
 ptr_musend2	;!@
 ;!@ Dups for other playlists
+;!@ S1_SMS playlist
+ptr_mus20:	SMPS_MUSIC_METADATA	Music20, s1TempotoS3($07), 0	; GHZ
+ptr_mus21:	SMPS_MUSIC_METADATA	Music21, s1TempotoS3($72), 0	; LZ
+ptr_mus22:	SMPS_MUSIC_METADATA	Music22, s1TempotoS3($73), 0	; MZ
+ptr_mus23:	SMPS_MUSIC_METADATA	Music23, s1TempotoS3($26), 0	; SLZ
+ptr_mus24:	SMPS_MUSIC_METADATA	Music24, s1TempotoS3($15), 0	; SYZ
+ptr_mus25:	SMPS_MUSIC_METADATA	Music25, s1TempotoS3($08), 0	; SBZ
+ptr_mus26:	SMPS_MUSIC_METADATA	Music26, s1TempotoS3($FF), 0	; Invincible
+ptr_mus27:	SMPS_MUSIC_METADATA	Music27, s1TempotoS3($05), SMPS_MUSIC_METADATA_EXTRA_LIFE_JINGLE	; Extra Life
+ptr_mus28:	SMPS_MUSIC_METADATA	Music28, s1TempotoS3($08), 0	; Special Stage
+ptr_mus29:	SMPS_MUSIC_METADATA	Music29, s1TempotoS3($05), 0	; Title Screen
+ptr_mus2A:	SMPS_MUSIC_METADATA	Music2A, s1TempotoS3($05), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Ending
+ptr_mus2B:	SMPS_MUSIC_METADATA	Music2B, s1TempotoS3($04)-$20, 0	; Boss
+ptr_mus2C:	SMPS_MUSIC_METADATA	Music2C, s1TempotoS3($06)-$20, 0	; Final Zone
+ptr_mus2D:	SMPS_MUSIC_METADATA	Music2D, s1TempotoS3($03), 0	; End of Act
+ptr_mus2E:	SMPS_MUSIC_METADATA	Music2E, s1TempotoS3($13), 0	; Game Over
+ptr_mus2F:	SMPS_MUSIC_METADATA	Music2F, s1TempotoS3($07), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Continue
+ptr_mus30:	SMPS_MUSIC_METADATA	Music30, s1TempotoS3($33), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Credits
+ptr_mus31:	SMPS_MUSIC_METADATA	Music31, s1TempotoS3($02), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Drowning
+ptr_mus32:	SMPS_MUSIC_METADATA	Music32, s1TempotoS3($06), 0	; Emerald
+;!@ New base music slots
+ptr_mus33:	SMPS_MUSIC_METADATA	Music33, s1TempotoS3($07), $00	; Level Select
+ptr_mus34:	SMPS_MUSIC_METADATA	Music34, s1TempotoS3($07), $00	; Zone Start
+ptr_mus35:	SMPS_MUSIC_METADATA	Music35, s1TempotoS3($07), $00	; Options
+ptr_mus36:	SMPS_MUSIC_METADATA	Music36, s1TempotoS3($07), $00	; Bridge Zone
+ptr_mus37:	SMPS_MUSIC_METADATA	Music37, s1TempotoS3($07), $00	; Jungle Zone
 ptr_musend
 		even
 
 ; ---------------------------------------------------------------------------
 ; Music data
 ; ---------------------------------------------------------------------------
-Music81:	include		"sound/music/Mus81 - GHZ.asm"
+;!@ S1 playlist
+Music08:	include		"sound/music/S1/Mus81 - GHZ.asm"
 		even
-Music82:	include		"sound/music/Mus82 - LZ.asm"
+Music09:	include		"sound/music/S1/Mus82 - LZ.asm"
 		even
-Music83:	include		"sound/music/Mus83 - MZ.asm"
+Music0A:	include		"sound/music/S1/Mus83 - MZ.asm"
 		even
-Music84:	include		"sound/music/Mus84 - SLZ.asm"
+Music0B:	include		"sound/music/S1/Mus84 - SLZ.asm"
 		even
-Music85:	include		"sound/music/Mus85 - SYZ.asm"
+Music0C:	include		"sound/music/S1/Mus85 - SYZ.asm"
 		even
-Music86:	include		"sound/music/Mus86 - SBZ.asm"
+Music0D:	include		"sound/music/S1/Mus86 - SBZ.asm"
 		even
-Music87:	include		"sound/music/Mus87 - Invincibility.asm"
+Music0E:	include		"sound/music/S1/Mus87 - Invincibility.asm"
 		even
-Music88:	include		"sound/music/Mus88 - Extra Life.asm"
+Music0F:	include		"sound/music/S1/Mus88 - Extra Life.asm"
 		even
-Music89:	include		"sound/music/Mus89 - Special Stage.asm"
+Music10:	include		"sound/music/S1/Mus89 - Special Stage.asm"
 		even
-Music8A:	include		"sound/music/Mus8A - Title Screen.asm"
+Music11:	include		"sound/music/S1/Mus8A - Title Screen.asm"
 		even
-Music8B:	include		"sound/music/Mus8B - Ending.asm"
+Music12:	include		"sound/music/S1/Mus8B - Ending.asm"
 		even
-Music8C:	include		"sound/music/Mus8C - Boss.asm"
+Music13:	include		"sound/music/S1/Mus8C - Boss.asm"
 		even
-Music8D:	include		"sound/music/Mus8D - FZ.asm"
+Music14:	include		"sound/music/S1/Mus8D - FZ.asm"
 		even
-Music8E:	include		"sound/music/Mus8E - Sonic Got Through.asm"
+Music15:	include		"sound/music/S1/Mus8E - Sonic Got Through.asm"
 		even
-Music8F:	include		"sound/music/Mus8F - Game Over.asm"
+Music16:	include		"sound/music/S1/Mus8F - Game Over.asm"
 		even
-Music90:	include		"sound/music/Mus90 - Continue Screen.asm"
+Music17:	include		"sound/music/S1/Mus90 - Continue Screen.asm"
 		even
-Music91:	include		"sound/music/Mus91 - Credits.asm"
+Music18:	include		"sound/music/S1/Mus91 - Credits.asm"
 		even
-Music92:	include		"sound/music/Mus92 - Drowning.asm"
+Music19:	include		"sound/music/S1/Mus92 - Drowning.asm"
 		even
-Music93:	include		"sound/music/Mus93 - Get Emerald.asm"
+Music1A:	include		"sound/music/S1/Mus93 - Get Emerald.asm"
 		even
 ;!@ New base music slots
-Music94:	include		"sound/music/Mus94 - Level Select.asm"
+Music1B:	include		"sound/music/S1/Mus94 - Level Select.asm"
 		even
-Music95:	include		"sound/music/Mus95 - Zone Start.asm"
+Music1C:	include		"sound/music/S1/Mus95 - Zone Start.asm"
 		even
-Music96:	include		"sound/music/Mus96 - Options.asm"
+Music1D:	include		"sound/music/S1/Mus96 - Options.asm"
 		even
-Music97:	include		"sound/music/Mus97 - BZ.asm"
+Music1E:	include		"sound/music/S1/Mus97 - BZ.asm"
 		even
-Music98:	include		"sound/music/Mus98 - JZ.asm"
+Music1F:	include		"sound/music/S1/Mus98 - JZ.asm"
 		even
+;!@ Dups for other playlists
 
+
+;!@ S1_SMS playlist
+Music20:	include		"sound/music/S1_SMS/Mus81 - GHZ.asm"
+		even
+Music21:	include		"sound/music/S1_SMS/Mus82 - LZ.asm"
+		even
+Music22:	include		"sound/music/S1_SMS/Mus83 - MZ.asm"
+		even
+Music23:	include		"sound/music/S1_SMS/Mus84 - SLZ.asm"
+		even
+Music24:	include		"sound/music/S1_SMS/Mus85 - SYZ.asm"
+		even
+Music25:	include		"sound/music/S1_SMS/Mus86 - SBZ.asm"
+		even
+Music26:	include		"sound/music/S1_SMS/Mus87 - Invincibility.asm"
+		even
+Music27:	include		"sound/music/S1_SMS/Mus88 - Extra Life.asm"
+		even
+Music28:	include		"sound/music/S1_SMS/Mus89 - Special Stage.asm"
+		even
+Music29:	include		"sound/music/S1_SMS/Mus8A - Title Screen.asm"
+		even
+Music2A:	include		"sound/music/S1_SMS/Mus8B - Ending.asm"
+		even
+Music2B:	include		"sound/music/S1_SMS/Mus8C - Boss.asm"
+		even
+Music2C:	include		"sound/music/S1_SMS/Mus8D - FZ.asm"
+		even
+Music2D:	include		"sound/music/S1_SMS/Mus8E - Sonic Got Through.asm"
+		even
+Music2E:	include		"sound/music/S1_SMS/Mus8F - Game Over.asm"
+		even
+Music2F:	include		"sound/music/S1_SMS/Mus90 - Continue Screen.asm"
+		even
+Music30:	include		"sound/music/S1_SMS/Mus91 - Credits.asm"
+		even
+Music31:	include		"sound/music/S1_SMS/Mus92 - Drowning.asm"
+		even
+Music32:	include		"sound/music/S1_SMS/Mus93 - Get Emerald.asm"
+		even
+Music33:	include		"sound/music/S1_SMS/Mus94 - Level Select.asm"
+		even
+Music34:	include		"sound/music/S1_SMS/Mus95 - Zone Start.asm"
+		even
+Music35:	include		"sound/music/S1_SMS/Mus96 - Options.asm"
+		even
+Music36:	include		"sound/music/S1_SMS/Mus97 - BZ.asm"
+		even
+Music37:	include		"sound/music/S1_SMS/Mus98 - JZ.asm"
+		even

@@ -330,8 +330,8 @@ af2ndRoutine:	equ $FA	; increment 2nd routine counter
 
 ;!@ playlists IDs
 bply_Sonic1FM:		equ	0	;Regular Sonic 1 music (FM)
-bply_Sonic1Mega:	equ	1	;Alt Sonic 1 Music (Music+Pico ADPCM)
-bply_Sonic1SMS:		equ	2	;Sonic 1 SMS (PSG)
+bply_Sonic1SMS:		equ	1	;Sonic 1 SMS (PSG)
+bply_Sonic1Mega:	equ	2	;Alt Sonic 1 Music (Music+Pico ADPCM)
 bply_SonicGSMS:		equ	3	;Sonic Genesis for SMS (PSG)
 bply_Copera:		equ	4	;Copera (Soundblaster)
 bply_MAX:			equ bply_Copera

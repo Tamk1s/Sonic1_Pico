@@ -32,8 +32,18 @@ SMPS_DoRingFilter:
     if SMPS_IdlingSegaSound
 SMPS_DoSegaFilter:
 	if sys_isPico=0 || (sys_PicoMods && sys_PicoRev)
-	cmpi.w	#SndID_SegaSound,d0
-	bne.s	.not_sega
+	;!@ cmpi.w	#SndID_SegaSound,d0
+	cmpi.w	#SndID_SegaSound,d1
+	;!@bne.s	.not_sega
+	beq.s	.sega
+	cmpi.w	#SndID_SegaSound2,d1
+	;!@bne.s	.not_sega
+	beq.s	.sega
+	bra.s	.not_sega	;!@
+	nop
+	
+;!@
+.sega:
 	; Waste cycles until the Sega sound finishes playing
 	movem.l	d0/d1,-(sp)
 	move.w	#$11,d1
@@ -121,7 +131,8 @@ SMPS_QueueSound3_Extended:
 	clr.b	(Clone_Driver_RAM+SMPS_TEMPO_OFFSET).l
 .not_music:
     if SMPS_RingSFXBehaviour
-	bsr.s	SMPS_DoRingFilter
+	;!@bsr.s	SMPS_DoRingFilter
+	bsr.w	SMPS_DoRingFilter
     endif
 	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).l
 	beq.s	.slot0
@@ -284,8 +295,8 @@ PlaySound_List:
 		
 Playlist_lists:		
 		dc.l	play_Sonic1FM
-		dc.l	play_Sonic1Mega
 		dc.l	play_Sonic1SMS
+		dc.l	play_Sonic1Mega
 		dc.l	play_SonicGSMS
 		dc.l	play_Copera
 		even
@@ -315,15 +326,15 @@ play_Sonic1FM:
 		dc.w	sfx_Sega,sfx_Dont
 		even
 		
-play_Sonic1Mega:
+play_Sonic1SMS:
 		;Flags
 		dc.w	$00,bgm_Stop,sfx_Fade,specsfx_Fade,dacsfx_Fade,bgm_Fade,bgm_Speedup,bgm_Slowdown
 		
 		;Music
-		dc.w	bgm_GHZ,bgm_LZ,bgm_MZ,bgm_SLZ,bgm_SYZ,bgm_SBZ
-		dc.w	bgm_Invincible,bgm_ExtraLife,bgm_SS,bgm_Title,bgm_Ending,bgm_Boss,bgm_FZ
-		dc.w	bgm_GotThrough,bgm_GameOver,bgm_Continue,bgm_Credits,bgm_Drowning,bgm_Emerald
-		dc.w	bgm_LvlSel,bgm_ZoneStart,bgm_Options,bgm_BZ,bgm_JZ
+		dc.w	bgm_GHZ_S1SMS,bgm_LZ_S1SMS,bgm_MZ_S1SMS,bgm_SLZ_S1SMS,bgm_SYZ_S1SMS,bgm_SBZ_S1SMS
+		dc.w	bgm_Invincible_S1SMS,bgm_ExtraLife_S1SMS,bgm_SS_S1SMS,bgm_Title_S1SMS,bgm_Ending_S1SMS,bgm_Boss_S1SMS,bgm_FZ_S1SMS
+		dc.w	bgm_GotThrough_S1SMS,bgm_GameOver_S1SMS,bgm_Continue_S1SMS,bgm_Credits_S1SMS,bgm_Drowning_S1SMS,bgm_Emerald_S1SMS
+		dc.w	bgm_LvlSel_S1SMS,bgm_ZoneStart_S1SMS,bgm_Options_S1SMS,bgm_BZ_S1SMS,bgm_JZ_S1SMS
 		
 		;SFX
 		dc.w	sfx_Jump,sfx_Lamppost,sfx_A2,sfx_Death,sfx_Skid,sfx_A5,sfx_HitSpikes,sfx_Push
@@ -339,8 +350,8 @@ play_Sonic1Mega:
 		;DAC SFX
 		dc.w	sfx_Sega,sfx_Dont
 		even
-
-play_Sonic1SMS:
+		
+play_Sonic1Mega:
 		;Flags
 		dc.w	$00,bgm_Stop,sfx_Fade,specsfx_Fade,dacsfx_Fade,bgm_Fade,bgm_Speedup,bgm_Slowdown
 		

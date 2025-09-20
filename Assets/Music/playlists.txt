@@ -1,0 +1,80 @@
+Sonic 1 (FM):
+$81	GHZ					S1 GHZ
+$82	LZ					S1 LZ
+$83	MZ					S1 MZ
+$84	SLZ					S1 SLZ
+$85	SYZ					S1 SYZ
+$86	SBZ					S1 SBZ
+$87	Invincibility		S1 Invin
+$88	Extra Life			S1 Extra Life
+$89	Special Stage		S1 SS
+$8A	Title Screen		S1 Title
+$8B	Ending				S1 Ending
+$8C	Boss				S1 Boss
+$8D	FZ					S1 FZ
+$8E	Sonic Got Through	S1 Act Clear
+$8F	Game Over			S1 Gameover
+$90	Continue Screen		S1 Continue Screen
+$91	Credits				S1 Credits (*Sequenced with BZ & JZ chords)
+$92	Drowning			S1 Drowning
+$93	Get Emerald			S1 Get Emerald
+$94 Level Select		
+$95	Zone Start			
+$96 Options				
+$97	BZ					
+$98	JZ
+
+Sonic 1 (Mega Pico):
+$86	SBZ (Alt)			S1 SBZ
+
+Sonic 1 (SMS):
+$81	GHZ					S1SMS GHZ
+$82	LZ					S1SMS LZ
+$83	MZ					S1SMS MZ
+$84	SLZ					SGWU Diamond Maze
+$85	SYZ					SGWU Egg Switch
+$86	SBZ					S1SMS SBZ
+$87	Invincibility		S1SMS Invincibility
+$88	Extra Life			
+$89	Special Stage		S1SMS Bonus
+$8A	Title Screen		S1SMS Title
+$8B	Ending				
+$8C	Boss				S1SMS Boss
+$8D	FZ					S1SMS Sky Base Zone
+$8E	Sonic Got Through	S1SMS Act Clear
+$8F	Game Over			S1SMS Death
+$90	Continue Screen
+$91	Credits				S1SMS Credits
+$92	Drowning			Sonic Blast Unused 2
+$93	Get Emerald			S1SMS Emerald
+$94 Level Select		
+$95	Zone Start			S1SMS Map
+$96 Options				
+$97	BZ					S1SMS BZ
+$98	JZ					S1SMS JZ
+
+Sonic Genesis for SMS:
+$81	GHZ					SGSMS GHZ
+$82	LZ					SGSMS LZ
+$83	MZ					SGSMS MZ
+$84	SLZ					SGSMS SLZ
+$85	SYZ					SGSMS SLZ
+$86	SBZ					SGSMS SBZ
+$87	Invincibility		SGSMS Invincibility
+$88	Extra Life			
+$89	Special Stage		SGSMS Bonus
+$8A	Title Screen		SGSMS Title
+$8B	Ending				
+$8C	Boss				SGSMS Boss
+$8D	FZ					SGSMS FZ
+$8E	Sonic Got Through	SGSMS Act Clear
+$8F	Game Over			SGSMS Death
+$90	Continue Screen
+$91	Credits				SGSMS Credits
+$92	Drowning
+$93	Get Emerald			SGSMS Emerald
+$94 Level Select		
+$95	Zone Start			SGSMS Map
+$96 Options				
+$97	BZ					SGSMS BZ
+$98	JZ					SGSMS JZ
