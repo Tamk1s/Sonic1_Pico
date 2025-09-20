@@ -2484,11 +2484,8 @@ Sega_WaitPal:
 		move.b	#_sfx_Sega,d0
 		bsr.w	PlaySound_Special	; play "SEGA" sound
 		move.b	#$14,(v_vbla_routine).w
-		bsr.w	WaitForVBla
-		
-		;!@ Yield about 7 seconds for the new GD Sega sound to stop playing
-		;!@ move.w	#$1E,(v_demolength).w
-		move.w	#($3C * $07),(v_demolength).w
+		bsr.w	WaitForVBla		
+		move.w	#$1E,(v_demolength).w
 
 Sega_WaitEnd:
 		move.b	#2,(v_vbla_routine).w
@@ -2498,10 +2495,10 @@ Sega_WaitEnd:
 		
 		;!@ If start button any Genesis controller OR if any action button pressed on pico_jpad, then skip Sega logo
 		;!@ andi.b	#btnStart,(v_jpadpress1).w 		; is Start button pressed?		
-		andi.b	#btnStart,(v_jpadpressG).w 			; is Start button pressed on Genesis controllers?
-		bne.s	Sega_GotoTitle						; if so, branch
-		andi.b	#btnABC+btnStart,(v_jpadpressP).w 	; is a button pressed on Pico_pad?
-		bne.s	Sega_GotoTitle						; if so, branch
+		;andi.b	#btnStart,(v_jpadpressG).w 			; is Start button pressed on Genesis controllers?
+		;bne.s	Sega_GotoTitle						; if so, branch
+		;andi.b	#btnABC+btnStart,(v_jpadpressP).w 	; is a button pressed on Pico_pad?
+		;bne.s	Sega_GotoTitle						; if so, branch
 		;!@
 		bra.s	Sega_WaitEnd						;Loop		
 
@@ -2565,9 +2562,7 @@ GM_Title:
 		;!@ Dont SFX
 		move.b	#_sfx_Dont,d0
 		bsr.w	PlaySound_Special	; play "DONT" sound		
-		;!@ Yield about 1.20 seconds for the new Dont Sega sound to stop playing
-		;!@ move.w	#$1E,(v_demolength).w
-		move.w	#(($3C * $01)+$14),(v_demolength).w
+		move.w	#$1E,(v_demolength).w
 
 Dont_WaitEnd:
 		move.b	#2,(v_vbla_routine).w
@@ -2575,13 +2570,13 @@ Dont_WaitEnd:
 		tst.w	(v_demolength).w
 		beq.s	GotoTitle
 		
-;!@ If start button any Genesis controller OR if any action button pressed on pico_jpad, then skip Sega logo
+		;!@ If start button any Genesis controller OR if any action button pressed on pico_jpad, then skip Sega logo
 		;!@ andi.b	#btnStart,(v_jpadpress1).w 		; is Start button pressed?		
-		jsr		(ReadJoypads).l
-		andi.b	#btnStart,(v_jpadpressG).w 			; is Start button pressed on Genesis controllers?
-		bne.s	GotoTitle						; if so, branch
-		andi.b	#btnABC+btnStart,(v_jpadpressP).w 	; is a button pressed on Pico_pad?
-		bne.s	GotoTitle						; if so, branch
+		;jsr		(ReadJoypads).l
+		;andi.b	#btnStart,(v_jpadpressG).w 			; is Start button pressed on Genesis controllers?
+		;bne.s	GotoTitle						; if so, branch
+		;andi.b	#btnABC+btnStart,(v_jpadpressP).w 	; is a button pressed on Pico_pad?
+		;bne.s	GotoTitle						; if so, branch
 		;!@
 		bra.s	Dont_WaitEnd						;Loop		
 

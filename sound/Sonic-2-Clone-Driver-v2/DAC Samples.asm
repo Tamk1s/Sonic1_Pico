@@ -142,10 +142,15 @@ ptr_dacend
 
 IncludeDAC macro Path,{INTLABEL}
 __LABEL__ label *
+dacStart set *
 	binclude Path
     rept SMPS_DAC_BATCH_SIZE * 2
 	dc.b	0 ; 0 marks the end of the sample, but the DAC driver only checks every 32 iterations (multiply it by two for high playback speeds)
     endm
+dacEnd set *
+	if MOMPASS==1
+	message "DACSample \"\{Path}\" is $\{dacEnd-dacStart} bytes"
+	endif
 	endm
 
 SegaPCM		IncludeDAC "sound/Sonic-2-Clone-Driver-v2/DAC/SegaPCM.pcm"

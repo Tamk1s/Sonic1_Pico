@@ -89,5 +89,5 @@ MusID_StopDACSFX	= _dacsfx_Fade
 ;	| ID of the command to stop DAC SFX
 ;
 SndID_SegaSound		= _sfx_Sega
+SndID_SegaSound2		= _sfx_Dont	;!@
 ;	| ID of your 'Sega' chant DAC SFX
-;
