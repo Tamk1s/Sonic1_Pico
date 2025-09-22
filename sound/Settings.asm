@@ -17,19 +17,19 @@ SMPS_EnablePWM	= 0
 ;	| If 1, support for four PWM tracks is added
 ;
 SMPS_S1DACSamples	= 1
-SMPS_S2DACSamples	= 0
+SMPS_S2DACSamples	= 1
 SMPS_S3DACSamples	= 0
 SMPS_SKDACSamples	= 0
 SMPS_S3DDACSamples	= 0
 SMPS_SCDACSamples	= 0
 
 SMPS_S1PSGEnvelopes	= 1
-SMPS_S2PSGEnvelopes	= 0
+SMPS_S2PSGEnvelopes	= 1
 SMPS_S3PSGEnvelopes	= 0
 SMPS_SKPSGEnvelopes	= 0
 SMPS_S3DPSGEnvelopes	= 0
 SMPS_KCPSGEnvelopes	= 0
-SMPS_S28BitPSGEnvelopes	= 1
+SMPS_S28BitPSGEnvelopes	= 0
 
 ; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
 SoundDriverLoad		= SMPS_Setup

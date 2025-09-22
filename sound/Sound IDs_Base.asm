@@ -13,6 +13,7 @@ _bgm_Speedup =		6
 _bgm_Slowdown =		7
 _flg__First =		_bgm_Stop
 _flg__Last =		_bgm_Slowdown
+_flg__Count = 		(_flg__Last-_flg__First)+2	;!@
 
 
 ; Background music
@@ -48,7 +49,8 @@ _bgm_ZoneStart =	SMPS_id(ptr_mus1C)
 _bgm_Options =		SMPS_id(ptr_mus1D)
 _bgm_BZ =			SMPS_id(ptr_mus1E)
 _bgm_JZ =			SMPS_id(ptr_mus1F)
-_bgm__Last =		SMPS_id(ptr_musend2)-1	;!@
+_bgm__Last =		SMPS_id(ptr_musend2)-1		;!@
+_bgm__Count =		(_bgm__Last-_bgm__First)+1	;!@
 
 
 ; Sound effects
@@ -106,6 +108,7 @@ _sfx_Switch =		SMPS_id(ptr_sndCD)
 _sfx_RingLeft =		SMPS_id(ptr_sndCE)
 _sfx_Signpost =		SMPS_id(ptr_sndCF)
 _sfx__Last =		SMPS_id(ptr_sndend2)-1	;!@
+_sfx__Count = 		(_sfx__Last-_sfx__First)+1	;!@
 
 
 ; Special sound effects
@@ -116,6 +119,7 @@ SMPS_idstart :=	_sfx__Last+1
 _spec__First = 		SMPS_idstart
 _sfx_Waterfall =	SMPS_id(ptr_sndD0)
 _spec__Last =		SMPS_id(ptr_specend2)-1	;!@
+_spec__Count =		(_spec__Last-_spec__First)+1 ;!@
 
 
 
@@ -127,7 +131,9 @@ SMPS_idstart := _spec__Last+1
 _dac__First = SMPS_idstart
 _sfx_Sega =		SMPS_id(ptr_dacE0)
 _sfx_Dont =		SMPS_id(ptr_dacE1)
-_dac__Last =		SMPS_id(ptr_dacend)-1
+_sfx_Start =	SMPS_id(ptr_dacE2)
+_dac__Last =	SMPS_id(ptr_dacend2)-1		;!@
+_dac__Count = (_dac__Last-_dac__First)+1	;!@
 
 
     if MOMPASS > 1 ; Avoid undefined symbol errors by checking only after the first pass.
@@ -147,3 +153,57 @@ _dac__Last =		SMPS_id(ptr_dacend)-1
             fatal "You have too many background sounds. _spec__Last ($\{_spec__Last}) can't exceed _dac__First ($\{_dac__First})."
         endif
     endif
+
+; ---------------------------------------------------------------------------
+; compare the size of an index with Variable constant
+; (should be used immediately after the index)
+; input: index address, element size,maxCount, variable name
+; ---------------------------------------------------------------------------
+_flgwarning:	macro loc,elementsize
+	._end:
+		if MOMPASS > 1
+			if (._end-loc)-(_flg__Count*elementsize)<>0
+				warning "Size of loc (\{(._end-loc)/elementsize}) does not match _flg__Count (\{_flg__Count})."
+			endif
+		endif
+		endm
+_bgmwarning:	macro loc2,elementsize2
+	._end2:
+		if MOMPASS > 1
+			if (._end2-loc2)-(_bgm__Count*elementsize2)<>0
+				warning "Size of loc2 (\{(._end2-loc2)/elementsize2}) does not match _bgm__Count (\{_bgm__Count})."
+			endif
+		endif
+		endm
+_sfxwarning:	macro loc3,elementsize3
+	._end3:
+		if MOMPASS > 1
+			if (._end3-loc3)-(_sfx__Count*elementsize3)<>0
+				warning "Size of loc3 (\{(._end3-loc3)/elementsize3}) does not match _sfx__Count (\{_sfx__Count})."
+			endif
+		endif
+		endm
+_specwarning:	macro loc4,elementsize4
+	._end4:
+		if MOMPASS > 1
+			if (._end4-loc4)-(_spec__Count*elementsize4)<>0
+				warning "Size of loc4 (\{(._end4-loc4)/elementsize4}) does not match _spec__Count (\{_spec__Count})."
+			endif
+		endif
+		endm
+_dacwarning:	macro loc5,elementsize5
+	._end5:
+		if MOMPASS > 1
+			if (._end5-loc5)-(_dac__Count*elementsize5)<>0
+				warning "Size of loc5 (\{(._end5-loc5)/elementsize5}) does not match _dac__Count (\{_dac__Count})."
+			endif
+		endif
+		endm
+_playwarning:	macro loc6,elementsize6
+	._end6:
+		if MOMPASS > 1
+			if (._end6-loc6)-(bply_MAX*elementsize6)<>0
+				warning "Size of loc6 (\{(._end6-loc6)/elementsize6}) does not match bply_MAX (\{bply_MAX})."
+			endif
+		endif
+		endm

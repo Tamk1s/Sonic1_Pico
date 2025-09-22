@@ -70,32 +70,72 @@ Sonic_Death:	; Routine 6
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
-GameOver:
+GameOver:		
+		;!@ New code to handle death song option
+		
+		;if f_dead flag set, then skip runonce stuff for death song trigger
+		tst.b	f_dead
+		bne.s	.go
+
+		;!@ If runonce flag not yet set		
+		btst	#iptSDeath,v_options	;Check Death song setting
+		bne.s	.doDeathSong			;If set, then do Death song init
+		;If setting not set, then
+		move.b	#1,f_dead				;Set death flag
+		move.w	#60,(v_LevelBGM).w		;Set song restart yield timer to 60 seconds
+		bra.s	.go						;Go do death stuff
+		
+	;Init the death song!@
+	.doDeathSong:
+		move.b	#1,f_dead				;Set death flag
+		move.w	#_bgm_GameOver,d0		;Play gameover song
+		jsr		(PlaySound).l
+		
+		movem.l	a0,-(sp)							;Push a0 onto stack
+		lea		(Level_DeathSong_Yield_tbl).l,a0	;Move playlist Death song yield timer table into a0
+		jsr		(PlaySound_List_GetItem).l			;Get this playlist's value into d0
+		movem.l	(sp)+,a0							;Pop a0 from stack
+		move.w	d0,(v_LevelBGM).w					;Move do timer into v_LevelBGM. Will be used to set the song yield timer
+	
+	;!@
+	.go:
 		move.w	(v_limitbtm2).w,d0
 		addi.w	#$100,d0
 		cmp.w	obY(a0),d0
 		bhs.w	locret_13900
 		move.w	#-$38,obVelY(a0)
-		addq.b	#2,obRoutine(a0)
+		addq.b	#2,obRoutine(a0)					;Goto next routine (level restart for death)
 		clr.b	(f_timecount).w	; stop time counter
 		addq.b	#1,(f_lifecount).w ; update lives counter
+		
+		;If death but still positive lives, then branch
 		subq.b	#1,(v_lives).w	; subtract 1 from number of lives
 		bne.s	loc_138D4
-		move.w	#0,objoff_3A(a0)
+
+		move.w	#0,objoff_3A(a0)					 ; On gameover, this prevent level restart
 		move.b	#id_GameOverCard,(v_gameovertext1).w ; load GAME object
 		move.b	#id_GameOverCard,(v_gameovertext2).w ; load OVER object
 		move.b	#1,(v_gameovertext2+obFrame).w ; set OVER object to correct frame
 		clr.b	(f_timeover).w
 
 loc_138C2:
+		;!@ If gameover and death song option set, then skip re-triggering of gameover song
+		btst	#iptSDeath,v_options
+		bne.s	.skip2
+
 		move.w	#_bgm_GameOver,d0
-		jsr	(PlaySound).l	; play game over music
+		jsr		(PlaySound).l	; play game over music
+	.skip2:
 		moveq	#3,d0
 		jmp	(AddPLC).l	; load game over patterns
 ; ===========================================================================
 
 loc_138D4:
-		move.w	#60,objoff_3A(a0)	; set time delay to 1 second
+		;Move the song yield timer into objoff_3A
+		;!@move.w	#60,objoff_3A(a0)	; set time delay to 1 second
+		move.w	(v_LevelBGM).w,d0		;!@
+		;!@move.w	#60,objoff_3A(a0)	; set time delay to 1 second
+		move.w	d0,objoff_3A(a0)	; set time delay to 1 second
 		tst.b	(f_timeover).w	; is TIME OVER tag set?
 		beq.s	locret_13900	; if not, branch
 		move.w	#0,objoff_3A(a0)
@@ -108,6 +148,12 @@ loc_138D4:
 
 locret_13900:
 		rts	
+		
+;!@ Death song playlist yield timers
+Level_DeathSong_Yield_tbl:		
+		dc.w	$3C*12,$3C*04,$0000,$0000,$0000
+		_playwarning	Level_DeathSong_Yield_tbl,2
+		even
 ; End of function GameOver
 
 ; ---------------------------------------------------------------------------
@@ -117,8 +163,15 @@ locret_13900:
 Sonic_ResetLevel:; Routine 8
 		tst.w	objoff_3A(a0)
 		beq.s	locret_13914
+		
+		;!@ Check if button is pressed to skip reset timer on death
+		andi.b	#btnABC+btnStart,(v_jpadpress1).w 	
+		bne.s	.skip
+		
 		subq.w	#1,objoff_3A(a0)	; subtract 1 from time delay
 		bne.s	locret_13914
+	.skip:
+		move.w	#0,objoff_3A(a0)	; !@
 		move.w	#1,(f_restart).w ; restart the level
 
 locret_13914:

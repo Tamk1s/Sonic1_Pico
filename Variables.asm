@@ -141,7 +141,9 @@ v_vbla_0e_counter:	ds.b	1		; tracks how many times vertical interrupts routine 0
 v_vbla_routine:		ds.b	1		; VBlank - routine counter
 			ds.b	1		; unused
 v_spritecount:		ds.b	1		; number of sprites on-screen
-			ds.b	5		; unused
+v_vbla_routineB:	ds.b 1			;!@ Backup for v_vbla_routine
+			ds.b	4		; unused
+			;!@ ds.b	5		; unused
 v_pcyc_num:		ds.w	1		; palette cycling - current reference number
 v_pcyc_time:		ds.w	1		; palette cycling - time until the next change
 v_random:		ds.l	1		; pseudo random number buffer
@@ -359,7 +361,9 @@ v_timemin = v_time+1				; time - minutes
 v_timesec = v_time+2				; time - seconds
 v_timecent = v_time+3				; time - centiseconds
 v_score:		ds.l	1		; score
-			ds.b	2		; unused
+f_dead:			ds.b	1		; Is Sonic dying?
+				ds.b	1			; unused
+				;!@ ds.b	2		; unused
 v_shield:		ds.b	1		; shield status (00 = no; 01 = yes)
 v_invinc:		ds.b	1		; invinciblity status (00 = no; 01 = yes)
 v_shoes:		ds.b	1		; speed shoes status (00 = no; 01 = yes)
@@ -445,7 +449,8 @@ f_creditscheat:		ds.b	1		; hidden credits & press start cheat flag
 v_title_dcount:		ds.w	1		; number of times the d-pad is pressed on title screen
 v_title_ccount:		ds.w	1		; number of times C is pressed on title screen
 			ds.b	2		; unused
-v_unused2:		ds.w	1		; unused
+v_LevelBGM		ds.w	1			;!@ Holds index for Level_GetBGM, for loading song from Title Card (Map song option stuff). Also generic scratch variable
+;!@ v_unused2:		ds.w	1		; unused
 v_unused3:		ds.b	1		; unused
 v_unused4:		ds.b	1		; unused
 v_unused5:		ds.b	1		; unused
@@ -455,7 +460,7 @@ f_demo:			ds.w	1		; demo mode flag (0 = no; 1 = yes; $8001 = ending)
 v_demonum:		ds.w	1		; demo level number (not the same as the level number)
 v_creditsnum:		ds.w	1		; credits index number
 v_playlist:		ds.b	1		;!@ Current playlist type. See constants for playlist types
-				ds.b	1
+v_options:		ds.b	1		;!@ Options bitifled. See constants for bits
 			;!@ ds.b	2		; unused
 v_megadrive:		ds.b	1		; Megadrive machine type
 			ds.b	1		; unused

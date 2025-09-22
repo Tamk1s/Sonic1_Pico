@@ -13,6 +13,8 @@ DACMetadataTable:
 ;!@ ptr_dacE0:	DACMetadata	16270, SegaPCM		; $E0	- Sega!
 ptr_dacE0:	DACMetadata	16000, SegaPCM		; $E0	- Sega!
 ptr_dacE1:	DACMetadata	16000, DontPCM		; $E1	- What NintenDont
+ptr_dacE2:	DACMetadata	16000, StartPCM		; $E2	- SA2b Act Start
+ptr_dacend2									;!@
 
 	if SMPS_S1DACSamples||SMPS_S2DACSamples
 		; Sonic 1 & 2
@@ -155,6 +157,7 @@ dacEnd set *
 
 SegaPCM		IncludeDAC "sound/Sonic-2-Clone-Driver-v2/DAC/SegaPCM.pcm"
 DontPCM		IncludeDAC "sound/Sonic-2-Clone-Driver-v2/DAC/Dont.pcm"
+StartPCM		IncludeDAC "sound/Sonic-2-Clone-Driver-v2/DAC/Start.pcm"
 
     if SMPS_S1DACSamples||SMPS_S2DACSamples
 Kick		IncludeDAC "sound/Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Kick.pcm"

@@ -15,6 +15,9 @@ Mus95_ZoneStart_Header:
 	smpsHeaderPSG       Mus95_ZoneStart_PSG3,	$00, $00, $00, fTone_01
 
 Mus95_ZoneStart_DAC:
+	dc.b	dStart, $12
+	smpsStop
+
 Mus95_ZoneStart_FM1:
 Mus95_ZoneStart_FM2:
 Mus95_ZoneStart_FM3:

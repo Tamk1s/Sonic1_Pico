@@ -99,16 +99,17 @@ id_SSRG:	equ ptr_GM_SSRGScreen-GameModeArray; !@ $20
 id_MAX:		equ	$3C
 
 ; Levels
-id_GHZ:		equ 0
-id_LZ:		equ 1
-id_MZ:		equ 2
-id_SLZ:		equ 3
-id_SYZ:		equ 4
-id_SBZ:		equ 5
-id_EndZ:	equ 6
-id_SS:		equ 7
-id_BZ:		equ 8	;!@
-id_JZ:		equ 9	;!@
+id_GHZ:		equ $00
+id_LZ:		equ $01
+id_MZ:		equ $02
+id_SLZ:		equ $03
+id_SYZ:		equ $04
+id_SBZ:		equ $05
+id_EndZ:	equ $06
+id_SS:		equ $07
+id_BZ:		equ $08	;!@ S1SMS Bridge Zone
+id_JZ:		equ $09	;!@ S1SMS Jungle Zone
+id_SkyBZ:	equ	$0A	;!@ S1SMS Sky Base Zone
 
 ; Colours
 cBlack:		equ $000		; colour black
@@ -138,6 +139,33 @@ tipConsole	equ	$00
 tipCopera	equ	$01
 tipRevision	equ	$02
 tipMods		equ	$03
+
+; !@ Options mask bitfields and Bits
+; 0zmd tttt 
+; tttt = Consle type mask bitfields; override. See above
+; z = Enable new zones?
+; m = Enable song at Title Cards?
+; d = Enable song on Death?
+;Masks
+optConsole	equ	typConsole
+optCopera	equ	typCopera
+optRevision	equ	typRevision
+optMods		equ	typMods
+optTMask	equ	typMask
+optSDeath	equ	%00010000
+optSMap		equ	%00100000
+optZones	equ	%01000000
+optUnk		equ	%10000000
+optSMask	equ	%11110000
+;Bits
+iptConsole	equ	tipConsole
+iptCopera	equ	tipCopera
+iptRevision	equ	tipRevision
+iptMods		equ	tipMods
+iptSDeath	equ	$04
+iptSMap		equ	$05
+iptZones	equ	$06
+iptUnk		equ	$07
 
 
 ; Joypad input
@@ -329,12 +357,13 @@ af2ndRoutine:	equ $FA	; increment 2nd routine counter
 ; flg__Last:	equ ((ptr_flgend-Sound_ExIndex-4)/4)+flg__First
 
 ;!@ playlists IDs
-bply_Sonic1FM:		equ	0	;Regular Sonic 1 music (FM)
-bply_Sonic1SMS:		equ	1	;Sonic 1 SMS (PSG)
-bply_Sonic1Mega:	equ	2	;Alt Sonic 1 Music (Music+Pico ADPCM)
-bply_SonicGSMS:		equ	3	;Sonic Genesis for SMS (PSG)
-bply_Copera:		equ	4	;Copera (Soundblaster)
-bply_MAX:			equ bply_Copera
+bply_Sonic1FM:		equ	0			;Regular Sonic 1 music (FM)
+bply_Sonic1SMS:		equ	1			;Sonic 1 SMS (PSG)
+bply_Sonic1Mega:	equ	2			;Alt Sonic 1 Music (Music+Pico ADPCM)
+bply_SonicGSMS:		equ	3			;Sonic Genesis for SMS (PSG)
+bply_Copera:		equ	4			;Copera (Soundblaster)
+bply_LAST			equ	bply_Copera	;Copera (Soundblaster)
+bply_MAX:			equ bply_LAST+1
 
 ; Sonic frame IDs
 fr_Null:	equ 0

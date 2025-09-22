@@ -228,7 +228,7 @@ Map_Cred_internal:	mappingsTable
 	dc.b $F8, 5, 0, $0E, $C0	; E
 	dc.b $F8, 5, 0, $1A, $D0	; N
 	dc.b $F8, 5, 0, $3E, $E0	; T
-	dc.b $F8, 5, 0, $0E, $F0	; E
+	dc.b $F8, 5, 0, $0E, $F0	; S
 	dc.b $F8, 5, 0, $42, $0	; D
 	dc.b $F8, 0, 0, $60, $C    ;Space
 	dc.b $F8, 5, 0, $48, $20	; B
@@ -278,26 +278,26 @@ Map_Cred_internal:	mappingsTable
 	; spritePiece	$10, 0, 2, 2, $1A, 0, 0, 0, 0
 	; spritePiece	$20, 0, 2, 2, $3E, 0, 0, 0, 0
 	; spritePiece	$30, 0, 2, 2, $2E, 0, 0, 0, 0
-	dc.b $13	;  SONIC TEAM PRESENTS | GENESISDOESPRESENTS
-	dc.b $E8, 5, 0, 0, $A0		; G
-	dc.b $E8, 5, 0, $0E, $B0	; E
-	dc.b $E8, 5, 0, $1A, $C0	; N
-	dc.b $E8, 5, 0, $0E, $D0	; E
-	dc.b $E8, 5, 0, $2E, $E0	; S
-	dc.b $E8, 1, 0, $46, $F0	; I
-	dc.b $E8, 5, 0, $2E, $F8	; S
-	dc.b $E8, 5, 0, $42, $8	; D
-	dc.b $E8, 5, 0, $26, $18	; O
-	dc.b $E8, 5, 0, $0E, $28	; E
-	dc.b $E8, 5, 0, $2E, $38	; S
+	dc.b $13	;  SONIC TEAM PRESENTS | GENESISDOES
+	dc.b $E8, 5, 0, 0,   $C0-$18	; G
+	dc.b $E8, 5, 0, $0E, $D0-$18	; E
+	dc.b $E8, 5, 0, $1A, $E0-$18	; N
+	dc.b $E8, 5, 0, $0E, $F0-$18	; E
+	dc.b $E8, 5, 0, $2E, $00-$18	; S
+	dc.b $E8, 1, 0, $46, $10-$18	; I
+	dc.b $E8, 5, 0, $2E, $18-$18	; S
+	dc.b $E8, 5, 0, $42, $28-$18	; D
+	dc.b $E8, 5, 0, $26, $38-$18	; O
+	dc.b $E8, 5, 0, $0E, $48-$18	; E
+	dc.b $E8, 5, 0, $2E, $58-$18	; S
 
-	dc.b 0,	5, 0, $12, $C0	; P
-	dc.b 0,	5, 0, $22, $D0	; R
-	dc.b 0,	5, 0, $E, $E0	; E
-	dc.b 0,	5, 0, $2E, $F0	; S
-	dc.b 0,	5, 0, $E, 0	; E
-	dc.b 0,	5, 0, $1A, $10	; N
-	dc.b 0,	5, 0, $3E, $20	; T
-	dc.b 0,	5, 0, $2E, $30	; S
+	dc.b 0,	5, 0, $12, $C0		; P
+	dc.b 0,	5, 0, $22, $D0		; R
+	dc.b 0,	5, 0, $E, $E0		; E
+	dc.b 0,	5, 0, $2E, $F0		; S
+	dc.b 0,	5, 0, $E, 0			; E
+	dc.b 0,	5, 0, $1A, $10		; N
+	dc.b 0,	5, 0, $3E, $20		; T
+	dc.b 0,	5, 0, $2E, $30		; S
 .sonicteam_End
 	even

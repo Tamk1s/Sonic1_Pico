@@ -1,5 +1,5 @@
 0
-11
+16
 00000	00FFF602	w	h	0	v_jpadHoldL
 00001	00FFF604	d	h	0	v_jpadhold1
 00002	00FFF608	d	h	0	v_jpadhold2
@@ -11,3 +11,8 @@
 00008	00FFFFEF	b	h	0	v_consoleType
 00009	00FFF614	w	h	0	v_demolength
 0000A	00FFFFF6	b	h	0	v_playlist
+0000B	00FFFFEA	w	h	0	v_LevelBGM
+0000C	00FFF62D	b	h	0	v_vbla_routineB
+0000D	00FFF62A	b	h	0	v_vbla_routine
+0000E	00FFFE2A	b	h	0	f_dead
+0000F	00FFFFF7	b	h	0	v_options

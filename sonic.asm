@@ -24,7 +24,7 @@ AddressSRAM			= 3	; 0 = odd+even; 2 = even only; 3 = odd only
 ; Change to 2 to build the version from Sonic Mega Collection, dubbed REVXB, which fixes the infamous "spike bug"
 Revision	  = 2
 
-ZoneCount	  = 6	; discrete zones are: GHZ, MZ, SYZ, LZ, SLZ, SBZ, BZ, and JZ
+ZoneCount	  = 6	; discrete zones are: GHZ, MZ, SYZ, LZ, SLZ, SBZ, BZ, JZ, SkyBZ
 
 FixBugs		  = 1	; change to 1 to enable bugfixes
 
@@ -715,7 +715,8 @@ VBla_Index:	dc.w VBla_00-VBla_Index, VBla_02-VBla_Index
 		dc.w VBla_0C-VBla_Index, VBla_0E-VBla_Index
 		dc.w VBla_10-VBla_Index, VBla_12-VBla_Index
 		dc.w VBla_14-VBla_Index, VBla_16-VBla_Index
-		dc.w VBla_0C-VBla_Index
+		;!@ dc.w VBla_0C-VBla_Index
+		dc.w VBla_18-VBla_Index		;!@ New VBla_Routine; combines $0C and $14. Used by ZoneStart song option
 ; ===========================================================================
 
 VBla_00:
@@ -943,6 +944,51 @@ VBla_16:
 		subq.w	#1,(v_demolength).w
 
 .end:
+		rts	
+
+; ===========================================================================
+
+;!@ New VBla_Routine; combines $0C and $14. Used by ZoneStart song option
+VBla_18:
+		;!@ VBla Routine $14
+		tst.w	(v_demolength).w
+		beq.w	.end		
+		subq.w	#1,(v_demolength).w
+	.end:
+	
+		;!@ VBla Routine $0C
+		stopZ80
+		waitZ80
+		bsr.w	ReadJoypads
+		tst.b	(f_wtr_state).w
+		bne.s	.waterabove
+
+		writeCRAM	v_palette,0
+		bra.s	.waterbelow
+
+.waterabove:
+		writeCRAM	v_palette_water,0
+
+.waterbelow:
+		move.w	(v_hbla_hreg).w,(a5)
+		writeVRAM	v_hscrolltablebuffer,vram_hscroll
+		writeVRAM	v_spritetablebuffer,vram_sprites
+		tst.b	(f_sonframechg).w
+		beq.s	.nochg
+		writeVRAM	v_sgfx_buffer,ArtTile_Sonic*tile_size
+		move.b	#0,(f_sonframechg).w
+
+.nochg:
+		startZ80
+		movem.l	(v_screenposx).w,d0-d7
+		movem.l	d0-d7,(v_screenposx_dup).w
+		movem.l	(v_fg_scroll_flags).w,d0-d1
+		movem.l	d0-d1,(v_fg_scroll_flags_dup).w
+		;!@ bsr.w	LoadTilesAsYouMove
+		jsr		(LoadTilesAsYouMove).l
+		jsr	(AnimateLevelGfx).l
+		jsr	(HUD_Update).l
+		bsr.w	sub_1642
 		rts	
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -2383,7 +2429,10 @@ __LABEL___end:
 
 Pal_SegaBG:	bincludePalette	"palette/Sega Background.bin"
 Pal_Title:	bincludePalette	"palette/Title Screen.bin"
-Pal_LevelSel:	bincludePalette	"palette/Level Select.bin"
+
+Pal_LevelSel:	bincludePalette	"palette/Level Select.bin"	; !@ Credits: Speem's new sepiatone pallette.
+; https://cdn.discordapp.com/attachments/1258015572310888549/1418934945090375680/Level_Select.bin?ex=68d1e7e5&is=68d09665&hm=0e43a54a9c08ff9cd7752201b35925af9a58f1284b2643d837a3d8585d60dcf8&
+
 Pal_Sonic:	bincludePalette	"palette/Sonic.bin"
 Pal_GHZ:	bincludePalette	"palette/Green Hill Zone.bin"
 Pal_LZ:		bincludePalette	"palette/Labyrinth Zone.bin"
@@ -2603,7 +2652,7 @@ Tit_LoadText:
 		move.b	#0,(v_lastlamp).w ; clear lamppost counter
 		move.w	#0,(v_debuguse).w ; disable debug item placement mode
 		move.w	#0,(f_demo).w	; disable debug mode
-		move.w	#0,(v_unused2).w ; unused variable
+		;!@ move.w	#0,(v_unused2).w ; unused variable
 		move.w	#(id_GHZ<<8),(v_zone).w	; set level to GHZ (00)
 		move.w	#0,(v_pcyc_time).w ; disable palette cycling
 		bsr.w	LevelSizeLoad
@@ -2779,6 +2828,10 @@ Tit_ClrScroll2:
 		move.l	d0,(a6)
 		dbf	d1,Tit_ClrScroll2 ; clear scroll data (in VRAM)
 		bsr.w	LevSelTextLoad
+		
+		;!@ Load Level Select music
+		move.b	#_bgm_LvlSel,d0
+		bsr.w	PlaySound_Special
 
 ; ---------------------------------------------------------------------------
 ; Level	Select
@@ -2833,8 +2886,8 @@ LevSel_PlaySnd:
 		;!@ New code to check playlist type.
 		;If invalid, then play sound ID absolute; else with playlist translation
 		move.b	v_playlist,d1		;Move playlist ID into d1
-		;Is the I>=MAX?
-		cmpi.b	#bply_MAX,d1
+		;Is the playlist>LAST?
+		cmpi.b	#bply_LAST,d1
 		bgt.s	.abs				;if so, branch		
 		bsr.w	PlaySound_Special	;Play sound normally (with playlist ID translation)
 		bra.s	.end
@@ -3287,18 +3340,26 @@ LevelMenuText:	if Revision=0
 		
 ;!@ Modified for multiple playlist sets
 ; ---------------------------------------------------------------------------
-; !@ Music	playlists
-; Playlist Sonic 1 (FM)
+; Music	playlist
 ; ---------------------------------------------------------------------------
 MusicList:
-		dc.b _bgm_GHZ	; GHZ
-		dc.b _bgm_LZ	; LZ
-		dc.b _bgm_MZ	; MZ
-		dc.b _bgm_SLZ	; SLZ
-		dc.b _bgm_SYZ	; SYZ
-		dc.b _bgm_SBZ	; SBZ
-		zonewarning MusicList,1
-		dc.b _bgm_FZ	; Ending
+		;dc.b _bgm_GHZ	; GHZ
+		;dc.b _bgm_LZ	; LZ
+		;dc.b _bgm_MZ	; MZ
+		;dc.b _bgm_SLZ	; SLZ
+		;dc.b _bgm_SYZ	; SYZ
+		;dc.b _bgm_SBZ	; SBZ
+		;zonewarning MusicList,1
+		;dc.b _bgm_FZ	; Ending
+		
+		dc.w _bgm_GHZ	; GHZ
+		dc.w _bgm_LZ	; LZ
+		dc.w _bgm_MZ	; MZ
+		dc.w _bgm_SLZ	; SLZ
+		dc.w _bgm_SYZ	; SYZ
+		dc.w _bgm_SBZ	; SBZ
+		zonewarning MusicList,2
+		dc.w _bgm_FZ	; Ending
 		even
 ; ===========================================================================
 
@@ -3392,7 +3453,8 @@ Level_WaterPal:
 
 Level_GetBgm:
 		tst.w	(f_demo).w
-		bmi.s	Level_SkipTtlCard
+		;!@ bmi.s	Level_SkipTtlCard
+		bmi.w	Level_SkipTtlCard
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		cmpi.w	#(id_LZ<<8)+3,(v_zone).w ; is level SBZ3?
@@ -3405,23 +3467,83 @@ Level_BgmNotLZ4:
 		moveq	#6,d0		; use 6th music (FZ)
 
 Level_PlayBgm:
-		lea	(MusicList).l,a1 ; load	music playlist
-		move.b	(a1,d0.w),d0
-		bsr.w	PlaySound	; play music
+		;!@ Option to play new Zone Start song 
+		;lea	(MusicList).l,a1 ; load	music playlist
+		;move.b	(a1,d0.w),d0
+		;bsr.w	PlaySound	; play music		
+		add.w	d0,d0				;Double d0 (word indices)
+		move.w	d0,(v_LevelBGM).w	;Store into v_LevelBGM
+		
+		;!@ If ending demo not playing, then just do level song
+		tst.w	(f_demo).w
+		bmi.s	.doLevelSong
+		
+		;!@ If Map song option set, then branch to do Map Song
+		btst	#iptSMap,v_options
+		bne.s	.doMapSong
+		
+		;!@ Do normal level song if option reset
+.doLevelSong:
+		bsr.w	Level_DoBGM					;!@Play level BGM
+		move.b	#$0C,(v_vbla_routineB).w	;!@Store normal $0C VBla routine into v_vbla_routineB
+		bra.s	Level_TtlCardStart			;Start title cards
+		
+		;!@ Do optional map song
+.doMapSong:
+		; play Act Start music
+		move.w	#_bgm_ZoneStart,d0
+		bsr.w	PlaySound	
+		
+		; Load appropriate song yield timer, for current playlist
+		lea		(Level_MapSong_Yield_tbl).l,a0	;Load Level_MapSong_Yield_tbl table into a0
+		bsr.w	PlaySound_List_GetItem			;Get value for current playlist in d0
+		move.w	d0,(v_demolength).w				;Store yield timer into v_demolength
+		move.b	#$18,(v_vbla_routineB).w		;!@ Store special VBla Routine $18 ($0C + $14 combination) into v_vbla_routineB
+		
+Level_TtlCardStart:	;!@
 		move.b	#id_TitleCard,(v_titlecard).w ; load title card object
 
 Level_TtlCardLoop:
-		move.b	#$C,(v_vbla_routine).w
-		bsr.w	WaitForVBla
+		;!@
+		move.b	(v_vbla_routineB).w,d0			;Store current v_vbla_routineB into d0
+		move.b	d0,(v_vbla_routine).w			;!@ Move d0 into v_vbla_routine
+		bsr.w	WaitForVBla						;Run VBla
+		
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	RunPLC
 		move.w	(v_ttlcardact+obX).w,d0
+		
+		;Yield if title card xpos has reached max
 		cmp.w	(v_ttlcardact+card_mainX).w,d0 ; has title card sequence finished?
 		bne.s	Level_TtlCardLoop ; if not, branch
+		;Yield until PLC buffer is empty
 		tst.l	(v_plc_buffer).w ; are there any items in the pattern load cue?
-		bne.s	Level_TtlCardLoop ; if yes, branch
+		bne.s	Level_TtlCardLoop ; if yes, branch		
+		
+		;!@ Check if Map song option is set; if not, branch 
+		btst	#iptSMap,v_options
+		beq.s	Level_TtlCardEnd
+		
+		;Map song option is set
+		; check if buttons are pressed to skip yield
+		andi.b	#btnABC+btnStart,(v_jpadpress1).w 	
+		bne.s	Level_TtlCardEnd
+		
+		;Loop until v_demolength yield timer has runout
+		tst.w	(v_demolength).w
+		beq.s	Level_TtlCardEnd
+		bra.s	Level_TtlCardLoop
+		
+		
+Level_TtlCardEnd:
+		move.b	#$00,(v_vbla_routineB).w	;!@ Reset VBla routine
 		jsr	(Hud_Base).l	; load basic HUD gfx
+		
+		;!@ If Map Song option is set, play level BGM; else resume game
+		btst	#iptSMap,v_options
+		beq.s	Level_SkipTtlCard
+		bsr.w	Level_DoBGM
 
 Level_SkipTtlCard:
 		moveq	#palid_Sonic,d0
@@ -3469,6 +3591,7 @@ Level_LoadObj:
 
 Level_SkipClr:
 		move.b	d0,(f_timeover).w
+		move.b	d0,(f_dead).w	;!@ Clear f_dead flag, for death/gameover runonce for Death song option
 		move.b	d0,(v_shield).w	; clear shield
 		move.b	d0,(v_invinc).w	; clear invincibility
 		move.b	d0,(v_shoes).w	; clear speed shoes
@@ -3533,6 +3656,21 @@ Level_DelayLoop:
 		addq.b	#4,(v_ttlcardact+obRoutine).w
 		addq.b	#4,(v_ttlcardoval+obRoutine).w
 		bra.s	Level_StartGame
+		rts		;!@
+; ===========================================================================e
+;!@ Map song option, yield timers foreach variant in the playlists
+Level_MapSong_Yield_tbl:		
+		dc.w	$0096,$0096,$0000,$0000,$0000
+		_playwarning	Level_MapSong_Yield_tbl,2
+		even
+
+;!@ Function to play current level BGM
+Level_DoBGM:
+		lea	(MusicList).l,a1 		; load	music playlist into a1
+		move.w	(v_LevelBGM).w,d0	; Move stored index from v_LevelBGM into d0
+		move.w	(a1,d0.w),d0		;Offset a1 by d0.w, store into d0
+		bsr.w	PlaySound			; play music
+		rts
 ; ===========================================================================
 
 Level_ClrCardArt:

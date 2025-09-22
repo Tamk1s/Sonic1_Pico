@@ -53,8 +53,11 @@ Over_SetWait:
 
 Over_Wait:	; Routine 4
 		move.b	(v_jpadpress1).w,d0
-		andi.b	#btnABC,d0	; is button A, B or C pressed?
+		
+		;!@andi.b	#btnABC,d0	; is button A, B or C pressed?
+		andi.b	#btnABC+btnStart,d0	; is button ABC/Start pressed?
 		bne.s	Over_ChgMode	; if yes, branch
+		
 		btst	#0,obFrame(a0)
 		bne.s	Over_Display
 		tst.w	obTimeFrame(a0)	; has time delay reached zero?

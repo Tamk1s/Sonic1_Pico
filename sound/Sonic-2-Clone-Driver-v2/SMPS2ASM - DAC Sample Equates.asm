@@ -134,6 +134,7 @@ dHey =				SMPS_id(ptr_dacDF)
 
 dSega =				SMPS_id(ptr_dacE0)
 dDont =				SMPS_id(ptr_dacE1)
+dStart =			SMPS_id(ptr_dacE2)
 
 dNoise1 =			$81
 dNoise2 =			$82

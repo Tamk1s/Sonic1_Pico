@@ -81,7 +81,7 @@ SRG_ClearObjects:
 		lea	(v_ram_start).l,a1			; set temporary ram space to dump to
 		jsr	KosDec					; decompress and dump
 		lea	(v_ram_start).l,a5			; load mappings to read
-		moveq	#$17,d0					; set number of columns
+		moveq	#$1C,d0					; set number of columns
 		moveq	#$00,d1					; set number of rows
 		;Base Value here =
 		; function to calculate the location of a tile in plane mappings with a width of 64 cells
