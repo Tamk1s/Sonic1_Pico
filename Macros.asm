@@ -326,6 +326,14 @@ zonewarning:	macro loc,elementsize
 		warning "Size of loc (\{(._end-loc)/elementsize}) does not match ZoneCount (\{ZoneCount})."
 		endif
 		endm
+		
+;!@ Emerald
+emeraldWarning:	macro loc2,elementsize2
+._end2:
+		if (._end2-loc2)-(maxEmerald*elementsize2)<>0
+		warning "Size of loc2 (\{(._end2-loc2)/elementsize2}) does not match maxEmerald (\{maxEmerald})."
+		endif
+		endm
 
 ; ---------------------------------------------------------------------------
 ; produce a packed art-tile

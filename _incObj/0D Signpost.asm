@@ -13,11 +13,13 @@ Signpost:
 		out_of_range.w	DeleteObject
 		rts	
 ; ===========================================================================
-Sign_Index:	dc.w Sign_Main-Sign_Index
-		dc.w Sign_Touch-Sign_Index
-		dc.w Sign_Spin-Sign_Index
-		dc.w Sign_SonicRun-Sign_Index
-		dc.w Sign_Exit-Sign_Index
+Sign_Index:	dc.w Sign_Main-Sign_Index	;$00
+		dc.w Sign_Touch-Sign_Index		;$02
+		dc.w Sign_Spin-Sign_Index		;$04
+		;!@ Victory Pose
+		;!@ https://sonicresearch.org/community/index.php?threads/restore-sonic-1s-prototype-victory.5790/#post-83222
+		dc.w Sign_SonicRun-Sign_Index	;$06
+		dc.w Sign_Exit-Sign_Index		;$08
 
 spintime = objoff_30		; time for signpost to spin
 sparkletime = objoff_32		; time between sparkles
@@ -35,12 +37,18 @@ Sign_Main:	; Routine 0
 Sign_Touch:	; Routine 2
 		move.w	(v_player+obX).w,d0
 		sub.w	obX(a0),d0
+		;!@ Victory Pose
 		bcs.s	.notouch
 		cmpi.w	#$20,d0		; is Sonic within $20 pixels of	the signpost?
-		bhs.s	.notouch	; if not, branch
+		;!@ bhs.s	.notouch	; if not, branch
+		bcc.s	.notouch	; if not, branch
+		;move.b  #$01,(v_trackbyte).w ; !@ Lock the screen
+		
 		move.w	#_sfx_Signpost,d0
 		jsr	(PlaySound).l	; play signpost sound
 		clr.b	(f_timecount).w	; stop time counter
+		;!@ Victory Pose
+		move.b	#1, (f_victoryPose).w	;Set victory animation flag
 		move.w	(v_limitright2).w,(v_limitleft2).w ; lock screen position
 		addq.b	#2,obRoutine(a0)
 
@@ -96,35 +104,42 @@ Sign_SparkPos:	dc.b -$18,-$10		; x-position, y-position
 		dc.b -$18,   8
 		dc.b  $18, $10
 ; ===========================================================================
-
+;!@ Victory pose
 Sign_SonicRun:	; Routine 6
-		tst.w	(v_debuguse).w	; is debug mode	on?
-		bne.w	locret_ECEE	; if yes, branch
-	if FixBugs
-		; This function's checks are a mess, creating an edgecase where it's
-		; possible for the player to avoid having their controls locked by
-		; jumping at the right side of the screen just as the score tally
-		; appears.
-		tst.b	(v_player+obID).w	; Check if Sonic's object has been deleted (because he entered the giant ring)
-		beq.s	loc_EC86
-		btst	#1,(v_player+obStatus).w
-		bne.w	locret_ECEE
-	else
-		btst	#1,(v_player+obStatus).w
-		bne.s	loc_EC70
-	endif
-		move.b	#1,(f_lockctrl).w ; lock controls
-		move.w	#btnR<<8,(v_jpadhold2).w ; make Sonic run to the right
-	if ~~FixBugs
-loc_EC70:
-		tst.b	(v_player+obID).w	; Check if Sonic's object has been deleted (because he entered the giant ring)
-		beq.s	loc_EC86
-	endif
-		move.w	(v_player+obX).w,d0
-		move.w	(v_limitright2).w,d1
-		addi.w	#$128,d1
-		cmp.w	d1,d0
-		blo.s	locret_ECEE
+		;!@ tst.w   (f_debugmode).w   		; is debug mode on?
+		;bne.w   locret_ECEE   			; if yes, branch
+		
+		;move.b  #1,(f_victoryPose).w 	; Set victory animation flag
+       
+		
+		;!@ Victory pose
+		; tst.w	(v_debuguse).w	; is debug mode	on?
+		; bne.w	locret_ECEE	; if yes, branch
+	; if FixBugs
+		; ; This function's checks are a mess, creating an edgecase where it's
+		; ; possible for the player to avoid having their controls locked by
+		; ; jumping at the right side of the screen just as the score tally
+		; ; appears.
+		; tst.b	(v_player+obID).w	; Check if Sonic's object has been deleted (because he entered the giant ring)
+		; beq.s	loc_EC86
+		; btst	#1,(v_player+obStatus).w
+		; bne.w	locret_ECEE
+	; else
+		; btst	#1,(v_player+obStatus).w
+		; bne.s	loc_EC70
+	; endif
+		; move.b	#1,(f_lockctrl).w ; lock controls
+		; move.w	#btnR<<8,(v_jpadhold2).w ; make Sonic run to the right
+	; if ~~FixBugs
+; loc_EC70:
+		; tst.b	(v_player+obID).w	; Check if Sonic's object has been deleted (because he entered the giant ring)
+		; beq.s	loc_EC86
+	; endif
+		; move.w	(v_player+obX).w,d0
+		; move.w	(v_limitright2).w,d1
+		; addi.w	#$128,d1
+		; cmp.w	d1,d0
+		; blo.s	locret_ECEE
 
 loc_EC86:
 		addq.b	#2,obRoutine(a0)

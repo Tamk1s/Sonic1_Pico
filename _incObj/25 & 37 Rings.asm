@@ -208,7 +208,8 @@ RLoss_Count:	; Routine 0
 		move.b	#3,obPriority(a1)
 		move.b	#$47,obColType(a1)
 		move.b	#8,obActWid(a1)
-		move.b	#-1,(v_ani3_time).w
+		;!@ Ring fix (https://sonicresearch.org/community/index.php?threads/how-to-fix-timers-on-scattered-rings-s1-s2-s3k.2945/)
+		;!@	move.b	#-1,(v_ani3_time).w
 		tst.w	d4
 		bmi.s	.loc_9D62
 		move.w	d4,d0
@@ -237,6 +238,12 @@ RLoss_Count:	; Routine 0
 		move.w	#0,(v_rings).w	; reset number of rings to zero
 		move.b	#$80,(f_ringcount).w ; update ring counter
 		move.b	#0,(v_lifecount).w
+		
+		;!@ Ring Fix
+		moveq #-1,d0 ; Move #-1 to d0
+		move.b d0,obDelayAni(a0) ; Move d0 to new timer
+		move.b d0,(v_ani3_time).w ; Move d0 to old timer (for animated purposes)
+		
 		move.w	#_sfx_RingLoss,d0
 		jsr	(PlaySound_Special).l	; play ring loss sound
 
@@ -259,8 +266,12 @@ RLoss_Bounce:	; Routine 2
 		neg.w	obVelY(a0)
 
 .chkdel:
-		tst.b	(v_ani3_time).w
-		beq.s	RLoss_Delete
+		;!@ Ring Fix
+		;tst.b	(v_ani3_time).w
+		;beq.s	RLoss_Delete
+		subq.b #1,obDelayAni(a0) ; Subtract 1
+		beq.w DeleteObject ; If 0, delete
+		
 		move.w	(v_limitbtm2).w,d0
 		addi.w	#$E0,d0
 		cmp.w	obY(a0),d0	; has object moved below level boundary?

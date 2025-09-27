@@ -44,7 +44,17 @@ loc_1341C:
 		bne.s	loc_13490
 		move.b	#$E,obHeight(a0)
 		move.b	#7,obWidth(a0)
-		move.b	#id_Roll,obAnim(a0) ; use "jumping" animation
+		
+		;!@ Victory Pose
+		;!@ move.b	#id_Roll,obAnim(a0) ; use "jumping" animation
+.Result_Check:
+        tst.b   (f_victoryPose).w 	; Has the victory animation flag been set?
+        beq.s   .NormalJump 			; If not, branch
+        move.b  #id_Leap2,obAnim(a0) ; Play the victory animation
+        bra.s   .cont 				; Continue
+.NormalJump:
+        move.b  #id_Roll,obAnim(a0)    ; use "jumping"    animation
+.cont:		
 		bset	#2,obStatus(a0)
 		addq.w	#5,obY(a0)
 

@@ -1,4 +1,6 @@
 quick	equ	$01
+loop3	equ	$02
+loop2	equ	$01
 
 Mus92_Drowning_S1SMS_SBlast_Header:
 	smpsHeaderStartSong	1, 1
@@ -59,14 +61,14 @@ Mus92_Drowning_S1SMS_SBlast_PSG1:
 Mus92_Drowning_S1SMS_SBlast_Loop05:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop05
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop05
 	smpsPSGAlterVol     $F9
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop06:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop06
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop06
 	smpsPSGAlterVol     $FD
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -87,7 +89,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop07:
 	smpsPSGAlterVol     $01
 	smpsAlterNote       $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop07
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop07
 	smpsPSGAlterVol     $FD
 	dc.b	nCs2
 
@@ -102,20 +104,20 @@ Mus92_Drowning_S1SMS_SBlast_Loop08:
 	smpsPSGAlterVol     $01
 	dc.b	$05/quick
 	smpsPSGAlterVol     $FC
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop08
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop08
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop09:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop09
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop09
 	smpsPSGAlterVol     $01
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop0A:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop0A
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop0A
 	smpsPSGAlterVol     $F9
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -143,7 +145,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop0A:
 Mus92_Drowning_S1SMS_SBlast_Loop0B:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop0B
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop0B
 	smpsPSGAlterVol     $FD
 	dc.b	nD2
 
@@ -158,13 +160,13 @@ Mus92_Drowning_S1SMS_SBlast_Loop0C:
 	smpsPSGAlterVol     $01
 	dc.b	$05/quick
 	smpsPSGAlterVol     $FC
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop0C
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop0C
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop0D:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop0D
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop0D
 	smpsPSGAlterVol     $01
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -179,7 +181,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop0D:
 Mus92_Drowning_S1SMS_SBlast_Loop0E:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop0E
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop0E
 	smpsPSGAlterVol     $FD
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -238,14 +240,14 @@ Mus92_Drowning_S1SMS_SBlast_Loop0E:
 Mus92_Drowning_S1SMS_SBlast_Loop0F:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop0F
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop0F
 	smpsPSGAlterVol     $F9
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop10:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop10
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop10
 	smpsPSGAlterVol     $FD
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -289,7 +291,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop11:
 	smpsAlterNote       $00
 	dc.b	$05/quick
 	smpsPSGAlterVol     $FC
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop11
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop11
 	smpsAlterNote       $00
 	dc.b	$02/quick
 
@@ -297,7 +299,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop12:
 	smpsPSGAlterVol     $01
 	smpsAlterNote       $00
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop12
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop12
 	smpsPSGAlterVol     $01
 	smpsAlterNote       $00
 	dc.b	$02/quick
@@ -306,7 +308,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop13:
 	smpsPSGAlterVol     $01
 	smpsAlterNote       $00
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop13
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop13
 	smpsPSGAlterVol     $F9
 	smpsAlterNote       $00
 	dc.b	$02/quick
@@ -339,7 +341,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop14:
 	smpsPSGAlterVol     $01
 	smpsAlterNote       $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop14
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop14
 	smpsPSGAlterVol     $FD
 	dc.b	nCs2
 
@@ -354,13 +356,13 @@ Mus92_Drowning_S1SMS_SBlast_Loop15:
 	smpsPSGAlterVol     $01
 	dc.b	$05/quick
 	smpsPSGAlterVol     $FC
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop15
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop15
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop16:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop16
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop16
 	smpsPSGAlterVol     $01
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -375,7 +377,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop16:
 Mus92_Drowning_S1SMS_SBlast_Loop17:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop17
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop17
 	smpsPSGAlterVol     $FD
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -410,27 +412,27 @@ Mus92_Drowning_S1SMS_SBlast_Loop18:
 	smpsPSGAlterVol     $01
 	dc.b	$05/quick
 	smpsPSGAlterVol     $FC
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop18
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop18
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop19:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop19
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop19
 	smpsPSGAlterVol     $01
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop1A:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop1A
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop1A
 	smpsPSGAlterVol     $F9
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop1B:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop1B
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop1B
 	smpsPSGAlterVol     $FD
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -454,7 +456,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop1C:
 	smpsPSGAlterVol     $01
 	smpsAlterNote       $00
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop1C
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop1C
 	smpsPSGAlterVol     $FD
 	dc.b	nEb2
 
@@ -469,20 +471,20 @@ Mus92_Drowning_S1SMS_SBlast_Loop1D:
 	smpsPSGAlterVol     $01
 	dc.b	$05/quick
 	smpsPSGAlterVol     $FC
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop1D
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop1D
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop1E:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop1E
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop1E
 	smpsPSGAlterVol     $01
 	dc.b	$02/quick
 
 Mus92_Drowning_S1SMS_SBlast_Loop1F:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop1F
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop1F
 	smpsPSGAlterVol     $F9
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
@@ -915,7 +917,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop1F:
 Mus92_Drowning_S1SMS_SBlast_Loop20:
 	smpsPSGAlterVol     $01
 	dc.b	$03/quick
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop20
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop20
 	smpsPSGAlterVol     $FD
 	dc.b	nB2, $02/quick, nBb2, nA2, nAb2, nG2, $01/quick, nFs2, $02/quick, nC2
 	smpsPSGAlterVol     $01
@@ -1595,7 +1597,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop00:
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
 	dc.b	nAb0
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop00
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop00
 
 Mus92_Drowning_S1SMS_SBlast_Loop01:
 	smpsPSGAlterVol     $01
@@ -1654,7 +1656,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop01:
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
 	dc.b	nA0
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop01
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop01
 	smpsPSGAlterVol     $01
 	dc.b	$01/quick
 	smpsPSGAlterVol     $FB
@@ -2324,7 +2326,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop02:
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
 	dc.b	nG0
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_Loop02
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_Loop02
 	smpsPSGAlterVol     $01
 	dc.b	$01/quick
 	smpsPSGAlterVol     $FB
@@ -2334,7 +2336,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop02:
 Mus92_Drowning_S1SMS_SBlast_Loop03:
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop03
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop03
 	dc.b	$04/quick, nRst, $0B/quick
 	smpsPSGAlterVol     $FE
 	dc.b	nC0, $01/quick
@@ -2343,7 +2345,7 @@ Mus92_Drowning_S1SMS_SBlast_Loop03:
 Mus92_Drowning_S1SMS_SBlast_Loop04:
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_Loop04
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_Loop04
 	dc.b	$05/quick, nRst, $0B/quick
 	smpsStop
 	
@@ -2464,7 +2466,7 @@ Mus92_Drowning_S1SMS_SBlast_PSG3_Loop00:
 	smpsPSGAlterVol     $03
 	dc.b	nCs1
 	smpsPSGAlterVol     $FF
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_PSG3_Loop00
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_PSG3_Loop00
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
 	dc.b	nCs1, nRst, $0D/quick
@@ -2790,7 +2792,7 @@ Mus92_Drowning_S1SMS_SBlast_PSG3_Loop01:
 	smpsAlterNote       $FF
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_PSG3_Loop01
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_PSG3_Loop01
 	smpsAlterNote       $FF
 	dc.b	nD1
 	smpsPSGAlterVol     $02
@@ -3454,7 +3456,7 @@ Mus92_Drowning_S1SMS_SBlast_PSG3_Loop02:
 	smpsAlterNote       $01
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_PSG3_Loop02
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_PSG3_Loop02
 	smpsAlterNote       $01
 	dc.b	$04/quick, nRst, $0B/quick
 	smpsPSGAlterVol     $FE
@@ -3466,7 +3468,7 @@ Mus92_Drowning_S1SMS_SBlast_PSG3_Loop03:
 	smpsAlterNote       $01
 	dc.b	$02/quick
 	smpsPSGAlterVol     $01
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_PSG3_Loop03
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_PSG3_Loop03
 	smpsAlterNote       $01
 	dc.b	$05/quick, nRst, $0B/quick
 	smpsStop
@@ -3483,7 +3485,7 @@ Mus92_Drowning_S1SMS_SBlast_PSG4_Loop00:
 	smpsPSGAlterVol     $06
 	dc.b	$02/quick
 	smpsPSGAlterVol     $FA
-	smpsLoop            $00, $03, Mus92_Drowning_S1SMS_SBlast_PSG4_Loop00
+	smpsLoop            $00, loop3, Mus92_Drowning_S1SMS_SBlast_PSG4_Loop00
 	dc.b	$04/quick
 	smpsPSGAlterVol     $01
 	dc.b	$02/quick
@@ -3834,7 +3836,7 @@ Mus92_Drowning_S1SMS_SBlast_PSG4_Loop01:
 	dc.b	$01/quick
 	smpsPSGAlterVol     $03
 	dc.b	nRst, $06/quick
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_PSG4_Loop01
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_PSG4_Loop01
 	smpsPSGAlterVol     $FC
 	smpsPSGform         $E0
 	dc.b	nC0, $01/quick
@@ -3980,7 +3982,7 @@ Mus92_Drowning_S1SMS_SBlast_PSG4_Loop02:
 	dc.b	$01/quick
 	smpsPSGAlterVol     $08
 	dc.b	nRst, $02/quick
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_PSG4_Loop02
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_PSG4_Loop02
 	smpsPSGAlterVol     $F7
 	smpsPSGform         $E1
 	dc.b	nC0
@@ -4010,7 +4012,7 @@ Mus92_Drowning_S1SMS_SBlast_PSG4_Loop03:
 	smpsPSGAlterVol     $F8
 	dc.b	nRst, $01/quick
 	smpsPSGAlterVol     $08
-	smpsLoop            $00, $02, Mus92_Drowning_S1SMS_SBlast_PSG4_Loop03
+	smpsLoop            $00, loop2, Mus92_Drowning_S1SMS_SBlast_PSG4_Loop03
 	dc.b	nRst, $02/quick
 	smpsPSGAlterVol     $F7
 	smpsPSGform         $E1

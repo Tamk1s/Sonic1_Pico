@@ -54,7 +54,9 @@ SSR_Loop:
 		move.b	(v_emeralds).w,d1
 		beq.s	loc_C842
 		moveq	#0,d0
-		cmpi.b	#6,d1		; do you have all chaos	emeralds?
+		;!@ Max Emerald
+		;!@ cmpi.b	#6,d1		; do you have all chaos	emeralds?
+		cmpi.b	#maxEmerald,d1	; do you have all chaos	emeralds?
 		bne.s	loc_C842	; if not, branch
 		moveq	#8,d0		; load "Sonic got them all" text
 		move.w	#$18,obX(a0)

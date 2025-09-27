@@ -1,18 +1,22 @@
 0
-16
+20
 00000	00FFF602	w	h	0	v_jpadHoldL
 00001	00FFF604	d	h	0	v_jpadhold1
 00002	00FFF608	d	h	0	v_jpadhold2
 00003	00FFF60C	w	h	0	v_jpadhold3
 00004	00FFF610	w	h	0	v_jpadholdP
 00005	00FFF612	w	h	0	v_jpadholdG
-00006	00FFFFE0	b	h	0	f_levselcheat
-00007	00FFFFE2	b	h	0	f_debugcheat
-00008	00FFFFEF	b	h	0	v_consoleType
-00009	00FFF614	w	h	0	v_demolength
-0000A	00FFFFF6	b	h	0	v_playlist
-0000B	00FFFFEA	w	h	0	v_LevelBGM
-0000C	00FFF62D	b	h	0	v_vbla_routineB
-0000D	00FFF62A	b	h	0	v_vbla_routine
-0000E	00FFFE2A	b	h	0	f_dead
-0000F	00FFFFF7	b	h	0	v_options
+00006	00000000	S	S	0	----------------------------
+00007	00FFFFE0	b	h	0	f_levselcheat
+00008	00FFFFE2	b	h	0	f_debugcheat
+00009	00FFFFFA	b	h	0	f_debugmode
+0000A	00000000	S	S	0	----------------------------
+0000B	00FFFFEF	b	h	0	v_consoleType
+0000C	00FFFFF7	b	h	0	v_options
+0000D	00FFFFF6	b	h	0	v_playlist
+0000E	00FFFFEA	w	h	0	v_LevelBGM
+0000F	00FFF62A	b	h	0	v_vbla_routine
+00010	00FFF62D	b	h	0	v_vbla_routineB
+00011	00FFF614	w	h	0	v_demolength
+00012	00FFFE2A	b	h	0	f_dead
+00013	00FFF622	b	h	0	f_victoryPose

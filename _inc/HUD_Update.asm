@@ -7,6 +7,7 @@
 HUD_Update:
 		tst.w	(f_debugmode).w	; is debug mode on?
 		bne.w	HudDebug	; if yes, branch
+
 		tst.b	(f_scorecount).w ; does the score need updating?
 		beq.s	.chkrings	; if not, branch
 
@@ -222,7 +223,9 @@ HudDb_XYLoop:
 		andi.w	#$F,d2
 		cmpi.w	#$A,d2
 		blo.s	loc_1C8B2
-		addq.w	#7,d2
+		;!@ Sonic 1 ASCII
+		;!@addq.w	#7,d2
+		addq.w	#7-3,d2
 
 loc_1C8B2:
 		lsl.w	#5,d2

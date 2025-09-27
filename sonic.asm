@@ -457,7 +457,7 @@ GameInit:
 MainGameLoop:
 		move.b	(v_gamemode).w,d0 ; load Game Mode
 		;!@andi.w	#$1C,d0	; limit Game Mode value to $1C max (change to a maximum of 7C to add more game modes)
-		andi.w	#id_MAX,d0	; limit Game Mode value to $1C max (change to a maximum of 7C to add more game modes)
+		andi.w	#id_MAX,d0	; limit Game Mode value to max
 		jsr	GameModeArray(pc,d0.w) ; jump to apt location in ROM
 		bra.s	MainGameLoop	; loop indefinitely
 ; ===========================================================================
@@ -467,24 +467,24 @@ MainGameLoop:
 
 GameModeArray:
 
-ptr_GM_Sega:	bra.w	GM_Sega		; Sega Screen ($00)
-
-ptr_GM_Title:	bra.w	GM_Title	; Title	Screen ($04)
-
-ptr_GM_Demo:	bra.w	GM_Level	; Demo Mode ($08)
-
-ptr_GM_Level:	bra.w	GM_Level	; Normal Level ($0C)
-
-ptr_GM_Special:	bra.w	GM_Special	; Special Stage	($10)
-
-ptr_GM_Cont:	bra.w	GM_Continue	; Continue Screen ($14)
-
-ptr_GM_Ending:	bra.w	GM_Ending	; End of game sequence ($18)
-
-ptr_GM_Credits:	bra.w	GM_Credits	; Credits ($1C)
+ptr_GM_Sega:		bra.w	GM_Sega				; Sega Screen ($00)
+ptr_GM_Title:		bra.w	GM_Title			; Title	Screen ($04)
+ptr_GM_Demo:		bra.w	GM_Level			; Demo Mode ($08)
+ptr_GM_Level:		bra.w	GM_Level			; Normal Level ($0C)
+ptr_GM_Special:		bra.w	GM_Special			; Special Stage	($10)
+ptr_GM_Cont:		bra.w	GM_Continue			; Continue Screen ($14)
+ptr_GM_Ending:		bra.w	GM_Ending			; End of game sequence ($18)
+ptr_GM_Credits:		bra.w	GM_Credits2			; !@ Credits ($1C)
 ;!@
-ptr_GM_SSRGScreen:	bra.w	GM_SSRGScreen	; CreditsSSRG Screen ($20)
+ptr_GM_SSRGScreen:	bra.w	GM_SSRGScreen		; Level Select Screen ($20)
+ptr_GM_LvlSel:		bra.w	GM_LvlSel			; Level Select Screen ($24)
+ptr_GM_Options:		bra.w	GM_Options			; Options Screen ($28)
 		rts	
+		
+;!@ Long jump
+GM_Credits2:
+		jmp		(GM_Credits2).l
+		rts
 ; ===========================================================================
 
 CheckSumError:
@@ -2561,6 +2561,10 @@ Sega_GotoTitle:
 		include	"SSRG/SSRG.asm"
 ; ===========================================================================
 
+;!@ Options Screen
+		include	"SSRG/Options.asm"
+; ===========================================================================
+
 ; ---------------------------------------------------------------------------
 ; Title	screen
 ; ---------------------------------------------------------------------------
@@ -2807,12 +2811,15 @@ Tit_ChkLevSel:
 		;!@ btst	#bitA,(v_jpadhold1).w ; check if A is pressed
 		;beq.w	PlayLevel	; if not, play level
 		btst	#bitA,(v_jpadhold1).w		;check if A is pressed on anything
-		bne.s	.lvlsel						;if so, branch
+		;!@ bne.s	.lvlsel					;if so, branch
+		bne.s	GM_LvlSel					;if so, branch
 		btst	#bitB,(v_jpadholdP).w		;check if B is pressed on pico_pad
-		bne.s	.lvlsel						;if so, branch
+		;!@ bne.s	.lvlsel					;if so, branch
+		bne.s	GM_LvlSel					;if so, branch
 		bra.w	PlayLevel					;If no presses, play level
 		
-.lvlsel:
+GM_LvlSel:
+;!@ .lvlsel:
 		moveq	#palid_LevelSel,d0
 		bsr.w	PalLoad	; load level select palette
 
@@ -3296,7 +3303,9 @@ LevSel_ChgSnd:
 		andi.w	#$F,d0
 		cmpi.b	#$A,d0		; is digit $A-$F?
 		blo.s	LevSel_Numb	; if not, branch
-		addi.b	#7,d0		; use alpha characters
+		;!@ Sonic 1 ASCII Text
+		;!@ addi.b	#7,d0		; use alpha characters
+		addi.b #4,d0 ; use alpha characters
 
 LevSel_Numb:
 		add.w	d3,d0
@@ -3321,21 +3330,85 @@ LevSel_LineLoop:
 
 
 LevSel_CharOk:
-		add.w	d3,d0		; combine char with VRAM setting
-		move.w	d0,(a6)		; send to VRAM
-		dbf	d2,LevSel_LineLoop
-		rts	
+		;!@ Sonic 1 ASCII text: (https://sonicresearch.org/community/index.php?threads/how-to-convert-sonic-1s-level-select-to-use-ascii.3335/)
+		;add.w	d3,d0		; combine char with VRAM setting
+		;move.w	d0,(a6)		; send to VRAM
+		;dbf	d2,LevSel_LineLoop
+		;rts	
+        cmp.w	#$40, d0			; Check for $40 (End of ASCII number area)
+        blt.s	.notText			; If this is not an ASCII text character, branch
+        sub.w	#$3,d0				; Subtract an extra 3 (Compensate for missing characters in the font)
+    .notText:
+        sub.w	#$30,d0				; Subtract #$33 (Convert to S2 font from ASCII)
+        add.w	d3,d0				; combine char with VRAM setting
+        move.w	d0,(a6)				; send to VRAM
+        dbf		d2,LevSel_LineLoop
+        rts   
 ; End of function LevSel_ChgLine
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Level	select menu text
 ; ---------------------------------------------------------------------------
-LevelMenuText:	if Revision=0
-		binclude	"misc/Level Select Text.bin"
-		else
-		binclude	"misc/Level Select Text (JP1).bin"
-		endif
+LevelMenuText:   if Revision=0
+		dc.b    "GREEN HILL ZONE  STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "LABYRINTH        STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "MARBLE ZONE      STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "STAR LIGHT ZONE  STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "SPRING YARD ZONE STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "SCRAP BRAIN ZONE STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+		dc.b	"BRIDGE ZONE      STAGE 1"
+		dc.b	"                 STAGE 2"
+		dc.b	"                 STAGE 3"
+		dc.b	"JUNGLE ZONE      STAGE 1"
+		dc.b	"                 STAGE 2"
+		dc.b	"                 STAGE 3"
+        dc.b    "FINAL ZONE              "            
+        dc.b    "SPECIAL STAGE           "          
+        dc.b    "SOUND TEST              "              
+		dc.b    "SOUND LIST              "
+        else
+        dc.b    "GREEN HILL ZONE  STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+		dc.b	"BRIDGE ZONE      STAGE 1"
+		dc.b	"                 STAGE 2"
+		dc.b	"                 STAGE 3"
+		dc.b	"JUNGLE ZONE      STAGE 1"
+		dc.b	"                 STAGE 2"
+		dc.b	"                 STAGE 3"
+        dc.b    "MARBLE ZONE      STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "SPRING YARD ZONE STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "LABYRINTH        STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "STAR LIGHT ZONE  STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "SCRAP BRAIN ZONE STAGE 1"
+        dc.b    "                 STAGE 2"
+        dc.b    "                 STAGE 3"
+        dc.b    "FINAL ZONE              "            
+        dc.b    "SPECIAL STAGE           "          
+        dc.b    "SOUND TEST              "        
+		dc.b    "SOUND LIST              "
+        endc
 		even
 		
 ;!@ Modified for multiple playlist sets
@@ -3416,6 +3489,9 @@ Level_ClrRam:
 		move.w	#$8720,(a6)		; set background colour (line 3; colour 0)
 		move.w	#$8A00+223,(v_hbla_hreg).w ; set palette change position (for water)
 		move.w	(v_hbla_hreg).w,(a6)
+		
+		;!@ Victory Pose
+		clr.b	(f_victoryPose).w	;!@ Clear victory pose flag
 		cmpi.b	#id_LZ,(v_zone).w ; is level LZ?
 		bne.s	Level_LoadPal	; if not, branch
 
@@ -4544,7 +4620,9 @@ GM_Ending:
 		move.w	(v_hbla_hreg).w,(a6)
 		move.w	#30,(v_air).w
 		move.w	#id_EndZ<<8,(v_zone).w ; set level number to 0600 (extra flowers)
-		cmpi.b	#6,(v_emeralds).w ; do you have all 6 emeralds?
+		;!@ Max Emerald
+		;!@ cmpi.b	#6,(v_emeralds).w ; do you have all 6 emeralds?
+		cmpi.b	#maxEmerald,(v_emeralds).w ; do you have all 6 emeralds?
 		beq.s	End_LoadData	; if yes, branch
 		move.w	#(id_EndZ<<8)+1,(v_zone).w ; set level number to 0601 (no flowers)
 
@@ -6269,20 +6347,56 @@ loc_8486:
 		adda.w	(a3,d0.w),a3
 		addq.w	#1,a3
 		bset	#5,obRender(a0)
-		_move.b	obID(a0),d4
+		move.b	obID(a0),d4
 		move.b	obRender(a0),d5
 		movea.l	a0,a1
-		bra.s	loc_84B2
+		
+		;!@ Collaspe optimization (https://sonicresearch.org/community/index.php?threads/optimizing-collapsing-platforms-a-lot.3527/)
+		;!@ bra.s	loc_84B2
+		; We have to remove this otherwise a1's value won't be right,
+		; but since it's what creates the first object over the source object, we also have to create it now...
+		; First object's creation begins here:
+		move.b #6,obRoutine(a1)
+		move.b d4,obID(a1)
+		move.l a3,obMap(a1)
+		move.b d5,obRender(a1)
+		move.w obX(a0),obX(a1)
+		move.w obY(a0),obY(a1)
+		move.w obGfx(a0),obGfx(a1)
+		move.b obPriority(a0),obPriority(a1)
+		move.b obActWid(a0),obActWid(a1)
+		move.b (a4)+,objoff_38(a1)
+		; and ends here, it's a simple copy/paste from loc_84B2.
+		; Now since we created one object already, we have to decrease the counter
+		subq.w #1,d1
+		; We don't have to check whether it's the last one or not, it can't be unless there's not enough free ram to create more (and that's checked later).
+		; Here we begin what's replacing SingleObjLoad, in order to avoid resetting its d0 every time an object is created.
+		lea (v_lvlobjspace).w,a1
+		move.w #$5F,d0
+		
 ; ===========================================================================
 
 loc_84AA:
-		bsr.w	FindFreeObj
-		bne.s	loc_84F2
-		addq.w	#5,a3
+		;!@ Collaspe optimization
+		;bsr.w	FindFreeObj
+		;bne.s	loc_84F2
+		;addq.w	#5,a3
+		; We remove this, it's the routine we want to avoid
+		; So here goes what was originally happening in SingleObjLoad, excepted now d0 won't be reset every time an object has to be created.
+		; We'll just copy/paste the content of loc_DA94 and correct the branches.
+.loop:
+		tst.b	(a1)
+		beq.s	.cont 		; Let's correct the branches. Here we can also skip the bne that was originally after bsr.w SingleObjLoad because we already know there's a free object slot in memory.
+		lea		$40(a1),a1
+		dbf		d0,.loop	; Branch correction again.
+		bne.s	loc_84F2	; We're moving this line here.
+.cont:
+		; And that's it, copy/paste complete.
+		addq.w #5,a3
 
 loc_84B2:
 		move.b	#6,obRoutine(a1)
-		_move.b	d4,obID(a1)
+		move.b	d4,obID(a1)
 		move.l	a3,obMap(a1)
 		move.b	d5,obRender(a1)
 		move.w	obX(a0),obX(a1)
@@ -6291,8 +6405,10 @@ loc_84B2:
 		move.b	obPriority(a0),obPriority(a1)
 		move.b	obActWid(a0),obActWid(a1)
 		move.b	(a4)+,ledge_timedelay(a1)
-		cmpa.l	a0,a1
-		bhs.s	loc_84EE
+		;!@ Collapse Optimization
+		; Finally, this isn't necessary anymore, its only purpose was to skip DisplaySprite2 on the first object
+		;!@ cmpa.l	a0,a1
+		;bhs.s	loc_84EE
 		bsr.w	DisplaySprite1
 
 loc_84EE:
@@ -7656,6 +7772,7 @@ Sonic_Index:	dc.w Sonic_Main-Sonic_Index
 		dc.w Sonic_Hurt-Sonic_Index
 		dc.w Sonic_Death-Sonic_Index
 		dc.w Sonic_ResetLevel-Sonic_Index
+		dc.w Sonic_Drowned-Sonic_Index		;!@ Drown Fix
 ; ===========================================================================
 
 Sonic_Main:	; Routine 0
@@ -7832,6 +7949,7 @@ locret_13302:
 		include	"_incObj/Sonic ResetOnFloor.asm"
 		include	"_incObj/Sonic (part 2).asm"
 		include	"_incObj/Sonic Loops.asm"
+		include "_incObj/Sonic Drowns.asm"		;!@ Drown Fix
 		include	"_incObj/Sonic Animate.asm"
 		include	"_anim/Sonic.asm"
 		include	"_incObj/Sonic LoadGfx.asm"
@@ -9020,23 +9138,6 @@ locret_1B640:
 SS_AniGlassData:dc.b $4B, $4C, $4D, $4E, $4B, $4C, $4D,	$4E, 0,	0
 
 ; ---------------------------------------------------------------------------
-; Special stage	layout pointers
-; ---------------------------------------------------------------------------
-SS_LayoutIndex:
-		dc.l SS_1
-		dc.l SS_2
-		dc.l SS_3
-		dc.l SS_4
-		dc.l SS_5
-		dc.l SS_6
-		even
-
-; ---------------------------------------------------------------------------
-; Special stage start locations
-; ---------------------------------------------------------------------------
-SS_StartLoc:	include	"_inc/Start Location Array - Special Stages.asm"
-
-; ---------------------------------------------------------------------------
 ; Subroutine to	load special stage layout
 ; ---------------------------------------------------------------------------
 
@@ -9044,26 +9145,45 @@ SS_StartLoc:	include	"_inc/Start Location Array - Special Stages.asm"
 
 
 SS_Load:
-		moveq	#0,d0
-		move.b	(v_lastspecial).w,d0 ; load number of last special stage entered
-		addq.b	#1,(v_lastspecial).w
-		cmpi.b	#6,(v_lastspecial).w
-		blo.s	SS_ChkEmldNum
-		move.b	#0,(v_lastspecial).w ; reset if higher than 6
+		;!@ Special Stage restore
+		;https://sonicresearch.org/community/index.php?threads/sonic-1-how-to-make-the-special-stages-in-sonic-1-not-progress-if-you-lose.2590/
+		
+		;moveq	#0,d0
+		;move.b	(v_lastspecial).w,d0 ; load number of last special stage entered
+		;addq.b	#1,(v_lastspecial).w
+		;!@ Max emerald
+		;!@ cmpi.b	#6,(v_lastspecial).w
+		;cmpi.b	#maxEmerald,(v_lastspecial).w
+		;blo.s	SS_ChkEmldNum
+		;!@ move.b	#0,(v_lastspecial).w ; reset if higher than 6
+		;move.b	#minEmerald,(v_lastspecial).w
+		
+		cmpi.b #maxEmerald-1,(v_emeralds).w 		; Does sonic have MAX-1 emeralds?
+		bls.s SS_SpecialStageNumLoad 				; If lower or same, branch
+		move.b #0,(v_lastspecial).w 				; reset if higher than MAX
 
+SS_SpecialStageNumLoad:
 SS_ChkEmldNum:
-		cmpi.b	#6,(v_emeralds).w ; do you have all emeralds?
-		beq.s	SS_LoadData	; if yes, branch
-		moveq	#0,d1
-		move.b	(v_emeralds).w,d1
-		subq.b	#1,d1
-		blo.s	SS_LoadData
-		lea	(v_emldlist).w,a3 ; check which emeralds you have
+		;!@ Special Stage Restore
+		move.b  (v_emeralds).w,(v_lastspecial).w   	; move the value of address
+		move.b (v_lastspecial).w,d0 				; move the value of d0 for later use
+		bra.s  SS_LoadData
+
+		;!@ Max emerald
+		;!@ cmpi.b	#6,(v_emeralds).w ; do you have all emeralds?
+		;cmpi.b	#maxEmerald,(v_emeralds).w ; do you have all emeralds?
+		;beq.s	SS_LoadData	; if yes, branch
+		;moveq	#0,d1
+		;move.b	(v_emeralds).w,d1
+		;subq.b	#1,d1
+		;blo.s	SS_LoadData
+		;lea	(v_emldlist).w,a3 ; check which emeralds you have
 
 SS_ChkEmldLoop:	
 		cmp.b	(a3,d1.w),d0
 		bne.s	SS_ChkEmldRepeat
-		bra.s	SS_Load
+		;!@bra.s	SS_Load
+		jmp		(SS_Load).l
 ; ===========================================================================
 
 SS_ChkEmldRepeat:
@@ -9085,6 +9205,25 @@ SS_LoadData:
 		; Clear everything from v_ssbuffer1 to v_ssbuffer2
 		lea	(v_ssbuffer1&$FFFFFF).l,a1
 		move.w	#(v_ssbuffer2-v_ssbuffer1)/4-1,d0
+		jmp SS_ClrRAM3 ;!@
+		
+;!@ Special Stage Restore
+; ---------------------------------------------------------------------------
+; Special stage	layout pointers
+; ---------------------------------------------------------------------------
+SS_LayoutIndex:
+		 dc.l SS_1
+		 dc.l SS_2
+		 dc.l SS_3
+		 dc.l SS_4
+		 dc.l SS_5
+		 dc.l SS_6
+		 even
+
+; ---------------------------------------------------------------------------
+; Special stage start locations
+; ---------------------------------------------------------------------------
+ SS_StartLoc:	include	"_inc/Start Location Array - Special Stages.asm"
 
 SS_ClrRAM3:
 		clr.l	(a1)+

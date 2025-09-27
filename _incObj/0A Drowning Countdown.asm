@@ -243,25 +243,36 @@ Drown_Countdown:; Routine $A
 		move.w	#0,obVelY(a0)
 		move.w	#0,obVelX(a0)
 		move.w	#0,obInertia(a0)
+		
+		;!@ Drown fix: (https://sonicresearch.org/community/index.php?threads/how-to-fix-the-drowning-bugs-sonic-1-and-2.2869/)
+		move.b #$A,obRoutine(a0) ; Force the character to drown
+		
 		move.b	#1,(f_nobgscroll).w
+		
+		;!@ Drown Fix
+		move.b #0,(f_timecount).w ; Stop the timer immediately
+		
 		movea.l	(sp)+,a0
 		rts	
 ; ===========================================================================
 
 .loc_13F86:
 		subq.w	#1,objoff_2C(a0)
-		bne.s	.loc_13F94
+		;!@ Drown Fix
+		;!@bne.s	.loc_13F94
+		bne.s	.nochange
 		move.b	#6,(v_player+obRoutine).w
 		rts	
 ; ===========================================================================
 
-.loc_13F94:
-		move.l	a0,-(sp)
-		lea	(v_player).w,a0
-		jsr	(SpeedToPos).l
-		addi.w	#$10,obVelY(a0)
-		movea.l	(sp)+,a0
-		bra.s	.nochange
+;!@ Drown Fix
+; .loc_13F94:
+		; move.l	a0,-(sp)
+		; lea	(v_player).w,a0
+		; jsr	(SpeedToPos).l
+		; addi.w	#$10,obVelY(a0)
+		; movea.l	(sp)+,a0
+		; bra.s	.nochange
 ; ===========================================================================
 
 .gotomakenum:

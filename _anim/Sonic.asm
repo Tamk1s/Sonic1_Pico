@@ -119,7 +119,7 @@ id_Float2:	equ (ptr_Float2-Ani_Sonic)/2	; $F
 id_Spring:	equ (ptr_Spring-Ani_Sonic)/2	; $10
 id_Hang:	equ (ptr_Hang-Ani_Sonic)/2	; $11
 id_Leap1:	equ (ptr_Leap1-Ani_Sonic)/2	; $12
-id_Leap2:	equ (ptr_Leap2-Ani_Sonic)/2	; $13
+id_Leap2:	equ (ptr_Leap2-Ani_Sonic)/2	; !@ $13 Victory Pose
 id_Surf:	equ (ptr_Surf-Ani_Sonic)/2	; $14
 id_GetAir:	equ (ptr_GetAir-Ani_Sonic)/2	; $15
 id_Burnt:	equ (ptr_Burnt-Ani_Sonic)/2	; $16

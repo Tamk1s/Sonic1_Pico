@@ -96,7 +96,9 @@ id_Continue:	equ ptr_GM_Cont-GameModeArray	; $14
 id_Ending:	equ ptr_GM_Ending-GameModeArray	; $18
 id_Credits:	equ ptr_GM_Credits-GameModeArray; $1C
 id_SSRG:	equ ptr_GM_SSRGScreen-GameModeArray; !@ $20
-id_MAX:		equ	$3C
+id_LvlSel:	equ ptr_GM_LvlSel-GameModeArray; !@ $24
+id_Options:	equ ptr_GM_Options-GameModeArray; !@ $28
+id_MAX:		equ	$3F
 
 ; Levels
 id_GHZ:		equ $00
@@ -110,6 +112,11 @@ id_SS:		equ $07
 id_BZ:		equ $08	;!@ S1SMS Bridge Zone
 id_JZ:		equ $09	;!@ S1SMS Jungle Zone
 id_SkyBZ:	equ	$0A	;!@ S1SMS Sky Base Zone
+
+; Emeralds
+minEmerald:	equ	$00
+maxEmerald:	equ	$06
+;!@ Max emerald
 
 ; Colours
 cBlack:		equ $000		; colour black

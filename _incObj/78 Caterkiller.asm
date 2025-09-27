@@ -360,6 +360,9 @@ loc_16C64:
 	endif
 
 .delete:
+		;!@ Caterkiller collision bugfix: (https://sonicresearch.org/community/index.php?threads/how-to-fix-the-caterkiller-damage-bug.4178/)
+		clr.b    $20(a1)
+
 		; Mark self for deletion.
 		move.b	#$A,obRoutine(a0)
 

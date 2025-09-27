@@ -1,7 +1,6 @@
 ; ---------------------------------------------------------------------------
 ; Object 7F - chaos emeralds from the special stage results screen
 ; ---------------------------------------------------------------------------
-
 SSRChaos:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
@@ -15,6 +14,7 @@ SSRC_Index:	dc.w SSRC_Main-SSRC_Index
 ; X-axis positions for chaos emeralds
 ; ---------------------------------------------------------------------------
 SSRC_PosData:	dc.w $110, $128, $F8, $140, $E0, $158
+				emeraldWarning	SSRC_PosData,2	;!@
 ; ===========================================================================
 
 SSRC_Main:	; Routine 0

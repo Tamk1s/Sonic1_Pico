@@ -26,7 +26,9 @@ EEgg_Main:	; Routine 0
 		move.b	#0,obRender(a0)
 		move.b	#2,obPriority(a0)
 		move.b	#2,obAnim(a0)	; use "END" animation
-		cmpi.b	#6,(v_emeralds).w ; do you have all 6 emeralds?
+		;!@ Max Emerald
+		;!@ cmpi.b	#6,(v_emeralds).w ; do you have all emeralds?
+		cmpi.b	#maxEmerald,(v_emeralds).w ; do you have all 6 emeralds?
 		beq.s	EEgg_Animate	; if yes, branch
 
 		move.b	#id_CreditsText,(v_tryagain).w ; load credits object

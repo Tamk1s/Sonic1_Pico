@@ -237,7 +237,9 @@ Got_SBZ2:
 		cmpi.b	#4,obFrame(a0)
 		bne.w	DeleteObject
 		addq.b	#2,obRoutine(a0)
-		clr.b	(f_lockctrl).w	; unlock controls
+		clr.b	(f_lockctrl).w		; unlock controls
+		;!@ Victory Pose
+		clr.b   (f_victoryPose).w	; !@ clear victory anim
 		move.w	#_bgm_FZ,d0
 		jmp	(PlaySound).l	; play FZ music
 ; ===========================================================================
